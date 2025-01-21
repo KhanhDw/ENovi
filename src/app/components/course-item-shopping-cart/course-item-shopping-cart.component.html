@@ -1,0 +1,81 @@
+<div
+  *ngFor="let item of listCourse"
+  class="flex items-center justify-start w-full mb-2 bg-white rounded-lg h-44"
+>
+  <!-- left img -->
+  <div class="flex items-center justify-center w-3/12 pl-2 h-5/6">
+    <input
+      type="checkbox"
+      [checked]="isSelected"
+      (change)="toggleChecked($event)"
+      name="{{ item.id }}"
+      id="{{ item.id }}"
+      value="{{ item.id }}"
+      class="self-start block w-2/12 h-5"
+    />
+    <img
+      class="object-cover w-10/12 h-full rounded-md"
+      src="{{ item.img }}"
+      alt="AnhBiaKhoaHoc"
+    />
+  </div>
+  <!-- infor of course -->
+  <div class="flex items-start justify-between w-9/12 pl-4 bg-white h-5/6">
+    <!-- info -->
+    <div
+      class="flex flex-col items-start justify-start flex-shrink-0 w-3/4 bg-white"
+    >
+      <!-- title -->
+      <h1
+        class="w-[536px] overflow-hidden text-xl font-semibold leading-none break-all text-slate-800 whitespace-nowrap text-ellipsis"
+      >
+        {{ item.title }}
+      </h1>
+      <!-- description -->
+      <p
+        class="w-[536px] mt-2 overflow-hidden text-md leading-none break-all text-slate-800 line-clamp-2 text-ellipsis"
+      >
+        {{ item.description }}
+      </p>
+      <!-- author -->
+      <p
+        class="w-[536px] mt-1 overflow-hidden text-md leading-none break-all line-clamp-1 text-gray-600 text-ellipsis"
+      >
+        {{ item.author }}
+      </p>
+      <!-- rate -->
+      <p class="w-full overflow-hidden text-gray-600 text-md">
+        {{ item.rate }}
+      </p>
+      <!-- duration -->
+      <p class="w-[536px] overflow-hidden text-md text-gray-600">
+        {{ item.duration }}
+      </p>
+    </div>
+    <!-- price -->
+    <div
+      class="flex flex-col items-end justify-between w-1/4 h-full pr-2 text-xl font-bold"
+    >
+      <!-- giá -->
+      <h6>{{ item.price }}đ</h6>
+      <!-- danh hiệu -->
+      <div class="flex flex-col">
+        <button
+          class="px-2 py-1 mt-2 text-xs text-center transition-all bg-green-400 border border-transparent rounded-md cursor-default text-slate-700 shado w-md"
+          type="button"
+        >
+          New
+        </button>
+      </div>
+      <!-- btn -->
+      <div class="flex flex-col">
+        <button
+          class="px-2 py-1 mt-2 text-xs text-center text-black transition-all border border-transparent rounded-md cursor-default hover:bg-red-400 shado w-md"
+          type="button"
+        >
+          Xoá
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

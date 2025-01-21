@@ -1,0 +1,253 @@
+<div class="w-full mx-auto" id="shopping-cart">
+  <div class="flex flex-col w-4/5 mx-auto my-2">
+    <div class="flex flex-col mb-5">
+      <h1 class="w-full mt-8 text-3xl font-bold font-signika">
+        Giỏ hàng <span>(có 21 khoá học)</span>
+      </h1>
+    </div>
+    <!-- body -->
+    <div class="flex items-start justify-center w-full gap-2">
+      <!-- left -->
+      <div class="flex flex-col items-start w-4/6 gap-2 rounded-lg bg-gray-000">
+        <div
+          class="flex items-center justify-between w-full h-10 px-5 bg-white rounded-lg"
+        >
+          <div class="flex items-center gap-2">
+            <input
+              (click)="selectAll()"
+              type="checkbox"
+              name="allCheck"
+              id="allCheck"
+              class="w-5 h-5"
+            />
+            <label for="allCheck" class="font-semibold text-slate-800"
+              >Chọn tất cả <span>({{ checkedCount }})</span></label
+            >
+          </div>
+
+          <button
+            type="button"
+            class="p-1 transition-all duration-300 rounded-md cursor-default hover:bg-gray-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-trash3"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"
+              />
+            </svg>
+          </button>
+        </div>
+        <div class="flex flex-col items-start justify-start">
+          <app-course-item-shopping-cart
+            [listCourse]="listCourse"
+            (checkedChange)="onCheckboxChange($event)"
+          ></app-course-item-shopping-cart>
+        </div>
+      </div>
+      <!-- right -->
+      <div
+        class="sticky top-0 right-0 flex flex-col w-2/6 h-full p-3 bg-white rounded-lg"
+      >
+        <!-- title -->
+        <h1 class="mb-3 text-xl font-bold">Thông tin đơn hàng</h1>
+        <!-- coupon -->
+        <button
+          type="button"
+          (click)="isShowModalF()"
+          class="flex items-center justify-between w-full h-10 px-5 my-3 duration-300 bg-gray-200 rounded-lg cursor-default select-none hover:bg-slate-300"
+        >
+          <div class="flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="text-red-600 bi bi-ticket-perforated-fill"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6zm4-1v1h1v-1zm1 3v-1H4v1zm7 0v-1h-1v1zm-1-2h1v-1h-1zm-6 3H4v1h1zm7 1v-1h-1v1zm-7 1H4v1h1zm7 1v-1h-1v1zm-8 1v1h1v-1zm7 1h1v-1h-1z"
+              />
+            </svg>
+            <h1>Áp mã giảm giá</h1>
+            <span class="">(2)</span>
+          </div>
+
+          <a
+            type="button"
+            class="p-1 transition-all duration-300 rounded-md cursor-default hover:bg-white"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-chevron-right"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
+              />
+            </svg>
+          </a>
+        </button>
+        <!-- detail -->
+        <div class="flex flex-col gap-2">
+          <div
+            class="flex items-start justify-between px-2 pb-2 font-semibold border-b border-slate-300"
+          >
+            <h6>Tổng tiền</h6>
+            <h1>10,000,000đ</h1>
+          </div>
+          <div class="flex flex-col">
+            <div
+              class="flex items-start justify-between px-2 pb-2 font-semibold border-b border-slate-300"
+            >
+              <h6>Tổng khuyến mãi</h6>
+              <h1>10,000,000đ</h1>
+            </div>
+            <ul class="flex flex-col pl-3">
+              <li
+                class="flex items-start justify-between px-2 pb-2 text-sm font-thin border-b border-slate-300"
+              >
+                <h6>Mã giảm giá</h6>
+                <h1>10,000,000đ</h1>
+              </li>
+              <li
+                class="flex items-start justify-between px-2 pb-2 text-sm font-thin border-b border-slate-300"
+              >
+                <h6>Mã giảm giá</h6>
+                <h1>10,000,000đ</h1>
+              </li>
+            </ul>
+          </div>
+          <div class="flex items-start justify-between px-2 pb-2 font-semibold">
+            <h6>Cần thành toán</h6>
+            <h1 class="px-2 font-bold border-2 rounded-md border-slate-700">
+              10,000,000đ
+            </h1>
+          </div>
+        </div>
+        <!-- btn submit -->
+        <button
+          type="button"
+          class="flex items-center justify-center py-5 mt-5 text-xl text-white transition-colors duration-500 rounded-md hover:bg-slate-700 bg-slate-800 font-signika"
+        >
+          Xác nhận thanh toán
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- right hidden -->
+  <div
+    [ngClass]="{
+      hidden: !isShowModal,
+      flex: isShowModal
+    }"
+    class="relative z-[99999] h-full w-full"
+    id="modal"
+  >
+    <div
+      class="fixed inset-0 z-[10000] flex w-full h-full pointer-events-none bg-slate-900 bg-opacity-90 backdrop-blur-md"
+    ></div>
+    <div
+      class="fixed inset-0 z-[10001] flex items-center justify-center w-screen h-screen max-h-full"
+    >
+      <div
+        class="w-11/12 max-w-lg px-5 py-4 text-center bg-white rounded-lg shadow-lg h-5/6"
+      >
+        <!-- title -->
+        <div class="flex items-start justify-between">
+          <h2 class="mb-4 text-2xl font-bold">Áp mã giảm giá</h2>
+          <button
+            (click)="isShowModalF()"
+            type="button"
+            class="px-2 py-1 text-black transition-all duration-300 bg-white rounded hover:bg-red-500"
+          >
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div class="flex flex-col justify-center h-full">
+          <div class="flex flex-col items-center h-full gap-5">
+            <!-- top -->
+            <div class="flex flex-col items-start w-full gap-1">
+              <div class="flex items-center justify-between w-10/12 pr-2">
+                <label for="inputDiscount" class="w-1/4">Mã giảm giá</label>
+                <!-- thông báo mã không tìm thấy -->
+                <p
+                  for="inputDiscount"
+                  class="w-3/4 font-semibold text-red-500 text-md hideen"
+                >
+                  Không tìm thấy mã giảm giá
+                </p>
+              </div>
+              <div
+                class="flex items-center justify-between w-full gap-2 border"
+              >
+                <input
+                  type="text"
+                  placeholder="Nhập mã giảm giá"
+                  name="inputDiscount"
+                  class="w-10/12 px-2 py-1 border-2 border-gray-400 rounded-md font-signika focus:outline-none active:outline-none"
+                />
+                <button
+                  type="button"
+                  class="flex items-center justify-center w-2/12 py-1 text-white transition-all duration-500 rounded-md bg-slate-700 hover:bg-slate-400"
+                >
+                  <p>Áp mã</p>
+                </button>
+              </div>
+            </div>
+            <!-- body -->
+            <ul
+              class="flex flex-col w-full h-[70%] rounded-md border-2 border-slate-800 overflow-y-scroll"
+            >
+              <!-- item -->
+              <li class="flex flex-col items-start w-full px-2 py-1 border-b-2">
+                <h1
+                  class="text-xl font-semibold text-left font-md font-signika line-clamp-2"
+                >
+                  Tên khoá học Tên khoá học Tên khoá học Tên khoá học Tên khoá
+                  khoá học Tên khoá khoá học Tên khoá khoá học Tên khoá khoá học
+                  Tên khoá học Tên khoá học
+                </h1>
+                <div class="flex items-center justify-between w-full">
+                  <div class="flex items-center w-full">
+                    <p>Mã giảm giá:</p>
+                    <span class="ml-1 text-blue-500">asvgdf</span>
+                  </div>
+                  <h1 class="flex">
+                    Giảm:
+                    <span class="ml-1 font-bold text-red-500">-50,000đ</span>
+                  </h1>
+                </div>
+              </li>
+            </ul>
+            <!-- footer  -->
+            <div class="flex items-center justify-between w-full">
+              <div class="flex items-center">
+                <h1 class="text-xl font-semibold font-signika">
+                  Tổng giảm: <span>-2323đ</span>
+                </h1>
+              </div>
+              <button
+                (click)="isShowModalF()"
+                type="button"
+                class="px-10 py-2 text-white transition-colors duration-500 rounded-md hover:bg-slate-900 bg-slate-500"
+              >
+                Xác nhận
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
