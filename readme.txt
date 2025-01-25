@@ -7,7 +7,8 @@ Nếu code 2 project trong Tabs Explorer: thì cần cd để thư mục angular
 
 lệnh khởi tạo component:::  ng generate component <name> --path=src/app --skip-import --skip-tests
 
-lệnh khởi tạo component tại đường dẫn hiện tại::: ng generate component <name>  --skip-import --skip-tests
+lệnh khởi tạo component tại đường dẫn hiện tại::: 
+ng generate component <name>  --skip-import --skip-tests
 
 hoặc rút gọn câu lệnh:    ng g c <name> --path=src/app --skipTests
 

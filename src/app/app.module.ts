@@ -13,9 +13,11 @@ import { LoginComponent } from './features/login/login.component';
 import { SearchComponent } from './features/search/search.component';
 import { RegisterComponent } from './features/register/register.component';
 import { NotfoundComponent } from './features/notfound/notfound.component';
-import { CourseItemComponent } from './components/course-item/course-item.component';
+import { MyLearningComponent } from './features/my-learning/my-learning.component';
 import { ShoppingCartComponent } from './features/shopping-cart/shopping-cart.component';
+import { CourseDetailComponent } from './features/course-detail/course-detail.component';
 import { CourseItemSearchComponent } from './components/course-item-search/course-item-search.component';
+import { CourseItemMyLearningComponent } from './components/course-item-my-learning/course-item-my-learning.component';
 import { CourseItemShoppingCartComponent } from './components/course-item-shopping-cart/course-item-shopping-cart.component';
 
 @NgModule({
@@ -31,10 +33,12 @@ import { CourseItemShoppingCartComponent } from './components/course-item-shoppi
     SearchComponent,
     NotfoundComponent,
     ShoppingCartComponent,
+    MyLearningComponent,
+    CourseDetailComponent,
     // components
-    CourseItemComponent,
     CourseItemSearchComponent,
     CourseItemShoppingCartComponent,
+    CourseItemMyLearningComponent,
   ],
   imports: [BrowserModule, AppRoutingModule],
   providers: [provideClientHydration()],

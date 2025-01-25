@@ -1,0 +1,31 @@
+<!-- component -->
+<div
+  class="mx-auto mt-6 overflow-hidden duration-300 transform bg-white rounded-lg shadow-md w-72 dark:bg-slate-800 hover:shadow-black hover:shadow-lg"
+>
+  <img
+    class="relative object-cover object-center w-full h-48"
+    src="{{ itemCourse.img }}"
+    alt="Product Image"
+  />
+  <div class="p-4">
+    <h2 class="mb-2 text-lg font-medium text-gray-900 dark:text-white">
+      {{ itemCourse.title }}
+    </h2>
+    <div class="flex items-center">
+      <p class="mr-2 font-semibold text-gray-900 text-md dark:text-gray-300">
+        Tiến trình: <span>10%</span>
+      </p>
+      <p
+        class="ml-auto text-base font-medium text-green-400 hover:text-yellow-400"
+      >
+        Bắt đầu/Tiếp tục
+      </p>
+    </div>
+  </div>
+  <button
+    type="button"
+    class="absolute top-0 right-0 p-2 text-white hover:bg-white hover:text-black focus:outline-none"
+  >
+    <i class="cursor-pointer bi bi-three-dots-vertical"></i>
+  </button>
+</div>

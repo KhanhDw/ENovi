@@ -1,19 +1,15 @@
-import { Component, QueryList, ViewChildren } from '@angular/core';
-import { CourseItemShoppingCartComponent } from '../../components/course-item-shopping-cart/course-item-shopping-cart.component';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-shopping-cart',
-  templateUrl: './shopping-cart.component.html',
-  styleUrl: './shopping-cart.component.css',
+  selector: 'app-my-learning',
+  templateUrl: './my-learning.component.html',
+  styleUrl: './my-learning.component.css',
 })
-export class ShoppingCartComponent {
-  // ===========
-  // construstor
-  // ===========
-  ShoppingCartComponent() {}
+export class MyLearningComponent {
+  lengthListMyCourses = 0;
 
   // =========================
-  // list course - right body
+  // list courses
   // =========================
   listCourse = [
     {
@@ -88,53 +84,20 @@ export class ShoppingCartComponent {
     },
   ];
 
-  lengthListCourse = this.listCourse.length;
-
-  // ================================
-  // selected all item shopping cart
-  // ================================
-
-  isSelectAll: boolean = false; // Trạng thái của nút "Chọn tất cả"
-  checkedCount: number = 0; // Số lượng item được chọn
-  selectedItems = new Map<string, boolean>(); // Sử dụng Map để lưu trữ dữ liệu
-
-  @ViewChildren(CourseItemShoppingCartComponent)
-  courseItemShoppingCartComponents!: QueryList<CourseItemShoppingCartComponent>;
-
-  selectAll() {
-    this.isSelectAll = !this.isSelectAll; // Đổi trạng thái của nút "Chọn tất cả"
-    this.courseItemShoppingCartComponents.forEach(
-      (item) => (item.isSelected = this.isSelectAll)
-    );
-
-    if (this.isSelectAll) {
-      this.checkedCount = this.listCourse.length;
-    } else {
-      this.checkedCount = 0;
-    }
+  // dùng trackby để tăng hiệu suất render
+  trackByFn(index: number, item: any): any {
+    return item.id; // Hoặc một thuộc tính duy nhất khác của item
   }
 
-  onCheckboxChange(event: { value: string; checked: boolean }) {
-    const { value, checked } = event;
-    console.log(value, checked);
-    // Thêm hoặc cập nhật dữ liệu trong Map
-    this.selectedItems.set(value, checked);
-    // In ra Map để kiểm tra
-    console.log(this.selectedItems);
-    // Nếu bạn muốn xóa một phần tử khỏi Map khi checkbox bỏ chọn
-    if (!checked) {
-      this.selectedItems.delete(value);
-    }
-    this.checkedCount = this.selectedItems.size;
-  }
+  // ====================
+  // button sort by
+  // ====================
 
-  // =====
-  // modal
-  // =====
-  isShowModal: boolean = false;
+  isOpenDropdownSortBy: boolean = false;
 
-  isShowModalF() {
-    this.isShowModal = !this.isShowModal;
-    console.log(this.isShowModal);
+  sortby = [{ name: 'Tăng dần' }, { name: 'Giảm dần' }, { name: 'Mới nhất' }];
+
+  toggleSortBy() {
+    this.isOpenDropdownSortBy = !this.isOpenDropdownSortBy;
   }
 }

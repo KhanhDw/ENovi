@@ -6,6 +6,8 @@ import { SearchComponent } from './features/search/search.component';
 import { LoginComponent } from './features/login/login.component';
 import { RegisterComponent } from './features/register/register.component';
 import { ShoppingCartComponent } from './features/shopping-cart/shopping-cart.component';
+import { MyLearningComponent } from './features/my-learning/my-learning.component';
+import { CourseDetailComponent } from './features/course-detail/course-detail.component';
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
@@ -13,6 +15,8 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'search', component: SearchComponent },
   { path: 'cart', component: ShoppingCartComponent },
+  { path: 'my-learning', component: MyLearningComponent },
+  { path: 'course-detail', component: CourseDetailComponent },
   { path: 'notfound', component: NotfoundComponent },
   // phải luôn đặt ** tại cuối vì theo trình tự biên dịch từ trên muốn
   { path: '**', redirectTo: 'notfound' },
