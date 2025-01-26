@@ -1,0 +1,36 @@
+Ok- đăng ký
+OK- đăng nhập
+ok- trang chủ 
+ok- not found
+ok- tìm kiếm
+ok- giỏ hàng 
+ok- khoá học của tôi      
+ok- xem chi tiết khoá học
+giao diện người dùng và giảng viên dùng chung
+    Cài đặt hồ sơ
+        edit profile public 
+        edit profile picture
+    cài đặt tài khoản
+        change email and password
+    phương thức thanh toán 
+        Ngân hàng số, MoMo, Viettel money, ZaloPay
+bảng điều khiển giảng viên (nếu kích hoạt giáo viên)
+    cài đặt hồ sơ giảng viên
+    quản lý khoá học:(khoá học (phần (bài học)))
+        tạo mới khoá học
+        thiết kế khoá học (phần (bài học)) [chỉ thiết kế cho khoá học đã khởi tạo và mã giảm giá]
+        xoá khoá học 
+        tình hình khoá học [xem tình hình khoá học, như số lượng học viên tham gia, đánh giá, bình luận]
+        
+
+    
+trang xem video khoá học - học từng bài học
+lịch sử mua hàng
+ngôn ngữ 
+thông báo
+tin nhắn	
+quản lý khoá học - admin
+quan lý user - admin
+quản lý doanh thu - admin
+xuất báo cáo danh thu - admin
+thanh toán đối tác - admin - chuyển tiền cho người bán khoá học - mõi tuần 1 lần thanh toán - đối tác nhận lại 90% số tiền

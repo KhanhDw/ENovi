@@ -7,11 +7,11 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'app-course-detail',
-  templateUrl: './course-detail.component.html',
-  styleUrl: './course-detail.component.css',
+  selector: 'app-course',
+  templateUrl: './course.component.html',
+  styleUrl: './course.component.css',
 })
-export class CourseDetailComponent {
+export class CourseComponent {
   // ====================
   // Section
   // ====================

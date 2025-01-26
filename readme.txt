@@ -22,3 +22,7 @@ lệnh tạo module mới trong 1 component: ng generate module --module app
 
 khi dùng tailwind muốn cập nhật font thì: npx tailwindcss -i ./src/input.css -o ./src/output.css --watch
 trong angular thì thì file style.css là css chính: ==> npx tailwindcss -i ./src/styles.css -o ./src/stylesCustom.css --watch
+
+
+
+
