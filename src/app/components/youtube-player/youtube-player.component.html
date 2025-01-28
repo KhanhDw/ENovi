@@ -1,0 +1,27 @@
+<div class="flex flex-col w-full">
+  <div id="player" #player class="w-full"></div>
+  <div class="flex items-start justify-between w-full px-4 my-5">
+    <!-- Thời gian hiện tại và tổng thời lượng video -->
+    <!-- <p hidden>Tổng thời gian {{ formatTime(videoDuration) }}</p> -->
+    <div class="flex flex-col flex-wrap items-start font-signika">
+      <h1 class="text-2xl">{{ titleCourse }}</h1>
+      <p class="text-sm text-gray-500">Cập nhật 12/12/2023</p>
+    </div>
+    <button
+      type="button"
+      class="flex items-start justify-start w-1/4 gap-2 px-3 py-3 transition-all duration-500 rounded-lg bg-zinc-200 hover:bg-slate-300"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="24px"
+        viewBox="0 -960 960 960"
+        width="24px"
+        fill="#000"
+      >
+        <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
+      </svg>
+      <span class="flex-none">Thêm ghi chú tại:</span>
+      <span class="font-bold">{{ formatTime(currentTime) }}</span>
+    </button>
+  </div>
+</div>

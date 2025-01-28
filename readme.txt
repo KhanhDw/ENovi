@@ -5,10 +5,11 @@ Nếu code 2 project trong Tabs Explorer: thì cần cd để thư mục angular
 
 
 
-lệnh khởi tạo component:::  ng generate component <name> --path=src/app --skip-import --skip-tests
+lệnh khởi tạo component:::  
+--> ng generate component <name> --path=src/app --skip-import --skip-tests
 
 lệnh khởi tạo component tại đường dẫn hiện tại::: 
-ng generate component <name>  --skip-import --skip-tests
+--> ng generate component <name>  --skip-import --skip-tests
 
 hoặc rút gọn câu lệnh:    ng g c <name> --path=src/app --skipTests
 
@@ -23,6 +24,7 @@ lệnh tạo module mới trong 1 component: ng generate module --module app
 khi dùng tailwind muốn cập nhật font thì: npx tailwindcss -i ./src/input.css -o ./src/output.css --watch
 trong angular thì thì file style.css là css chính: ==> npx tailwindcss -i ./src/styles.css -o ./src/stylesCustom.css --watch
 
-
+lệnh tạo interface::
+--> ng generate interface housinglocation
 
 

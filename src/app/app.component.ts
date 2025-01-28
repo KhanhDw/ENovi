@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
@@ -16,9 +16,16 @@ export class AppComponent {
       if (event instanceof NavigationEnd) {
         // Kiểm tra nếu route hiện tại là 'login' hoặc 'register'
         this.showHeaderAndFooter = !(
-          event.url === '/login' || event.url === '/register'
+          event.url === '/login' ||
+          event.url === '/register' ||
+          event.url === '/lecture'
         );
       }
     });
+  }
+
+  @HostListener('contextmenu', ['$event'])
+  onRightClick(event: MouseEvent) {
+    event.preventDefault();
   }
 }
