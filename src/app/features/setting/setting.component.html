@@ -1,0 +1,86 @@
+<div class="flex w-full h-[calc(100vh-60px)]">
+  <!-- left -->
+  <div
+    [ngClass]="isShowSidebar ? 'w-1/6' : 'w-16'"
+    class="flex pt-2 flex-col h-full bg-[#231D1D] border-t border-gray-600 text-white"
+  >
+    <!-- header -->
+    <div class="flex items-center w-full gap-1 mt-5 mb-5">
+      <button
+        (click)="toggleShowSidebar()"
+        type="button"
+        class="flex items-center justify-center w-full px-2 font-bold uppercase transition-all duration-500 hover:text-orange-300"
+      >
+        <span *ngIf="isShowSidebar" class="w-full text-xl cursor-pointer"
+          >Bảng điều khiển</span
+        >
+        <span
+          *ngIf="!isShowSidebar"
+          class="w-full text-2xl cursor-pointer hover:bg-gray-700 hover:rounded-md font-signika"
+          >EI</span
+        >
+        <i
+          [ngClass]="
+            isShowSidebar ? 'bi-caret-left-fill' : 'bi-caret-right-fill'
+          "
+          class="text-sm cursor-pointer bi"
+        ></i>
+      </button>
+    </div>
+    <!-- body -->
+    <div
+      id="sidebarRight"
+      class="flex flex-col items-start justify-start w-full gap-0 overflow-y-scroll text-xl"
+    >
+      <a
+        *ngFor="let item of sideBar; let i = index"
+        (click)="setActiveButton(i)"
+        routerLinkActive="border-l-8 bg-slate-700"
+        [ngClass]="{
+          'hover:font-bold hover:border-l-8 hover:bg-slate-700':
+            item.name !== '',
+          'opacity-50 pointer-events-none': item.url === '/notfound'
+        }"
+        [routerLink]="item.url"
+        class="flex items-center justify-start w-full gap-2 px-2 py-2 transition-all duration-150"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="#fff"
+        >
+          <path [attr.d]="item.icon" />
+        </svg>
+        <span *ngIf="isShowSidebar" style="font-size: 15px">{{
+          item.name
+        }}</span>
+      </a>
+    </div>
+  </div>
+  <!-- right -->
+  <div class="flex w-full h-full">
+    <div class="flex w-full h-full overflow-y-auto bg-white" py-5>
+      <!-- courses-of-instructor -->
+      <app-courses-of-instructor
+        class="w-full"
+        *ngIf="routerDirection == 1"
+      ></app-courses-of-instructor>
+
+      <!--courses-of-instructor -is parent of- course-update -->
+      <app-course-update
+        class="w-full"
+        *ngIf="routerDirection == 11"
+      ></app-course-update>
+
+      <!-- revenue -->
+      <app-revenue class="w-full" *ngIf="routerDirection == 2"></app-revenue>
+
+      <!-- message -->
+      <app-message class="w-full" *ngIf="routerDirection == 3"></app-message>
+
+      <!--  -->
+    </div>
+  </div>
+</div>

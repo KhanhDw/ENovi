@@ -1,0 +1,6 @@
+#sectionContaint::-webkit-scrollbar {
+  display: flex;
+}
+#rescrourseContaint::-webkit-scrollbar {
+  display: none;
+}

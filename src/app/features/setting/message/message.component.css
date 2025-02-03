@@ -1,0 +1,27 @@
+/* Tùy chỉnh thanh cuộn */
+#leftCol::-webkit-scrollbar {
+  width: 8px; /* Độ rộng của thanh cuộn dọc */
+  height: 12px; /* Độ cao của thanh cuộn ngang */
+}
+
+#leftCol::-webkit-scrollbar-thumb {
+  background-color: #d4d9e6; /* Màu của thanh kéo */
+  border-radius: 2px; /* Bo tròn thanh kéo */
+  border: 0px solid #f3f4f6; /* Tạo khoảng cách với đường dẫn */
+}
+
+#leftCol::-webkit-scrollbar-track {
+  background-color: #f3f4f600; /* Màu nền của đường dẫn */
+  border-radius: 10px; /* Bo tròn đường dẫn */
+}
+
+/* Tùy chỉnh khi hover lên thanh cuộn */
+#leftCol::-webkit-scrollbar-thumb:hover {
+  background-color: #071126; /* Màu khi hover lên thanh kéo */
+  transition: all;
+  transition-duration: 500ms;
+}
+
+#boxchat::-webkit-scrollbar {
+  display: none;
+}

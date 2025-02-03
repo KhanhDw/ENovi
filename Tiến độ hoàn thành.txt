@@ -6,6 +6,7 @@ ok- tìm kiếm
 ok- giỏ hàng 
 ok- khoá học của tôi      
 ok- xem chi tiết khoá học
+ok- xem bài giảng khoá học
 giao diện người dùng và giảng viên dùng chung
     Cài đặt hồ sơ
         edit profile public 
@@ -21,10 +22,14 @@ bảng điều khiển giảng viên (nếu kích hoạt giáo viên)
         thiết kế khoá học (phần (bài học)) [chỉ thiết kế cho khoá học đã khởi tạo và mã giảm giá]
         xoá khoá học 
         tình hình khoá học [xem tình hình khoá học, như số lượng học viên tham gia, đánh giá, bình luận]
+    doanh thu
+        lịch sử nạp
+        hỏi đáp 
+        ok- yêu cầu rút tiền
+        biểu đồ doanh thu của các khóa học
         
 
     
-trang xem video khoá học - học từng bài học
 lịch sử mua hàng
 ngôn ngữ 
 thông báo
@@ -34,3 +39,6 @@ quan lý user - admin
 quản lý doanh thu - admin
 xuất báo cáo danh thu - admin
 thanh toán đối tác - admin - chuyển tiền cho người bán khoá học - mõi tuần 1 lần thanh toán - đối tác nhận lại 90% số tiền
+
+
+

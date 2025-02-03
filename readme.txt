@@ -25,6 +25,6 @@ khi dùng tailwind muốn cập nhật font thì: npx tailwindcss -i ./src/input
 trong angular thì thì file style.css là css chính: ==> npx tailwindcss -i ./src/styles.css -o ./src/stylesCustom.css --watch
 
 lệnh tạo interface::
---> ng generate interface housinglocation
+--> ng generate interface <name>
 
 
