@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
-  selector: 'app-setting',
-  templateUrl: './setting.component.html',
-  styleUrl: './setting.component.css',
+    selector: 'app-setting',
+    templateUrl: './setting.component.html',
+    styleUrl: './setting.component.css',
+    standalone: false
 })
 export class SettingComponent {
   // ==========================

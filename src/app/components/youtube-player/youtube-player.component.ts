@@ -8,9 +8,10 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'app-youtube-player',
-  templateUrl: './youtube-player.component.html',
-  styleUrl: './youtube-player.component.css',
+    selector: 'app-youtube-player',
+    templateUrl: './youtube-player.component.html',
+    styleUrl: './youtube-player.component.css',
+    standalone: false
 })
 export class YoutubePlayerComponent implements OnInit {
   constructor(private zone: NgZone) {} // Thêm `NgZone` vào constructor

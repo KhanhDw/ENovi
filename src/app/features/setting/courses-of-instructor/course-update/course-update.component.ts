@@ -1,9 +1,10 @@
 import { Component, HostListener } from '@angular/core';
 
 @Component({
-  selector: 'app-course-update',
-  templateUrl: './course-update.component.html',
-  styleUrl: './course-update.component.css',
+    selector: 'app-course-update',
+    templateUrl: './course-update.component.html',
+    styleUrl: './course-update.component.css',
+    standalone: false
 })
 export class CourseUpdateComponent {
   contentOfSection = [

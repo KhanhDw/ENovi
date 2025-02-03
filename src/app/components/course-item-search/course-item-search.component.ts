@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-course-item-search',
-  templateUrl: './course-item-search.component.html',
-  styleUrl: './course-item-search.component.css',
+    selector: 'app-course-item-search',
+    templateUrl: './course-item-search.component.html',
+    styleUrl: './course-item-search.component.css',
+    standalone: false
 })
 export class CourseItemSearchComponent {
   // Nhận dữ liệu từ component cha

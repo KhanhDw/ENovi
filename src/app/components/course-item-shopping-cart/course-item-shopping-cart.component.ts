@@ -1,9 +1,10 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-course-item-shopping-cart',
-  templateUrl: './course-item-shopping-cart.component.html',
-  styleUrl: './course-item-shopping-cart.component.css',
+    selector: 'app-course-item-shopping-cart',
+    templateUrl: './course-item-shopping-cart.component.html',
+    styleUrl: './course-item-shopping-cart.component.css',
+    standalone: false
 })
 export class CourseItemShoppingCartComponent {
   // ==============================
