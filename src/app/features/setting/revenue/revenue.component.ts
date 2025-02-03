@@ -130,7 +130,7 @@ export class RevenueComponent implements AfterViewInit, OnInit {
     this.modalQA(event);
   }
 
-  // withdraw
+  // withdraws
 
   private modalWithdraw(event: MouseEvent) {
     if (!this.modalWithdrawElementRef) {
