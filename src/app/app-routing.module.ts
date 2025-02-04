@@ -9,6 +9,11 @@ import { ShoppingCartComponent } from './features/shopping-cart/shopping-cart.co
 import { MyLearningComponent } from './features/my-learning/my-learning.component';
 import { LectureComponent } from './features/lecture/lecture.component';
 import { CourseComponent } from './features/course/course.component';
+import { SettingComponent } from './features/setting/setting.component';
+import { CoursesOfInstructorComponent } from './features/setting/courses-of-instructor/courses-of-instructor.component';
+import { RevenueComponent } from './features/setting/revenue/revenue.component';
+import { MessageComponent } from './features/setting/message/message.component';
+import { CourseUpdateComponent } from './features/setting/courses-of-instructor/course-update/course-update.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -20,6 +25,22 @@ const routes: Routes = [
   { path: 'my-learning', component: MyLearningComponent },
   { path: 'course', component: CourseComponent },
   { path: 'lecture', component: LectureComponent },
+  {
+    path: 'setting',
+    component: SettingComponent,
+    children: [
+      {
+        path: 'courses-instructor',
+        component: CoursesOfInstructorComponent,
+        children: [{ path: 'course-update', component: CourseUpdateComponent }],
+      },
+      {
+        path: 'revenue',
+        component: RevenueComponent,
+      },
+      { path: 'message', component: MessageComponent },
+    ],
+  },
   { path: 'notfound', component: NotfoundComponent },
   // phải luôn đặt ** tại cuối vì theo trình tự biên dịch từ trên muốn
   { path: '**', redirectTo: 'notfound' },

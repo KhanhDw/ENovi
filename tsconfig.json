@@ -19,15 +19,16 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
-    "lib": [
-      "ES2022",
-      "dom"
-    ]
+    "lib": ["ES2022", "dom"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true
+    "strictTemplates": true,
+
+    "strict": false, // Nếu true có thể gây lỗi với một số thư viện
+    "skipLibCheck": true, // Bỏ qua kiểm tra thư viện bên ngoài
+    "forceConsistentCasingInFileNames": true
   }
 }

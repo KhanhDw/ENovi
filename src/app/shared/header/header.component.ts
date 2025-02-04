@@ -14,7 +14,6 @@ export class HeaderComponent {
     { name: 'Bảng điều khiển' },
     { name: 'Khoá học' },
     { name: 'Giảng dạy' },
-    { name: 'Cài đặt' },
   ];
 
   constructor(private elementRef: ElementRef) {}

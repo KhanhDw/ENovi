@@ -1,4 +1,6 @@
 import { NgModule, Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
 import {
   BrowserModule,
   provideClientHydration,
@@ -22,6 +24,15 @@ import { CourseItemMyLearningComponent } from './components/course-item-my-learn
 import { CourseItemShoppingCartComponent } from './components/course-item-shopping-cart/course-item-shopping-cart.component';
 import { ProgressLearningComponent } from './components/progress-learning/progress-learning.component';
 import { YoutubePlayerComponent } from './components/youtube-player/youtube-player.component';
+import { SettingComponent } from './features/setting/setting.component';
+import { CoursesOfInstructorComponent } from './features/setting/courses-of-instructor/courses-of-instructor.component';
+import { RevenueComponent } from './features/setting/revenue/revenue.component';
+import { MessageComponent } from './features/setting/message/message.component';
+import { CourseUpdateComponent } from './features/setting/courses-of-instructor/course-update/course-update.component';
+
+import { QuillModule } from 'ngx-quill';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgApexchartsModule } from 'ng-apexcharts'; // Import đúng cách
 
 @NgModule({
   declarations: [
@@ -39,6 +50,11 @@ import { YoutubePlayerComponent } from './components/youtube-player/youtube-play
     MyLearningComponent,
     CourseComponent,
     LectureComponent,
+    SettingComponent,
+    CoursesOfInstructorComponent,
+    RevenueComponent,
+    MessageComponent,
+    CourseUpdateComponent,
     // components
     YoutubePlayerComponent,
     CourseItemSearchComponent,
@@ -46,7 +62,14 @@ import { YoutubePlayerComponent } from './components/youtube-player/youtube-play
     CourseItemMyLearningComponent,
     CourseItemShoppingCartComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    QuillModule.forRoot(),
+    ReactiveFormsModule,
+    NgApexchartsModule,
+  ],
   providers: [provideClientHydration()],
   bootstrap: [AppComponent],
 })

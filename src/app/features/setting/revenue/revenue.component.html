@@ -1,0 +1,436 @@
+<div class="relative flex w-full h-full">
+  <div class="flex flex-col w-full h-full">
+    <!-- header -->
+    <div class="flex items-end justify-between mx-6 my-5">
+      <div class="flex items-center justify-start gap-4">
+        <h1 class="text-4xl font-bold uppercase font-signika">Doanh thu</h1>
+        <select
+          class="w-[180px] py-2 border rounded-md focus:outline-none shadow-sm shadow-gray-400"
+        >
+          <option value="AllCourses">Tất cả khóa học</option>
+          <option value="oldest">Khóa học 1</option>
+          <option value="oldest1">Khóa học 2</option>
+        </select>
+      </div>
+      <div class="flex gap-3">
+        <button
+          hidden
+          (click)="toggleShowModalQA()"
+          type="button"
+          class="px-3 py-2 font-semibold rounded-md bg-zinc-200"
+        >
+          Hỏi đáp
+        </button>
+        <button
+          (click)="toggleShowModalWithdrawHistory()"
+          type="button"
+          class="px-3 py-2 font-semibold bg-blue-200 rounded-md"
+        >
+          Lịch sử rút tiền
+        </button>
+        <button
+          (click)="toggleShowModalWithdraw()"
+          type="button"
+          class="px-3 py-2 font-semibold bg-red-200 rounded-md"
+        >
+          Yêu cầu rút tiền
+        </button>
+      </div>
+    </div>
+
+    <!-- body -->
+    <div class="flex flex-col w-auto h-full mx-3 mt-5 mb-3">
+      <div class="flex flex-col w-full h-full p-5">
+        <!-- over view : revenue : number of student : rate of courses -->
+        <div class="flex items-start justify-start gap-20">
+          <!-- tổng doanh thu -->
+          <div class="flex flex-col">
+            <h1 class="font-semibold text-gray-600">Tổng doanh thu</h1>
+            <span class="text-3xl font-bold"
+              >20,000,000 <span class="text-sm text-gray-600">đ</span></span
+            >
+          </div>
+          <!-- Tổng số học sinh tham gia khóa học -->
+          <div class="flex flex-col">
+            <h1 class="font-semibold text-gray-600">Tổng học viên</h1>
+            <span class="text-3xl font-bold"
+              >20,213 <span class="text-sm text-gray-600">người</span></span
+            >
+          </div>
+          <!--  học sinh tham gia khóa học tháng này -->
+          <div class="flex flex-col">
+            <h1 class="font-semibold text-gray-600">Học viên tháng này</h1>
+            <span class="text-3xl font-bold"
+              >252 <span class="text-sm text-gray-600">người</span></span
+            >
+          </div>
+          <!-- Đánh giá giảng viên -->
+          <div class="flex flex-col">
+            <h1 class="font-semibold text-gray-600">Đánh giá giảng viên</h1>
+            <span class="text-3xl font-bold"
+              >4.8
+              <span class="text-sm text-gray-600"
+                ><i class="bi bi-star-fill"></i></span
+            ></span>
+          </div>
+          <!-- đánh giá khóa học (chỉ hiển thị khi chọn khóa học chỉ định, nếu chọn tất thì sẽ ẩn mục này đi)  -->
+          <div class="flex flex-col">
+            <h1 class="font-semibold text-gray-600">Đánh giá khóa học</h1>
+            <span class="text-3xl font-bold"
+              >4.5
+              <span class="text-sm text-gray-600"
+                ><i class="bi bi-star-fill"></i></span
+            ></span>
+          </div>
+        </div>
+        <!-- chart -->
+        <div class="flex w-full h-full mt-8">
+          <div
+            class="flex flex-col w-full h-full border-2 border-gray-500 rounded-md"
+          >
+            <!-- biểu đồ tại đây -->
+            <apx-chart
+              class="w-full h-full"
+              [series]="chartOptions.series"
+              [chart]="chartOptions.chart"
+              [xaxis]="chartOptions.xaxis"
+              [title]="chartOptions.title"
+            ></apx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- modal withdraw -->
+    <div class="fixed w-screen h-screen" *ngIf="isShowModalWithdraw">
+      <!-- background -->
+      <div
+        id="BackgroungModalWithdrawID"
+        class="absolute flex w-screen z-[10] h-screen bg-zinc-900 opacity-80"
+      ></div>
+
+      <!-- modal -->
+      <div
+        #ModalWithdraw
+        id="modalWithdrawID"
+        class="flex absolute right-1/3 items-center z-[11] justify-center w-1/3 h-[calc(100vh-104px)]"
+      >
+        <div class="flex flex-col w-full h-full bg-white rounded-md">
+          <!-- header -->
+          <div
+            class="flex flex-col items-center justify-center h-[10%] px-5 w-full"
+          >
+            <div class="flex items-center justify-between w-full">
+              <h1 class="text-xl font-bold">Yêu cầu rút tiền</h1>
+              <button
+                (click)="toggleShowModalWithdraw()"
+                type="button"
+                class="text-2xl text-black transition-all duration-500 rounded-full hover:bg-slate-300"
+              >
+                <i class="cursor-pointer bi bi-x"></i>
+              </button>
+            </div>
+            <p class="flex gap-2 text-xs text-gray-500">
+              <i class="bi bi-info-circle"></i>
+              Vui lòng kiểm tra kỹ thông tin nhận tiền, nếu sai bạn có thể sẽ
+              mất tiền.
+            </p>
+          </div>
+          <!-- body -->
+          <div class="flex flex-col w-full h-[90%] rounded-md p-6 space-y-4">
+            <!-- Ngân hàng của người dùng -->
+            <div class="flex flex-col space-y-2">
+              <label for="bank" class="text-sm font-medium">Ngân hàng</label>
+              <select id="bank" class="p-2 border rounded-md">
+                <option
+                  class="grid grid-cols-2 gap-4"
+                  *ngFor="let item of banks"
+                  value="{{ item.brandName }}"
+                >
+                  {{ item.brandName }} - {{ item.fullName }}
+                </option>
+                <!-- Thêm các ngân hàng khác tại đây -->
+              </select>
+            </div>
+
+            <!-- Số tài khoản ngân hàng -->
+            <div class="flex flex-col space-y-2">
+              <label for="accountNumber" class="text-sm font-medium"
+                >Số tài khoản</label
+              >
+              <input
+                type="text"
+                id="accountNumber"
+                class="p-2 border rounded-md"
+                placeholder="Nhập số tài khoản"
+              />
+            </div>
+
+            <!-- Tên chủ tài khoản -->
+            <div class="flex flex-col space-y-2">
+              <label for="accountName" class="text-sm font-medium"
+                >Tên chủ tài khoản</label
+              >
+              <input
+                type="text"
+                id="accountName"
+                class="p-2 border rounded-md"
+                placeholder="Nhập tên chủ tài khoản"
+              />
+            </div>
+
+            <!-- Số điện thoại -->
+            <div class="flex flex-col space-y-2">
+              <label for="phoneNumber" class="text-sm font-medium"
+                >Số điện thoại</label
+              >
+              <input
+                type="text"
+                id="phoneNumber"
+                class="p-2 border rounded-md"
+                placeholder="Nhập số điện thoại"
+              />
+            </div>
+
+            <!-- Email -->
+            <div class="flex flex-col space-y-2">
+              <label for="email" class="text-sm font-medium">Email</label>
+              <input
+                type="email"
+                id="email"
+                class="p-2 border rounded-md"
+                placeholder="Nhập email"
+              />
+            </div>
+
+            <!-- Mã xác nhận -->
+            <div class="flex flex-col space-y-2">
+              <div class="flex items-center justify-start gap-2">
+                <label for="confirmationCode" class="text-sm font-medium"
+                  >Mã xác nhận</label
+                >
+                <p class="hidden font-semibold text-red-500">sai mã xác thực</p>
+              </div>
+              <div class="flex items-center justify-between">
+                <input
+                  type="text"
+                  id="confirmationCode"
+                  class="w-3/4 p-2 border rounded-md"
+                  placeholder="Nhập mã xác nhận"
+                />
+                <button type="button" class="px-3 py-2 rounded-md bg-zinc-200">
+                  Xác nhận
+                </button>
+              </div>
+            </div>
+
+            <!-- Nút gửi yêu cầu -->
+            <button
+              class="p-2 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600"
+            >
+              Gửi yêu cầu
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- modal withdraw history -->
+    <div
+      class="fixed items-center justify-end w-screen h-screen"
+      *ngIf="isShowModalWithdrawHistory"
+    >
+      <!-- background -->
+      <div
+        id="BackgroungModalWithdrawHistoryID"
+        class="absolute flex w-screen z-[10] h-screen bg-zinc-900 opacity-80"
+      ></div>
+
+      <!-- modal -->
+      <div
+        #ModalWithdrawHistory
+        id="modalWithdrawHistoryID"
+        class="flex absolute top-3 left-32 items-center z-[11] justify-center w-4/5 h-[calc(100vh-104px)]"
+      >
+        <div class="flex flex-col w-full h-full bg-white rounded-md">
+          <!-- content -->
+          <div class="container px-4 py-8 mx-auto">
+            <div class="flex items-start justify-between">
+              <h1 class="mb-6 text-3xl font-bold">Lịch sử rút tiền</h1>
+              <button
+                (click)="toggleShowModalWithdrawHistory()"
+                type="button"
+                class="px-2 py-1 hover:bg-slate-300"
+              >
+                <i class="cursor-pointer bi bi-x-lg"></i>
+              </button>
+            </div>
+
+            <div class="overflow-hidden bg-white rounded-lg shadow-md">
+              <div class="overflow-x-auto">
+                <div class="max-h-[70vh] overflow-y-auto">
+                  <table class="min-w-full leading-normal">
+                    <thead class="sticky top-0 bg-gray-100">
+                      <tr>
+                        <th
+                          class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                        >
+                          ID
+                        </th>
+                        <th
+                          class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                        >
+                          Số tiền
+                        </th>
+                        <th
+                          class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                        >
+                          Trạng thái
+                        </th>
+                        <th
+                          class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                        >
+                          Ngày
+                        </th>
+                        <th
+                          class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                        >
+                          Phương thức
+                        </th>
+                        <th
+                          class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                        >
+                          Người gửi
+                        </th>
+                        <th
+                          class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                        >
+                          Số điện thoại
+                        </th>
+                        <th
+                          class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                        >
+                          Email
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let transaction of transactions">
+                        <td
+                          class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                        >
+                          <p class="text-gray-900 whitespace-no-wrap">
+                            {{ transaction.id }}
+                          </p>
+                        </td>
+                        <td
+                          class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                        >
+                          <p class="text-gray-900 whitespace-no-wrap">
+                            {{
+                              transaction.amount
+                                | currency : transaction.currency
+                            }}
+                          </p>
+                        </td>
+                        <td
+                          class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                        >
+                          <span
+                            [class]="
+                              'px-2 py-1 font-semibold leading-tight rounded-full ' +
+                              getStatusClass(transaction.status)
+                            "
+                          >
+                            {{ transaction.status }}
+                          </span>
+                        </td>
+                        <td
+                          class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                        >
+                          <p class="text-gray-900 whitespace-no-wrap">
+                            {{ transaction.date | date : "dd/MM/yyyy" }}
+                          </p>
+                        </td>
+                        <td
+                          class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                        >
+                          <p class="text-gray-900 whitespace-no-wrap">
+                            {{ transaction.method }}
+                          </p>
+                        </td>
+                        <td
+                          class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                        >
+                          <p class="text-gray-900 whitespace-no-wrap">
+                            {{ transaction.senderName }}
+                          </p>
+                        </td>
+                        <td
+                          class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                        >
+                          <p class="text-gray-900 whitespace-no-wrap">
+                            {{ transaction.phoneNumber }}
+                          </p>
+                        </td>
+                        <td
+                          class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                        >
+                          <p class="text-gray-900 whitespace-no-wrap">
+                            {{ transaction.email }}
+                          </p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- end -->
+        </div>
+      </div>
+    </div>
+
+    <!-- modal QA -->
+    <div class="fixed w-screen h-screen" *ngIf="isShowModalQA">
+      <!-- background -->
+      <div
+        id="BackgroungModalQAID"
+        class="absolute flex w-screen z-[10] h-screen bg-zinc-900 opacity-80"
+      ></div>
+
+      <!-- modal -->
+      <div
+        #ModalQA
+        id="modalQAID"
+        class="flex absolute right-1/3 items-center z-[11] justify-center w-1/3 h-[calc(100vh-104px)]"
+      >
+        <div class="flex flex-col w-full h-full bg-white rounded-md">
+          <!-- header -->
+          <div
+            class="flex flex-col items-center justify-center h-[10%] px-5 w-full"
+          >
+            <div class="flex items-center justify-between w-full">
+              <h1 class="text-xl font-bold">Yêu cầu rút tiền</h1>
+              <button
+                (click)="toggleShowModalQA()"
+                type="button"
+                class="text-2xl text-black transition-all duration-500 rounded-full hover:bg-slate-300"
+              >
+                <i class="cursor-pointer bi bi-x"></i>
+              </button>
+            </div>
+          </div>
+          <!-- body -->
+          <div
+            class="flex flex-col w-full h-[90%] rounded-md p-6 bg-slate-50 space-y-4"
+          >
+            <!-- content -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
