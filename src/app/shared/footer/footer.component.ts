@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { link } from 'node:fs';
 
 @Component({
-  selector: 'app-footer',
-  templateUrl: './footer.component.html',
-  styleUrl: './footer.component.css',
+    selector: 'app-footer',
+    templateUrl: './footer.component.html',
+    styleUrl: './footer.component.css',
+    standalone: false
 })
 export class FooterComponent {
   menuItem = [

@@ -9,9 +9,10 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'app-lecture',
-  templateUrl: './lecture.component.html',
-  styleUrl: './lecture.component.css',
+    selector: 'app-lecture',
+    templateUrl: './lecture.component.html',
+    styleUrl: './lecture.component.css',
+    standalone: false
 })
 export class LectureComponent implements AfterViewInit {
   // ==================

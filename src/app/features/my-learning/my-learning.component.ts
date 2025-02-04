@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-my-learning',
-  templateUrl: './my-learning.component.html',
-  styleUrl: './my-learning.component.css',
+    selector: 'app-my-learning',
+    templateUrl: './my-learning.component.html',
+    styleUrl: './my-learning.component.css',
+    standalone: false
 })
 export class MyLearningComponent {
   lengthListMyCourses = 0;

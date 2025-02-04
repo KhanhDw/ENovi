@@ -7,9 +7,10 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'app-progress-learning',
-  templateUrl: './progress-learning.component.html',
-  styleUrl: './progress-learning.component.css',
+    selector: 'app-progress-learning',
+    templateUrl: './progress-learning.component.html',
+    styleUrl: './progress-learning.component.css',
+    standalone: false
 })
 export class ProgressLearningComponent implements AfterViewInit {
   private _progress: number = 0; // Giá trị mặc định

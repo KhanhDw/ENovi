@@ -2,9 +2,10 @@ import { Component, QueryList, ViewChildren } from '@angular/core';
 import { CourseItemShoppingCartComponent } from '../../components/course-item-shopping-cart/course-item-shopping-cart.component';
 
 @Component({
-  selector: 'app-shopping-cart',
-  templateUrl: './shopping-cart.component.html',
-  styleUrl: './shopping-cart.component.css',
+    selector: 'app-shopping-cart',
+    templateUrl: './shopping-cart.component.html',
+    styleUrl: './shopping-cart.component.css',
+    standalone: false
 })
 export class ShoppingCartComponent {
   // ===========

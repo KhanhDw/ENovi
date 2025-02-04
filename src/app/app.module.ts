@@ -55,6 +55,11 @@ import { NgApexchartsModule } from 'ng-apexcharts'; // Import đúng cách
     RevenueComponent,
     MessageComponent,
     CourseUpdateComponent,
+    SettingComponent,
+    CoursesOfInstructorComponent,
+    RevenueComponent,
+    MessageComponent,
+    CourseUpdateComponent,
     // components
     YoutubePlayerComponent,
     CourseItemSearchComponent,
