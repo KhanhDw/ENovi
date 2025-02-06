@@ -23,7 +23,7 @@ bảng điều khiển giảng viên (nếu kích hoạt giáo viên)
         xoá khoá học 
         tình hình khoá học [xem tình hình khoá học, như số lượng học viên tham gia, đánh giá, bình luận]
     doanh thu
-        lịch sử nạp
+        lịch sử rút tiền
         hỏi đáp 
         ok- yêu cầu rút tiền
         biểu đồ doanh thu của các khóa học
@@ -31,9 +31,8 @@ bảng điều khiển giảng viên (nếu kích hoạt giáo viên)
 
     
 lịch sử mua hàng
-ngôn ngữ 
-thông báo
-tin nhắn	
+
+ok- tin nhắn	
 quản lý khoá học - admin
 quan lý user - admin
 quản lý doanh thu - admin
@@ -42,3 +41,57 @@ thanh toán đối tác - admin - chuyển tiền cho người bán khoá học 
 
 
 
+ngày mai làm
+
+ok- lịch sử mua hàng
+hồ sơ giảng viên công khai
+điều chỉnh hồ sơ giảng viên công khai
+hồ sơ học viên công khai
+điều chỉnh hồ sơ học viên công khai
+phương thức nhận tiền
+bảo mật - mật khẩu
+đóng tài khoản
+bỏ icon thông báo trên header - hidden thôi
+bỏ icon ngôn ngữ - hidden thôi
+
+
+
+
+
+
+
+
+<app-edit-instructor-profile
+        class="w-full h-full"
+        *ngIf="routerDirection == 5"
+      ></app-edit-instructor-profile>
+
+      <!-- instructor profile -->
+      <app-instructor-profile
+        class="w-full h-full"
+        *ngIf="routerDirection == 501"
+      ></app-instructor-profile>
+
+      <!-- courses-of-instructor -->
+      <app-courses-of-instructor
+        class="w-full"
+        *ngIf="routerDirection == 1"
+      ></app-courses-of-instructor>
+
+      <!--courses-of-instructor -is parent of- course-update -->
+      <app-course-update
+        class="w-full"
+        *ngIf="routerDirection == 101"
+      ></app-course-update>
+
+      <!-- revenue -->
+      <app-revenue class="w-full" *ngIf="routerDirection == 2"></app-revenue>
+
+      <!-- message -->
+      <app-message class="w-full" *ngIf="routerDirection == 3"></app-message>
+
+      <!-- history buy course -->
+      <app-purchase-history
+        class="w-full"
+        *ngIf="routerDirection == 11"
+      ></app-purchase-history>

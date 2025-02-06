@@ -1,15 +1,91 @@
 <div
   class="w-full h-auto bg-[#231d1d] flex items-center justify-between px-10 py-1 no-select text-white"
 >
-  <div class="flex flex-wrap items-center justify-center">
+  <div class="relative flex flex-wrap items-center justify-center h-full">
     <a href="#" class="p-3 mx-2 text-xl font-bold">ENovi</a>
-    <a href="#" class="p-3 mx-2 font-semibold hover:text-yellow-400"
-      >Lĩnh vực</a
-    >
+    <!-- lĩnh vực -->
+    <div class="relative inline-block text-left">
+      <a
+        href="#"
+        (mouseenter)="onHover(true)"
+        (mouseleave)="onHover(false)"
+        (click)="$event.preventDefault()"
+        class="p-3 mx-2 font-semibold hover:text-yellow-400 hover:bg-[#312929]"
+      >
+        Lĩnh vực
+      </a>
+
+      <div
+        *ngIf="isHovered"
+        class="absolute z-10 flex justify-center mt-2 text-black bg-white border-2 border-black rounded-md h-96 ring-1 ring-black ring-opacity-5"
+        (mouseenter)="onHover(true)"
+        (mouseleave)="onHover(false)"
+      >
+        <div class="flex flex-col border-r-2 border-black w-60">
+          <h1
+            class="flex items-center justify-center w-full font-bold rounded-tl-md bg-slate-200"
+          >
+            Lĩnh vực
+          </h1>
+          <a
+            *ngFor="let field of fields"
+            (mouseenter)="onHoverField(field); onHoverSubfield(null)"
+            class="flex items-center justify-between px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 hover:text-gray-900"
+          >
+            <span>{{ field.name }}</span
+            ><i class="bi bi-chevron-right"></i>
+          </a>
+        </div>
+
+        <div
+          class="flex flex-col border-r-2 border-black w-60"
+          *ngIf="selectedSubfields"
+        >
+          <h1
+            class="flex items-center justify-center w-full font-bold bg-slate-200"
+            [ngClass]="selectedSubfields ? 'rounded-tr-md' : ''"
+          >
+            Chuyên ngành
+          </h1>
+          <div
+            *ngFor="let subfield of selectedSubfields"
+            (mouseenter)="onHoverSubfield(subfield.subitems)"
+            class="flex flex-col w-full"
+          >
+            <a
+              href="#"
+              class="flex items-center justify-between px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 hover:text-gray-900"
+            >
+              <span>{{ subfield.name }}</span
+              ><i class="bi bi-chevron-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="flex flex-col w-60" *ngIf="isShowCol3">
+          <h1
+            class="flex items-center justify-center w-full font-bold bg-slate-200 rounded-tr-md"
+          >
+            Phân mục
+          </h1>
+          <div
+            *ngFor="let subitem of hoveredFieldSubitem"
+            class="flex flex-col w-full"
+          >
+            <a
+              href="#"
+              class="px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 hover:text-gray-900"
+            >
+              {{ subitem }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="flex items-center justify-center">
-    <form>
+  <div class="flex items-center justify-center w-5/12">
+    <form class="w-full">
       <label
         for="search"
         class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -38,7 +114,7 @@
         <input
           type="search"
           id="search"
-          class="focus:outline-none active:outline-none block w-[600px] h-[45px] p-4 text-sm text-gray-900 border border-gray-300 rounded-full ps-10 bg-gray-50"
+          class="focus:outline-none active:outline-none block w-full min-w-[100px] h-[45px] p-4 text-sm text-gray-900 border border-gray-300 rounded-full ps-10 bg-gray-50"
           placeholder="Tìm kiếm"
           required
         />
@@ -53,32 +129,42 @@
     </form>
   </div>
 
-  <div class="flex flex-wrap">
+  <div class="flex flex-wrap items-center justify-center">
     <a
-      href="#"
-      class="flex-col items-center justify-center hidden px-3 py-2 mx-2 font-semibold hover:text-red-300"
-      >Trở thành giảng viên
+      href="/user/courses-instructor"
+      class="flex items-center justify-center gap-2 px-3 py-2 mx-2 text-sm font-semibold group hover:text-red-300"
+      ><i class="text-3xl bi bi-mortarboard-fill"></i>
+      <div
+        class="flex flex-col items-center justify-center group-hover:text-red-300"
+      >
+        <!-- <span>Trở thành</span><span>giảng viên</span>  -->
+        <span>Hoạt động</span><span>giảng dạy</span>
+      </div>
     </a>
     <a
       href="#"
       class="flex items-center justify-center gap-2 px-3 py-2 mx-2 font-semibold hover:text-red-300"
-      ><i class="text-2xl bi bi-person-fill-gear"></i>
-      Quản trị hệ thống
+      ><i class="text-3xl bi bi-person-fill-gear"></i>
+      <div class="flex flex-col text-sm">
+        <span>Quản trị</span>
+        <span>hệ thống</span>
+      </div>
     </a>
 
     <a
-      href="#"
-      class="flex items-center justify-center h-auto px-4 mx-2 text-xl transition duration-300 rounded hover:bg-gray-700"
+      href="/cart"
+      class="flex items-center justify-center h-full px-4 py-2 mx-2 text-xl transition duration-300 rounded hover:bg-gray-700"
       ><i class="bi bi-cart"></i
     ></a>
     <a
+      hidden
       href="#"
-      class="flex items-center justify-center h-auto px-4 mx-2 text-xl transition duration-300 rounded hover:bg-gray-700"
+      class="items-center justify-center h-full px-4 py-2 mx-2 text-xl transition duration-300 rounded hover:bg-gray-700"
       ><i class="bi bi-bell"></i
     ></a>
 
     <a
-      href="#"
+      href="/my-learning"
       class="flex items-center justify-center px-3 py-1 m-1 text-xs font-semibold text-center text-black bg-white border-2 rounded hover:bg-slate-100 border-cyan-900"
       >Khoá học <br />
       của tôi</a
@@ -109,33 +195,38 @@
             src="https://media-cdn-v2.laodong.vn/storage/newsportal/2023/8/26/1233821/Giai-Nhi-1--Nang-Tre.jpg"
             alt="avarta"
           />
-          <h6 class="font-medium text-black">Administrator</h6>
+          <h6 class="font-medium text-black">{{ nameUser }}</h6>
         </button>
 
+        <!-- ---------------------- -->
         <!-- dropdown trang cá nhân -->
+        <!-- ---------------------- -->
         <div
           *ngIf="isOpen"
-          class="absolute z-10 bg-white divide-y divide-gray-400 rounded-lg shadow top-14 right-16 shadow-slate-700 w-44"
+          class="absolute z-[9999] bg-white divide-y divide-gray-400 rounded-lg shadow top-14 right-16 shadow-slate-700 w-60"
         >
           <div class="px-4 py-3 text-sm text-gray-900">
-            <a href="#" class="font-semibold hover:text-blue-600">
-              <div>Bonnie Green</div>
-              <div class="font-medium truncate">name11flowbite.com</div></a
+            <a
+              [href]="publishProfileURL"
+              class="font-semibold hover:text-blue-600"
+            >
+              <div>{{ nameUser }}</div>
+              <div class="font-medium truncate">{{ emailUser }}</div></a
             >
           </div>
           <ul class="py-2 text-sm text-gray-700">
             <li>
               <a
-                href="#"
                 class="block px-4 py-2 hover:bg-gray-100"
                 *ngFor="let item of avartFeature"
+                href="{{ item.url }}"
                 >{{ item.name }}</a
               >
             </li>
           </ul>
           <div class="py-2">
             <a
-              href="#"
+              [href]="LogOutUrl"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >Đăng xuất</a
             >
@@ -144,9 +235,11 @@
       </div>
     </div>
 
+    <!-- xóa hidden và thêm  flex vào class để hiển thị btn ngôn ngữ, chỉ hiển thị khi chưa đăng nhập, nếu đăng nhập rồI thì ấn -->
     <a
+      hidden
       href="#"
-      class="flex items-center justify-center px-3 py-1 m-1 text-xl bg-white border-2 rounded border-cyan-900 hover:bg-blue-100"
+      class="items-center justify-center px-3 py-1 m-1 text-xl bg-white border-2 rounded border-cyan-900 hover:bg-blue-100"
     >
       <i class="text-black bi bi-globe fs-1"></i
     ></a>

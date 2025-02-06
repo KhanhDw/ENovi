@@ -1,0 +1,141 @@
+<form>
+  <div class="grid grid-cols-1 gap-6 mb-6 md:grid-cols-2">
+    <!-- left -->
+    <div class="flex flex-col">
+      <div>
+        <label class="block mb-2 text-gray-700">Tên</label>
+        <input
+          type="text"
+          class="w-full p-2 border border-gray-300 rounded"
+          value="Ngô"
+        />
+      </div>
+      <div>
+        <label class="block mb-2 text-gray-700">Họ</label>
+        <input
+          type="text"
+          class="w-full p-2 border border-gray-300 rounded"
+          value="Khánh"
+        />
+      </div>
+      <div>
+        <label class="block mb-2 text-gray-700">Lĩnh vực</label>
+        <input
+          type="text"
+          class="w-full p-2 border border-gray-300 rounded"
+          value="Instructor at Udemy"
+        />
+      </div>
+      <div>
+        <label class="block mb-2 text-gray-700">Tiểu sử</label>
+
+        <quill-editor
+          placeholder="Viết tiểu sư của bạn"
+          theme="snow"
+          [modules]="modules"
+          class="w-full p-2 border border-gray-300 rounded"
+        ></quill-editor>
+        <div class="flex items-center gap-2">
+          <p class="mt-2 text-sm text-gray-500">
+            Để giúp người học tìm hiểu thêm về bạn, tiểu sử của bạn phải phản
+            ánh Uy tín, Sự đồng cảm, Niềm đam mê và Tính cách của bạn. Tiểu sử
+            của bạn phải có ít nhất 50 từ, liên kết và không được phép sử dụng
+            mã phiếu giảm giá.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- right -->
+    <div class="flex flex-col">
+      <div>
+        <label class="block mb-2 text-gray-700">Website</label>
+        <input
+          type="text"
+          class="w-full p-2 border border-gray-300 rounded"
+          placeholder="Url"
+        />
+      </div>
+
+      <div>
+        <label class="block mb-2 text-gray-700">X</label>
+        <div class="flex">
+          <input
+            type="text"
+            class="w-1/2 p-2 border border-gray-300 rounded-l"
+            value="http://www.x.com/"
+          />
+          <input
+            type="text"
+            class="w-1/2 p-2 border border-gray-300 rounded-r"
+            placeholder="Username"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label class="block mb-2 text-gray-700">Facebook</label>
+        <div class="flex">
+          <input
+            type="text"
+            class="w-1/2 p-2 border border-gray-300 rounded-l"
+            value="http://www.facebook.com/"
+          />
+          <input
+            type="text"
+            class="w-1/2 p-2 border border-gray-300 rounded-r"
+            placeholder="Username"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label class="block mb-2 text-gray-700">LinkedIn</label>
+        <div class="flex">
+          <input
+            type="text"
+            class="w-1/2 p-2 border border-gray-300 rounded-l"
+            value="http://www.linkedin.com/"
+          />
+          <input
+            type="text"
+            class="w-1/2 p-2 border border-gray-300 rounded-r"
+            placeholder="Resource ID"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label class="block mb-2 text-gray-700">Youtube</label>
+        <div class="flex">
+          <input
+            type="text"
+            class="w-1/2 p-2 border border-gray-300 rounded-l"
+            value="http://www.youtube.com/"
+          />
+          <input
+            type="text"
+            class="w-1/2 p-2 border border-gray-300 rounded-r"
+            placeholder="Username"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label class="block mb-2 text-gray-700">Language</label>
+        <select class="w-full p-2 border border-gray-300 rounded">
+          <option>Tiếng Việt</option>
+          <option>Tiếng Anh</option>
+          <option>Tiếng Trung Quốc</option>
+          <option>Tiếng Hàn</option>
+          <option>Tiếng Nhật</option>
+          <option>Tiếng Pháp</option>
+          <option>Tiếng Đức</option>
+          <option>Tiếng Ấn Độ</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <button type="submit" class="px-4 py-2 text-white bg-purple-500 rounded">
+    Lưu
+  </button>
+</form>

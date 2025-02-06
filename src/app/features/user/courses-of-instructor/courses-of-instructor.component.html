@@ -1,7 +1,10 @@
-<div class="flex w-full h-full">
-  <div class="container p-6 mx-auto">
-    <h1 class="mb-8 text-3xl font-bold uppercase font-signika">Khóa học</h1>
+<div class="w-full h-screen overflow-y-auto">
+  <div class="px-6 mx-auto mt-5">
+    <h1 class="block mb-8 text-3xl font-bold uppercase font-signika">
+      Khóa học
+    </h1>
 
+    <!-- search and sort and add course -->
     <div
       class="flex flex-col gap-6 mb-8 md:flex-row md:items-center md:justify-between"
     >
@@ -95,7 +98,7 @@
     </div>
 
     <!-- Course List -->
-    <div class="grid gap-3 pb-10">
+    <div class="grid gap-3 pb-5">
       <div
         *ngFor="let course of courses"
         class="flex overflow-hidden transition-shadow border border-gray-500 rounded-lg hover:shadow-lg bg-zinc-50"

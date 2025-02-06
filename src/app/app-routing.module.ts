@@ -9,11 +9,19 @@ import { ShoppingCartComponent } from './features/shopping-cart/shopping-cart.co
 import { MyLearningComponent } from './features/my-learning/my-learning.component';
 import { LectureComponent } from './features/lecture/lecture.component';
 import { CourseComponent } from './features/course/course.component';
-import { SettingComponent } from './features/setting/setting.component';
-import { CoursesOfInstructorComponent } from './features/setting/courses-of-instructor/courses-of-instructor.component';
-import { RevenueComponent } from './features/setting/revenue/revenue.component';
-import { MessageComponent } from './features/setting/message/message.component';
-import { CourseUpdateComponent } from './features/setting/courses-of-instructor/course-update/course-update.component';
+import { userComponent } from './features/user/user.component';
+import { CoursesOfInstructorComponent } from './features/user/courses-of-instructor/courses-of-instructor.component';
+import { RevenueComponent } from './features/user/revenue/revenue.component';
+import { MessageComponent } from './features/user/message/message.component';
+import { CourseUpdateComponent } from './features/user/courses-of-instructor/course-update/course-update.component';
+import { PurchaseHistoryComponent } from './features/user/purchase-history/purchase-history.component';
+import { InstructorProfileComponent } from './features/user/instructor-profile/instructor-profile.component';
+import { EditInstructorProfileComponent } from './features/user/edit-instructor-profile/edit-instructor-profile.component';
+import { UpdatePhotoComponent } from './features/user/edit-instructor-profile/update-photo/update-photo.component';
+import { BasicInformationComponent } from './features/user/edit-instructor-profile/basic-information/basic-information.component';
+import { PaymentsComponent } from './features/user/payments/payments.component';
+import { ReceiveComponent } from './features/user/payments/receive/receive.component';
+import { TransferComponent } from './features/user/payments/transfer/transfer.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -26,21 +34,41 @@ const routes: Routes = [
   { path: 'course', component: CourseComponent },
   { path: 'lecture', component: LectureComponent },
   {
-    path: 'setting',
-    component: SettingComponent,
+    path: 'user',
+    component: userComponent,
     children: [
+      { path: '', redirectTo: 'courses-instructor', pathMatch: 'full' },
       {
         path: 'courses-instructor',
         component: CoursesOfInstructorComponent,
         children: [{ path: 'course-update', component: CourseUpdateComponent }],
       },
-      {
-        path: 'revenue',
-        component: RevenueComponent,
-      },
+      { path: 'revenue', component: RevenueComponent },
       { path: 'message', component: MessageComponent },
+      { path: 'purchase-history', component: PurchaseHistoryComponent },
+      { path: 'instructor-profile', component: InstructorProfileComponent },
+      {
+        path: 'payments',
+        component: PaymentsComponent,
+        children: [
+          { path: 'recive', component: ReceiveComponent },
+          { path: 'transfer', component: TransferComponent },
+        ],
+      },
+      {
+        path: 'instructor',
+        component: EditInstructorProfileComponent,
+        // // 🚨 Bỏ component: EditInstructorProfileComponent ở đây - để router-outlet không lòng componentCha(componentCha(componentCon))
+        // vì khi render component con sẽ lấy luôn component cha
+        children: [
+          { path: '', redirectTo: 'basic-information', pathMatch: 'full' }, // Chuyển hướng mặc định khi vào /instructor
+          { path: 'basic-information', component: BasicInformationComponent },
+          { path: 'photo', component: UpdatePhotoComponent },
+        ],
+      },
     ],
   },
+
   { path: 'notfound', component: NotfoundComponent },
   // phải luôn đặt ** tại cuối vì theo trình tự biên dịch từ trên muốn
   { path: '**', redirectTo: 'notfound' },

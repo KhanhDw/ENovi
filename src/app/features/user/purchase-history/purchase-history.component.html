@@ -1,0 +1,54 @@
+<div class="w-full h-screen overflow-y-auto" style="width: 100% !important">
+  <div class="w-full h-full px-4 py-8">
+    <h1 class="mb-6 text-3xl font-bold">Lịch sử mua hàng</h1>
+    <div class="bg-white rounded-lg shadow-md">
+      <table class="min-w-full leading-normal table-fixed">
+        <thead>
+          <tr>
+            <th
+              class="w-1/12 px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
+            >
+              Ngày
+            </th>
+            <th
+              class="w-7/12 px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
+            >
+              Khóa học
+            </th>
+            <th
+              class="w-2/12 px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
+            >
+              Giá tiền
+            </th>
+            <th
+              class="w-1/12 px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
+            >
+              Trạng thái
+            </th>
+          </tr>
+        </thead>
+        <tbody class="">
+          <tr *ngFor="let purchase of purchases">
+            <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+              {{ purchase.date | date : "mediumDate" }}
+            </td>
+            <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+              {{ purchase.product }}
+            </td>
+            <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+              {{ purchase.amount | currency : "USD" : "symbol" : "1.2-2" }}
+            </td>
+            <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+              <span
+                [ngClass]="getStatusColor(purchase.status)"
+                class="relative inline-block px-3 py-1 font-semibold leading-tight"
+              >
+                {{ purchase.status }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

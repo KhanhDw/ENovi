@@ -1,6 +1,10 @@
 import { NgModule, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { QuillModule } from 'ngx-quill';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgApexchartsModule } from 'ng-apexcharts'; // Import đúng cách
+
 import {
   BrowserModule,
   provideClientHydration,
@@ -24,15 +28,19 @@ import { CourseItemMyLearningComponent } from './components/course-item-my-learn
 import { CourseItemShoppingCartComponent } from './components/course-item-shopping-cart/course-item-shopping-cart.component';
 import { ProgressLearningComponent } from './components/progress-learning/progress-learning.component';
 import { YoutubePlayerComponent } from './components/youtube-player/youtube-player.component';
-import { SettingComponent } from './features/setting/setting.component';
-import { CoursesOfInstructorComponent } from './features/setting/courses-of-instructor/courses-of-instructor.component';
-import { RevenueComponent } from './features/setting/revenue/revenue.component';
-import { MessageComponent } from './features/setting/message/message.component';
-import { CourseUpdateComponent } from './features/setting/courses-of-instructor/course-update/course-update.component';
-
-import { QuillModule } from 'ngx-quill';
-import { ReactiveFormsModule } from '@angular/forms';
-import { NgApexchartsModule } from 'ng-apexcharts'; // Import đúng cách
+import { userComponent } from './features/user/user.component';
+import { CoursesOfInstructorComponent } from './features/user/courses-of-instructor/courses-of-instructor.component';
+import { RevenueComponent } from './features/user/revenue/revenue.component';
+import { MessageComponent } from './features/user/message/message.component';
+import { CourseUpdateComponent } from './features/user/courses-of-instructor/course-update/course-update.component';
+import { PurchaseHistoryComponent } from './features/user/purchase-history/purchase-history.component';
+import { InstructorProfileComponent } from './features/user/instructor-profile/instructor-profile.component';
+import { EditInstructorProfileComponent } from './features/user/edit-instructor-profile/edit-instructor-profile.component';
+import { UpdatePhotoComponent } from './features/user/edit-instructor-profile/update-photo/update-photo.component';
+import { BasicInformationComponent } from './features/user/edit-instructor-profile/basic-information/basic-information.component';
+import { PaymentsComponent } from './features/user/payments/payments.component';
+import { ReceiveComponent } from './features/user/payments/receive/receive.component';
+import { TransferComponent } from './features/user/payments/transfer/transfer.component';
 
 @NgModule({
   declarations: [
@@ -50,16 +58,24 @@ import { NgApexchartsModule } from 'ng-apexcharts'; // Import đúng cách
     MyLearningComponent,
     CourseComponent,
     LectureComponent,
-    SettingComponent,
+    userComponent,
     CoursesOfInstructorComponent,
     RevenueComponent,
     MessageComponent,
     CourseUpdateComponent,
-    SettingComponent,
+    userComponent,
     CoursesOfInstructorComponent,
     RevenueComponent,
     MessageComponent,
     CourseUpdateComponent,
+    InstructorProfileComponent,
+    PurchaseHistoryComponent,
+    EditInstructorProfileComponent,
+    UpdatePhotoComponent,
+    PaymentsComponent,
+    BasicInformationComponent,
+    ReceiveComponent,
+    TransferComponent,
     // components
     YoutubePlayerComponent,
     CourseItemSearchComponent,

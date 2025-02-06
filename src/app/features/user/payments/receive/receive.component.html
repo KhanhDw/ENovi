@@ -1,0 +1,304 @@
+<div class="flex flex-col items-center w-[1350px] h-full overflow-y-auto">
+  <!-- infor -->
+  <div class="flex items-center justify-center w-4/5 h-full">
+    <div class="flex items-start w-full h-[350px] rounded-lg">
+      <div
+        class="flex flex-col w-full h-full overflow-hidden border-2 border-gray-700 rounded-lg"
+      >
+        <!-- header -->
+        <div
+          class="flex items-center justify-between w-full px-4 py-3 border-b-2 border-gray-700"
+        >
+          <h1 class="flex w-full text-xl font-bold uppercase font-signika">
+            Thông tin tài khoản nhận tiền
+          </h1>
+          <h1
+            class="flex items-center justify-end w-full text-xl font-bold uppercase font-signika"
+          >
+            Ngân hàng
+          </h1>
+        </div>
+        <!-- body -->
+        <div class="flex flex-col w-full p-6">
+          <!-- ngân hàng -->
+          <div
+            class="grid w-full grid-cols-2 gap-4 mx-auto bg-white rounded-lg"
+          >
+            <!-- Chọn ngân hàng -->
+            <div class="w-full mb-1">
+              <label for="bank" class="block text-sm font-medium text-gray-700"
+                >Chọn ngân hàng</label
+              >
+              <select
+                id="bank"
+                name="bank"
+                class="block w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm"
+              >
+                <option value="">-- Chọn ngân hàng --</option>
+                <option value="VCB">Vietcombank</option>
+                <option value="BIDV">BIDV</option>
+                <option value="AGB">Agribank</option>
+                <option value="VIB">VIB</option>
+              </select>
+            </div>
+
+            <!-- Tên người nhận -->
+            <div class="mb-1">
+              <label
+                for="recipient-name"
+                class="block text-sm font-medium text-gray-700"
+                >Tên người nhận</label
+              >
+              <input
+                type="text"
+                id="recipient-name"
+                name="recipient-name"
+                class="block w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm"
+              />
+            </div>
+
+            <!-- Số tài khoản nhận tiền -->
+            <div class="mb-1">
+              <label
+                for="account-number"
+                class="block text-sm font-medium text-gray-700"
+                >Số tài khoản nhận tiền</label
+              >
+              <input
+                type="text"
+                id="account-number"
+                name="account-number"
+                class="block w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm"
+              />
+            </div>
+
+            <!-- Số điện thoại nhận tiền -->
+            <div class="mb-1">
+              <label
+                for="phone-number"
+                class="block text-sm font-medium text-gray-700"
+                >Số điện thoại nhận tiền</label
+              >
+              <input
+                type="text"
+                id="phone-number"
+                name="phone-number"
+                class="block w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm"
+              />
+            </div>
+
+            <!-- Email -->
+            <div class="mb-1">
+              <label for="email" class="block text-sm font-medium text-gray-700"
+                >Email</label
+              >
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="block w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm"
+              />
+            </div>
+
+            <!-- Nút gửi -->
+            <button
+              (click)="toggleUpdateInfo()"
+              type="submit"
+              class="w-full p-2 text-2xl font-bold text-white rounded-md bg-slate-800 hover:bg-slate-900"
+            >
+              Điều chỉnh thông tin
+            </button>
+          </div>
+          <!-- momo -->
+          <!-- paypal -->
+          <!-- ngân lượng -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- edit info -->
+  <div
+    *ngIf="updateInfo"
+    class="flex items-center justify-center w-4/5 h-full mt-5"
+  >
+    <div
+      class="flex items-start w-full h-[400px] border-2 border-gray-700 rounded-lg"
+    >
+      <!-- left -->
+      <div
+        class="flex flex-col w-[300px] border h-full rounded-tl-lg rounded-bl-lg overflow-hidden"
+      >
+        <!-- header -->
+        <div class="flex px-4 py-3 h-1/5">
+          <h1 class="w-full text-xl font-bold uppercase font-signika">
+            Chọn phương thức
+          </h1>
+        </div>
+        <!-- body -->
+        <div class="flex flex-col h-4/5">
+          <!-- item method -->
+          <div
+            class="flex items-center justify-start gap-5 px-4 py-2 border-t-2 border-gray-700 h-1/4 h-15 hover:bg-gray-300"
+            *ngFor="let item of bank"
+            [ngClass]="item.active ? '' : 'pointer-events-none opacity-40'"
+          >
+            <!-- icon -->
+            <div class="flex items-center justify-center">
+              <img class="w-10 h-10" src="{{ item.url }}" alt="" />
+            </div>
+            <!-- name and recommend -->
+            <div class="flex flex-col items-start h-full gap-2">
+              <!-- name -->
+              <div class="flex items-start justify-start h-full">
+                <h1 class="h-full text-xl font-bold">{{ item.name }}</h1>
+              </div>
+              <!-- recommend -->
+              <div class="flex" *ngIf="item.recommend !== ''">
+                <p class="px-2 py-1 text-xs bg-green-400 rounded-lg">
+                  {{ item.recommend }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- right -->
+      <div
+        class="flex flex-col border-l-2 border-gray-700 w-[800px] h-full rounded-tr-lg rounded-br-lg overflow-hidden"
+      >
+        <!-- header -->
+        <div
+          class="flex items-center justify-between w-full px-4 py-3 border-b-2 border-gray-700"
+        >
+          <h1 class="flex w-full text-xl font-bold uppercase font-signika">
+            Thông tin tài khoản nhận tiền
+          </h1>
+          <h1
+            class="flex items-center justify-end w-full text-xl font-bold uppercase font-signika"
+          >
+            Ngân hàng
+          </h1>
+        </div>
+        <!-- body -->
+        <div class="flex flex-col w-full p-6">
+          <!-- ngân hàng -->
+          <div
+            class="grid w-full grid-cols-2 gap-4 mx-auto bg-white rounded-lg"
+          >
+            <!-- Chọn ngân hàng -->
+            <div class="w-full mb-1">
+              <label for="bank" class="block text-sm font-medium text-gray-700"
+                >Chọn ngân hàng</label
+              >
+              <select
+                id="bank"
+                name="bank"
+                class="block w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm"
+              >
+                <option value="">-- Chọn ngân hàng --</option>
+                <option value="VCB">Vietcombank</option>
+                <option value="BIDV">BIDV</option>
+                <option value="AGB">Agribank</option>
+                <option value="VIB">VIB</option>
+              </select>
+            </div>
+
+            <!-- Tên người nhận -->
+            <div class="mb-1">
+              <label
+                for="recipient-name"
+                class="block text-sm font-medium text-gray-700"
+                >Tên người nhận</label
+              >
+              <input
+                type="text"
+                id="recipient-name"
+                name="recipient-name"
+                class="block w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm"
+              />
+            </div>
+
+            <!-- Số tài khoản nhận tiền -->
+            <div class="mb-1">
+              <label
+                for="account-number"
+                class="block text-sm font-medium text-gray-700"
+                >Số tài khoản nhận tiền</label
+              >
+              <input
+                type="text"
+                id="account-number"
+                name="account-number"
+                class="block w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm"
+              />
+            </div>
+
+            <!-- Số điện thoại nhận tiền -->
+            <div class="mb-1">
+              <label
+                for="phone-number"
+                class="block text-sm font-medium text-gray-700"
+                >Số điện thoại nhận tiền</label
+              >
+              <input
+                type="text"
+                id="phone-number"
+                name="phone-number"
+                class="block w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm"
+              />
+            </div>
+
+            <!-- Email -->
+            <div class="mb-1">
+              <label for="email" class="block text-sm font-medium text-gray-700"
+                >Email</label
+              >
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="block w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm"
+              />
+            </div>
+
+            <!-- Mã xác thực -->
+            <div class="mb-1">
+              <label
+                for="verification-code"
+                class="block text-sm font-medium text-gray-700"
+                >Mã xác thực</label
+              >
+              <input
+                type="text"
+                id="verification-code"
+                name="verification-code"
+                class="block w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm"
+              />
+            </div>
+
+            <!-- Nút hủy -->
+            <button
+              (click)="toggleUpdateInfo()"
+              type="submit"
+              class="w-full p-2 text-white bg-gray-500 rounded-md hover:bg-blue-600"
+            >
+              Hủy bỏ
+            </button>
+
+            <!-- Nút gửi -->
+            <button
+              (click)="toggleUpdateInfo()"
+              type="submit"
+              class="w-full p-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
+            >
+              Lưu thông tin
+            </button>
+          </div>
+          <!-- momo -->
+          <!-- paypal -->
+          <!-- ngân lượng -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

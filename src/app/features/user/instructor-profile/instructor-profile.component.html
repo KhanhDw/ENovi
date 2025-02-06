@@ -1,0 +1,67 @@
+<div class="h-full max-w-6xl px-4 py-8 mx-auto">
+  <div class="flex flex-col h-full gap-8 lg:flex-row">
+    <!-- Main Content -->
+    <div class="flex-1 h-full">
+      <!-- Header -->
+      <div class="mb-6">
+        <div class="mb-1 text-sm tracking-wider text-gray-600 uppercase">
+          INSTRUCTOR
+        </div>
+        <h1 class="mb-2 text-4xl font-bold text-gray-900">
+          {{ instructor.name }}
+        </h1>
+        <p class="text-lg text-gray-600">{{ instructor.title }}</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="flex gap-8 mb-8">
+        <div>
+          <div class="text-2xl font-bold text-gray-900">
+            {{ instructor.stats.totalStudents }}
+          </div>
+          <div class="text-sm text-gray-600">Total students</div>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-gray-900">
+            {{ instructor.stats.reviews }}
+          </div>
+          <div class="text-sm text-gray-600">Reviews</div>
+        </div>
+      </div>
+
+      <!-- About Section -->
+      <div class="mb-8">
+        <h2 class="mb-4 text-xl font-bold text-gray-900">About me</h2>
+        <div class="space-y-4 text-gray-600 whitespace-pre-line">
+          {{ instructor.bio }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="lg:w-80">
+      <!-- Profile Image -->
+      <div class="mb-6">
+        <img
+          [src]="
+            'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7BF17E03CC-2329-41AB-BBA5-4B194A196E8F%7D-UxMB1NQIIEHcM8begQWMOFwqm3wsjh.png'
+          "
+          alt="Profile photo"
+          class="object-cover w-64 h-64 mx-auto rounded-full"
+        />
+      </div>
+
+      <!-- Social Links -->
+      <div class="space-y-3">
+        <a
+          *ngFor="let link of instructor.socialLinks"
+          [href]="link.url"
+          class="flex items-center justify-center w-full p-3 transition-colors border border-gray-300 rounded-lg hover:bg-gray-50"
+        >
+          <i [class]="'fas fa-' + link.icon + ' mr-2'"></i>
+          {{ link.name }}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
