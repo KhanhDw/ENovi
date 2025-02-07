@@ -12,14 +12,29 @@ import {
   ApexAxisChartSeries,
   ApexChart,
   ApexXAxis,
+  ApexDataLabels,
+  ApexStroke,
+  ApexYAxis,
   ApexTitleSubtitle,
+  ApexLegend,
+  ApexPlotOptions,
+  ApexFill,
+  ChartType,
 } from 'ng-apexcharts';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
   xaxis: ApexXAxis;
+  stroke: ApexStroke;
+  dataLabels: ApexDataLabels;
+  yaxis: ApexYAxis;
   title: ApexTitleSubtitle;
+  labels: string[];
+  legend: ApexLegend;
+  subtitle: ApexTitleSubtitle;
+  plotOptions: ApexPlotOptions;
+  fill: ApexFill;
 };
 
 interface WithdrawalTransaction {
@@ -40,46 +55,6 @@ interface WithdrawalTransaction {
   styleUrl: './revenue.component.css',
 })
 export class RevenueComponent implements AfterViewInit, OnInit {
-  constructor(private elementRef: ElementRef) {
-    this.chartOptions = {
-      series: [
-        {
-          name: 'My-series',
-          data: [10, 41, 35, 51, 49, 62, 69, 91, 148, 168, 248, 348],
-        },
-      ],
-      chart: {
-        height: '100%',
-        type: 'line',
-      },
-      title: {
-        text: 'Tổng doanh thu các khóa học',
-        style: {
-          fontSize: '20px',
-          fontWeight: 'bold',
-          fontFamily: 'Verdana, sans-serif',
-          color: '#333',
-        },
-      },
-      xaxis: {
-        categories: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ],
-      },
-    };
-  }
-
   // =========================
   // modal bank
   // =========================
@@ -433,6 +408,86 @@ export class RevenueComponent implements AfterViewInit, OnInit {
   // =============
 
   @ViewChild('chart') chart!: ChartComponent;
-  public chartOptions: Partial<ChartOptions>;
+  public chartOptions!: Partial<ChartOptions>;
   // dữ liệU biểu đồ để trên contructor
+
+  nameChart = 'Tổng doanh thu các khóa học';
+  dataChart = [10, 41, 35, 51, 49, 62, 69, 91, 148, 168, 248, 348];
+  typeChartInput: ChartType = 'line';
+  typeChartList = [
+    { name: 'line', title: 'Biểu đồ đường' },
+    { name: 'area', title: 'Biểu đồ vùng' },
+    { name: 'bar', title: 'Biểu đồ cột' },
+  ];
+
+  constructor(private elementRef: ElementRef) {
+    this.updateChartOptions(); // Cập nhật lại `chartOptions`
+  }
+
+  onChangeTypeChart(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    if (target && target.value) {
+      const selectedValue = target.value;
+      this.typeChartInput = selectedValue as ChartType;
+      this.updateChartOptions(); // Cập nhật lại `chartOptions`
+    } else {
+      console.error('Không thể lấy giá trị từ select');
+    }
+  }
+
+  // Hàm cập nhật lại chartOptions
+  updateChartOptions() {
+    this.chartOptions = {
+      series: [
+        {
+          name: 'RevenueData',
+          data: this.dataChart,
+        },
+      ],
+      chart: {
+        height: '100%',
+        type: this.typeChartInput, // Cập nhật loại biểu đồ
+        zoom: {
+          enabled: true,
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        curve: 'straight',
+      },
+      title: {
+        text: this.nameChart,
+        style: {
+          fontSize: '20px',
+          fontWeight: 'bold',
+          fontFamily: 'Verdana, sans-serif',
+          color: '#333',
+        },
+      },
+      xaxis: {
+        categories: [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ],
+      },
+      yaxis: {
+        opposite: true,
+      },
+      legend: {
+        horizontalAlign: 'left',
+      },
+    };
+  }
 }

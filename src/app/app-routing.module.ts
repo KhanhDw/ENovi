@@ -22,6 +22,14 @@ import { BasicInformationComponent } from './features/user/edit-instructor-profi
 import { PaymentsComponent } from './features/user/payments/payments.component';
 import { ReceiveComponent } from './features/user/payments/receive/receive.component';
 import { TransferComponent } from './features/user/payments/transfer/transfer.component';
+import { SecurityComponent } from './features/user/security/security.component';
+import { DeleteAccountComponent } from './features/user/delete-account/delete-account.component';
+import { UserInfoComponent } from './features/user/user-info/user-info.component';
+import { EditUserInfoComponent } from './features/user/edit-user-info/edit-user-info.component';
+import { BasicInfoUserComponent } from './features/user/edit-user-info/basic-info-user/basic-info-user.component';
+import { UploadPhotoUserComponent } from './features/user/edit-user-info/upload-photo-user/upload-photo-user.component';
+import { UserProfileComponent } from './features/user/user-profile/user-profile.component';
+import { RattingInstructorComponent } from './features/user/ratting-instructor/ratting-instructor.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -32,40 +40,83 @@ const routes: Routes = [
   { path: 'cart', component: ShoppingCartComponent },
   { path: 'my-learning', component: MyLearningComponent },
   { path: 'course', component: CourseComponent },
-  { path: 'lecture', component: LectureComponent },
+
+  {
+    path: 'course',
+    children: [{ path: 'lecture', component: LectureComponent }],
+  },
+
   {
     path: 'user',
     component: userComponent,
     children: [
-      { path: '', redirectTo: 'courses-instructor', pathMatch: 'full' },
+      // =====
+      // user
+      // =====
+      { path: 'security', component: SecurityComponent },
+      { path: 'basic-information', component: UserInfoComponent },
       {
-        path: 'courses-instructor',
-        component: CoursesOfInstructorComponent,
-        children: [{ path: 'course-update', component: CourseUpdateComponent }],
-      },
-      { path: 'revenue', component: RevenueComponent },
-      { path: 'message', component: MessageComponent },
-      { path: 'purchase-history', component: PurchaseHistoryComponent },
-      { path: 'instructor-profile', component: InstructorProfileComponent },
-      {
-        path: 'payments',
-        component: PaymentsComponent,
-        children: [
-          { path: 'recive', component: ReceiveComponent },
-          { path: 'transfer', component: TransferComponent },
-        ],
-      },
-      {
-        path: 'instructor',
-        component: EditInstructorProfileComponent,
-        // // 🚨 Bỏ component: EditInstructorProfileComponent ở đây - để router-outlet không lòng componentCha(componentCha(componentCon))
-        // vì khi render component con sẽ lấy luôn component cha
+        path: 'edit-information',
+        component: EditUserInfoComponent,
         children: [
           { path: '', redirectTo: 'basic-information', pathMatch: 'full' }, // Chuyển hướng mặc định khi vào /instructor
-          { path: 'basic-information', component: BasicInformationComponent },
-          { path: 'photo', component: UpdatePhotoComponent },
+          { path: 'basic-information', component: BasicInfoUserComponent },
+          { path: 'photo', component: UploadPhotoUserComponent },
         ],
       },
+      { path: 'delete-account', component: DeleteAccountComponent },
+      { path: 'purchase-history', component: PurchaseHistoryComponent },
+      { path: 'profile', component: UserProfileComponent },
+
+      // ==========
+      // isntructor
+      // ==========
+      {
+        path: 'instructor',
+        children: [
+          { path: '', redirectTo: 'courses-instructor', pathMatch: 'full' },
+          {
+            path: 'courses-instructor',
+            component: CoursesOfInstructorComponent,
+          },
+          {
+            path: 'courses-instructor',
+            children: [
+              { path: 'course-update', component: CourseUpdateComponent },
+            ],
+          },
+          { path: 'revenue', component: RevenueComponent },
+          { path: 'ratting', component: RattingInstructorComponent },
+          { path: 'message', component: MessageComponent },
+          { path: 'profile', component: InstructorProfileComponent },
+
+          {
+            path: 'payments',
+            component: PaymentsComponent,
+            children: [
+              { path: 'recive', component: ReceiveComponent },
+              { path: 'transfer', component: TransferComponent },
+              { path: '', redirectTo: 'recive', pathMatch: 'full' },
+            ],
+          },
+          {
+            path: 'updateInfo',
+            component: EditInstructorProfileComponent,
+            children: [
+              { path: '', redirectTo: 'basic-information', pathMatch: 'full' }, // Chuyển hướng mặc định khi vào /instructor
+              {
+                path: 'basic-information',
+                component: BasicInformationComponent,
+              },
+              { path: 'photo', component: UpdatePhotoComponent },
+            ],
+          },
+        ],
+      },
+
+      // =====
+      // admin
+      // =====
     ],
   },
 

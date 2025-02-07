@@ -12,6 +12,26 @@
           <option value="oldest1">Khóa học 2</option>
         </select>
       </div>
+      <div class="flex gap-10">
+        <!-- Đã rút tiền -->
+        <div
+          class="flex items-center gap-2 px-3 py-2 border-2 rounded-lg border-slate-500"
+        >
+          <h1 class="font-semibold text-gray-600">Có thể thanh toán:</h1>
+          <span class="text-xl font-bold text-green-700"
+            >2,000,000 <span class="text-sm text-gray-600">đ</span></span
+          >
+        </div>
+        <!-- Đã rút tiền -->
+        <div
+          class="flex items-center gap-2 px-3 py-2 border-2 rounded-lg border-slate-500"
+        >
+          <h1 class="font-semibold text-gray-600">Đã thanh toán:</h1>
+          <span class="text-xl font-bold"
+            >18,000,000 <span class="text-sm text-gray-600">đ</span></span
+          >
+        </div>
+      </div>
       <div class="flex gap-3">
         <button
           hidden
@@ -42,45 +62,60 @@
     <div class="flex flex-col w-auto h-full mx-3 mt-5">
       <div class="flex flex-col w-full h-full p-5">
         <!-- over view : revenue : number of student : rate of courses -->
-        <div class="flex items-start justify-start gap-20">
-          <!-- tổng doanh thu -->
-          <div class="flex flex-col">
-            <h1 class="font-semibold text-gray-600">Tổng doanh thu</h1>
-            <span class="text-3xl font-bold"
-              >20,000,000 <span class="text-sm text-gray-600">đ</span></span
+        <div class="flex items-center justify-between w-full">
+          <div class="flex items-start justify-start gap-20">
+            <!-- tổng doanh thu -->
+            <div class="flex flex-col">
+              <h1 class="font-semibold text-gray-600">Tổng doanh thu</h1>
+              <span class="text-3xl font-bold"
+                >20,000,000 <span class="text-sm text-gray-600">đ</span></span
+              >
+            </div>
+            <!-- Tổng số học sinh tham gia khóa học -->
+            <div class="flex flex-col">
+              <h1 class="font-semibold text-gray-600">Tổng học viên</h1>
+              <span class="text-3xl font-bold"
+                >20,213 <span class="text-sm text-gray-600">người</span></span
+              >
+            </div>
+            <!--  học sinh tham gia khóa học tháng này -->
+            <div class="flex flex-col">
+              <h1 class="font-semibold text-gray-600">Học viên tháng này</h1>
+              <span class="text-3xl font-bold"
+                >252 <span class="text-sm text-gray-600">người</span></span
+              >
+            </div>
+            <!-- Đánh giá giảng viên -->
+            <div class="flex flex-col">
+              <h1 class="font-semibold text-gray-600">Đánh giá giảng viên</h1>
+              <span class="text-3xl font-bold"
+                >4.8
+                <span class="text-sm text-gray-600"
+                  ><i class="bi bi-star-fill"></i></span
+              ></span>
+            </div>
+            <!-- đánh giá khóa học (chỉ hiển thị khi chọn khóa học chỉ định, nếu chọn tất thì sẽ ẩn mục này đi)  -->
+            <div class="flex flex-col">
+              <h1 class="font-semibold text-gray-600">Đánh giá khóa học</h1>
+              <span class="text-3xl font-bold"
+                >4.5
+                <span class="text-sm text-gray-600"
+                  ><i class="bi bi-star-fill"></i></span
+              ></span>
+            </div>
+          </div>
+          <div class="flex">
+            <select
+              (change)="onChangeTypeChart($event)"
+              class="w-[180px] py-2 border rounded-md focus:outline-none shadow-sm shadow-gray-400"
             >
-          </div>
-          <!-- Tổng số học sinh tham gia khóa học -->
-          <div class="flex flex-col">
-            <h1 class="font-semibold text-gray-600">Tổng học viên</h1>
-            <span class="text-3xl font-bold"
-              >20,213 <span class="text-sm text-gray-600">người</span></span
-            >
-          </div>
-          <!--  học sinh tham gia khóa học tháng này -->
-          <div class="flex flex-col">
-            <h1 class="font-semibold text-gray-600">Học viên tháng này</h1>
-            <span class="text-3xl font-bold"
-              >252 <span class="text-sm text-gray-600">người</span></span
-            >
-          </div>
-          <!-- Đánh giá giảng viên -->
-          <div class="flex flex-col">
-            <h1 class="font-semibold text-gray-600">Đánh giá giảng viên</h1>
-            <span class="text-3xl font-bold"
-              >4.8
-              <span class="text-sm text-gray-600"
-                ><i class="bi bi-star-fill"></i></span
-            ></span>
-          </div>
-          <!-- đánh giá khóa học (chỉ hiển thị khi chọn khóa học chỉ định, nếu chọn tất thì sẽ ẩn mục này đi)  -->
-          <div class="flex flex-col">
-            <h1 class="font-semibold text-gray-600">Đánh giá khóa học</h1>
-            <span class="text-3xl font-bold"
-              >4.5
-              <span class="text-sm text-gray-600"
-                ><i class="bi bi-star-fill"></i></span
-            ></span>
+              <option
+                *ngFor="let item of typeChartList; let i = index"
+                [value]="typeChartList[i].name"
+              >
+                {{ item.title }}
+              </option>
+            </select>
           </div>
         </div>
         <!-- chart -->

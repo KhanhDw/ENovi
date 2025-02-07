@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, Directive } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
@@ -23,17 +23,28 @@ export class AppComponent {
           event.url === '/lecture' ||
           event.url === '/user' ||
           event.url === '/user/courses-instructor' ||
-          event.url === '/user/instructor/basic-information' ||
-          event.url === '/user/instructor/photo' ||
-          event.url === '/user/courses-instructor/course-update' ||
-          event.url === '/user/revenue' ||
-          event.url === '/user/message' ||
-          event.url === '/user/instructor/basic-information' ||
-          event.url === '/user/instructor/photo' ||
+          event.url === '/user/basic-information' ||
+          event.url === '/user/photo' ||
+          event.url === '/user/delete-account' ||
+          event.url === '/user/profile' ||
+          event.url === '/user/security' ||
           event.url === '/user/instructor' ||
-          event.url === '/user/payments' ||
+          event.url === '/user/instructor/revenue' ||
+          event.url === '/user/instructor/ratting' ||
+          event.url === '/user/instructor/courses-instructor' ||
+          event.url === '/user/instructor/courses-instructor/course-update' ||
+          event.url === '/user/instructor/message' ||
+          event.url === '/user/instructor/basic-information' ||
+          event.url === '/user/instructor/photo' ||
+          event.url === '/user/instructor/payments/transfer' ||
+          event.url === '/user/instructor/payments' ||
+          event.url === '/user/edit-information' ||
+          event.url === '/user/basic-information' ||
+          event.url === '/user/edit-information/photo' ||
+          event.url === '/user/edit-information/basic-information' ||
+          event.url === '/user/instructor/profile' ||
           event.url === '/user/payments/recive' ||
-          event.url === '/user/payments/transfer' ||
+          event.url === '/course/lecture' ||
           event.url === '/user/purchase-history'
         );
         this.hiddenFooter = !(
@@ -42,25 +53,52 @@ export class AppComponent {
           event.url === '/lecture' ||
           event.url === '/user' ||
           event.url === '/user/courses-instructor' ||
-          event.url === '/user/instructor/basic-information' ||
-          event.url === '/user/instructor/photo' ||
-          event.url === '/user/courses-instructor/course-update' ||
-          event.url === '/user/revenue' ||
-          event.url === '/user/message' ||
-          event.url === '/user/instructor/basic-information' ||
-          event.url === '/user/instructor/photo' ||
+          event.url === '/user/basic-information' ||
+          event.url === '/user/photo' ||
+          event.url === '/user/delete-account' ||
+          event.url === '/user/profile' ||
+          event.url === '/user/security' ||
           event.url === '/user/instructor' ||
-          event.url === '/user/payments' ||
+          event.url === '/user/instructor/revenue' ||
+          event.url === '/user/instructor/ratting' ||
+          event.url === '/user/instructor/courses-instructor/course-update' ||
+          event.url === '/user/instructor/courses-instructor' ||
+          event.url === '/user/instructor/message' ||
+          event.url === '/user/instructor/basic-information' ||
+          event.url === '/user/instructor/photo' ||
+          event.url === '/user/instructor/payments/transfer' ||
+          event.url === '/user/instructor/payments' ||
+          event.url === '/user/edit-information' ||
+          event.url === '/user/basic-information' ||
+          event.url === '/user/edit-information/photo' ||
+          event.url === '/user/edit-information/basic-information' ||
+          event.url === '/user/instructor/profile' ||
           event.url === '/user/payments/recive' ||
-          event.url === '/user/payments/transfer' ||
+          event.url === '/course/lecture' ||
           event.url === '/user/purchase-history'
         );
       }
     });
   }
 
+  // Chặn chuột phải
   @HostListener('contextmenu', ['$event'])
   onRightClick(event: MouseEvent) {
     event.preventDefault();
+  }
+
+  // Chặn các phím tắt mở DevTools
+  @HostListener('document:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent) {
+    // Chặn các phím tắt mở DevTools
+    if (
+      event.keyCode === 123 || // F12
+      (event.ctrlKey && event.shiftKey && event.keyCode === 73) || // Ctrl + Shift + I
+      (event.ctrlKey && event.shiftKey && event.keyCode === 74) || // Ctrl + Shift + J
+      (event.ctrlKey && event.keyCode === 85) // Ctrl + U
+    ) {
+      // event.preventDefault();
+      // alert('DevTools is blocked!');
+    }
   }
 }

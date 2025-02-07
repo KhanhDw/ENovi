@@ -41,7 +41,14 @@ import { BasicInformationComponent } from './features/user/edit-instructor-profi
 import { PaymentsComponent } from './features/user/payments/payments.component';
 import { ReceiveComponent } from './features/user/payments/receive/receive.component';
 import { TransferComponent } from './features/user/payments/transfer/transfer.component';
-
+import { SecurityComponent } from './features/user/security/security.component';
+import { DeleteAccountComponent } from './features/user/delete-account/delete-account.component';
+import { UserInfoComponent } from './features/user/user-info/user-info.component';
+import { EditUserInfoComponent } from './features/user/edit-user-info/edit-user-info.component';
+import { BasicInfoUserComponent } from './features/user/edit-user-info/basic-info-user/basic-info-user.component';
+import { UploadPhotoUserComponent } from './features/user/edit-user-info/upload-photo-user/upload-photo-user.component';
+import { UserProfileComponent } from './features/user/user-profile/user-profile.component';
+import { RattingInstructorComponent } from './features/user/ratting-instructor/ratting-instructor.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -50,6 +57,7 @@ import { TransferComponent } from './features/user/payments/transfer/transfer.co
     FooterComponent,
     // page
     LoginComponent,
+    RattingInstructorComponent,
     RegisterComponent,
     HomeComponent,
     SearchComponent,
@@ -75,7 +83,14 @@ import { TransferComponent } from './features/user/payments/transfer/transfer.co
     PaymentsComponent,
     BasicInformationComponent,
     ReceiveComponent,
+    SecurityComponent,
     TransferComponent,
+    DeleteAccountComponent,
+    UserInfoComponent,
+    EditUserInfoComponent,
+    BasicInfoUserComponent,
+    UserProfileComponent,
+    UploadPhotoUserComponent,
     // components
     YoutubePlayerComponent,
     CourseItemSearchComponent,

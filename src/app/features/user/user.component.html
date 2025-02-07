@@ -1,19 +1,25 @@
 <div class="flex w-full h-screen">
   <!-- left -->
   <div
-    [ngClass]="isShowSidebar ? 'w-1/6' : 'w-16'"
+    [ngClass]="isShowSidebar ? 'w-[20%]' : 'w-16'"
     class="flex pt-2 flex-col h-full bg-[#231D1D] border-gray-600 text-white"
   >
     <!-- header -->
     <div class="flex items-center justify-center w-full px-2">
       <a
         href="#"
-        class="flex items-center justify-center w-full cursor-pointer"
-      >
+        class="flex hover:bg-[#41424a] bg-[#2a2424] items-center justify-between rounded-md w-full cursor-pointer"
+        ><div></div>
         <i
-          class="text-xl flex py-2 items-center cursor-pointer justify-center w-full bi bi-house rounded-md hover:bg-[#41424a] bg-[#2a2424]"
+          class="flex items-center justify-center w-full py-2 text-xl rounded-md cursor-pointer bi bi-house"
         ></i
-      ></a>
+        ><img
+          *ngIf="isShowSidebar"
+          class="w-5 h-5"
+          src="/img/miku.png"
+          alt=""
+        />
+      </a>
     </div>
     <div class="flex items-center w-full gap-1 mt-5 mb-5">
       <button
@@ -46,6 +52,7 @@
         *ngFor="let item of sideBar; let i = index"
         (click)="setActiveButton(i)"
         routerLinkActive="border-l-8 bg-slate-700"
+        [routerLinkActiveOptions]="{ exact: true }"
         [ngClass]="{
           'hover:font-bold hover:border-l-8 hover:bg-slate-700':
             item.name !== '',
@@ -64,7 +71,7 @@
         >
           <path [attr.d]="item.icon" />
         </svg>
-        <span *ngIf="isShowSidebar" style="font-size: 15px">{{
+        <span *ngIf="isShowSidebar" style="font-size: 17px">{{
           item.name
         }}</span>
       </a>

@@ -33,11 +33,6 @@ bảng điều khiển giảng viên (nếu kích hoạt giáo viên)
 lịch sử mua hàng
 
 ok- tin nhắn	
-quản lý khoá học - admin
-quan lý user - admin
-quản lý doanh thu - admin
-xuất báo cáo danh thu - admin
-thanh toán đối tác - admin - chuyển tiền cho người bán khoá học - mõi tuần 1 lần thanh toán - đối tác nhận lại 90% số tiền
 
 
 
@@ -60,38 +55,44 @@ bỏ icon ngôn ngữ - hidden thôi
 
 
 
+quản trị hệ thống
 
-<app-edit-instructor-profile
-        class="w-full h-full"
-        *ngIf="routerDirection == 5"
-      ></app-edit-instructor-profile>
+quản lý khoá học - admin
+  có quyền đình chỉ khóa học 
+    - nếu nó không lành mạnh hoặc vi phạm nguyên tắc cộng đồng
+    - người dùng sẽ không đăng ký được khóa học này
+quan lý user (phân loại thành 2 list: student và instructor ) - admin
+  gmail
+  studen/instructor 
+  cấp lại mật khẩu
+  số khóa học . nếu là instructor 
+  ngày đăng ký
+  số tiền đã thanh toán
+  học viên
 
-      <!-- instructor profile -->
-      <app-instructor-profile
-        class="w-full h-full"
-        *ngIf="routerDirection == 501"
-      ></app-instructor-profile>
+quản lý doanh thu - admin
+  
+quản lý yêu cầu thanh toán - admin - mõi tuần 1 lần thanh toán - đối tác nhận lại 90% số tiền
+  gmail 
+  số điện thoại
+  tên đầy đủ
+  đang yêu cầu thanh toán 
+  Hoa hồng website đã nhận
 
-      <!-- courses-of-instructor -->
-      <app-courses-of-instructor
-        class="w-full"
-        *ngIf="routerDirection == 1"
-      ></app-courses-of-instructor>
 
-      <!--courses-of-instructor -is parent of- course-update -->
-      <app-course-update
-        class="w-full"
-        *ngIf="routerDirection == 101"
-      ></app-course-update>
+người dùng
+  xóa
+  cấp lại mật khẩu
+  
+khóa học
+doanh thu 
+  tổng doanh thu
+  chi tiết doanh thu
+  Doanh thu theo instructor
+  Doanh thu theo khóa học
+  Thanh toán cho instructor
+  Các giao dịch thanh toán
+  Lợi nhuận của nền tảng
+  Báo cáo tài chính có thể được tạo tự động mỗi tuần/tháng dưới dạng file Excel hoặc PDF.
 
-      <!-- revenue -->
-      <app-revenue class="w-full" *ngIf="routerDirection == 2"></app-revenue>
 
-      <!-- message -->
-      <app-message class="w-full" *ngIf="routerDirection == 3"></app-message>
-
-      <!-- history buy course -->
-      <app-purchase-history
-        class="w-full"
-        *ngIf="routerDirection == 11"
-      ></app-purchase-history>
