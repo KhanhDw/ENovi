@@ -50,9 +50,10 @@ interface WithdrawalTransaction {
 }
 
 @Component({
-  selector: 'app-revenue',
-  templateUrl: './revenue.component.html',
-  styleUrl: './revenue.component.css',
+    selector: 'app-revenue',
+    templateUrl: './revenue.component.html',
+    styleUrl: './revenue.component.css',
+    standalone: false
 })
 export class RevenueComponent implements AfterViewInit, OnInit {
   // =========================

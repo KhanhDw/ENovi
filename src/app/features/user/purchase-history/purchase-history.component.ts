@@ -9,9 +9,10 @@ interface PurchaseItem {
 }
 
 @Component({
-  selector: 'app-purchase-history',
-  templateUrl: './purchase-history.component.html',
-  styleUrl: './purchase-history.component.css',
+    selector: 'app-purchase-history',
+    templateUrl: './purchase-history.component.html',
+    styleUrl: './purchase-history.component.css',
+    standalone: false
 })
 export class PurchaseHistoryComponent {
   purchases: PurchaseItem[] = [

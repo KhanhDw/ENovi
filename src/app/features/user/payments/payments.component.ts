@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-payments',
-  templateUrl: './payments.component.html',
-  styleUrl: './payments.component.css',
+    selector: 'app-payments',
+    templateUrl: './payments.component.html',
+    styleUrl: './payments.component.css',
+    standalone: false
 })
 export class PaymentsComponent {
   urls = [

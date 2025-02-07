@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-receive',
-  templateUrl: './receive.component.html',
-  styleUrl: './receive.component.css',
+    selector: 'app-receive',
+    templateUrl: './receive.component.html',
+    styleUrl: './receive.component.css',
+    standalone: false
 })
 export class ReceiveComponent {
   bank = [

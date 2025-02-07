@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
-  selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrl: './user.component.css',
+    selector: 'app-user',
+    templateUrl: './user.component.html',
+    styleUrl: './user.component.css',
+    standalone: false
 })
 export class userComponent {
   // ==========================

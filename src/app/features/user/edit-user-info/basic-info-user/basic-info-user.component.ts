@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { QuillModules } from 'ngx-quill';
 
 @Component({
-  selector: 'app-basic-info-user',
-  templateUrl: './basic-info-user.component.html',
-  styleUrl: './basic-info-user.component.css',
+    selector: 'app-basic-info-user',
+    templateUrl: './basic-info-user.component.html',
+    styleUrl: './basic-info-user.component.css',
+    standalone: false
 })
 export class BasicInfoUserComponent {
   modules: QuillModules = {

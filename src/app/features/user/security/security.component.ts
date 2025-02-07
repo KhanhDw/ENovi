@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-security',
-  templateUrl: './security.component.html',
-  styleUrl: './security.component.css',
+    selector: 'app-security',
+    templateUrl: './security.component.html',
+    styleUrl: './security.component.css',
+    standalone: false
 })
 export class SecurityComponent {
   accountForm: FormGroup;

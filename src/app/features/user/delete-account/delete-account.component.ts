@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
-  selector: 'app-delete-account',
-  templateUrl: './delete-account.component.html',
-  styleUrl: './delete-account.component.css',
+    selector: 'app-delete-account',
+    templateUrl: './delete-account.component.html',
+    styleUrl: './delete-account.component.css',
+    standalone: false
 })
 export class DeleteAccountComponent {
   accountForm: FormGroup;

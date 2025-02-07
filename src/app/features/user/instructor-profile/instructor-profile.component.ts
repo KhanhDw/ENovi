@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-instructor-profile',
-  templateUrl: './instructor-profile.component.html',
-  styleUrl: './instructor-profile.component.css',
+    selector: 'app-instructor-profile',
+    templateUrl: './instructor-profile.component.html',
+    styleUrl: './instructor-profile.component.css',
+    standalone: false
 })
 export class InstructorProfileComponent {
   instructor = {

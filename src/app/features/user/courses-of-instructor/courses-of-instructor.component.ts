@@ -3,9 +3,10 @@ import { Component } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
-  selector: 'app-courses-of-instructor',
-  templateUrl: './courses-of-instructor.component.html',
-  styleUrl: './courses-of-instructor.component.css',
+    selector: 'app-courses-of-instructor',
+    templateUrl: './courses-of-instructor.component.html',
+    styleUrl: './courses-of-instructor.component.css',
+    standalone: false
 })
 export class CoursesOfInstructorComponent {
   courses: Course[] = [

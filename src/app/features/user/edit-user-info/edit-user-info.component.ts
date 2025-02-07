@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-edit-user-info',
-  templateUrl: './edit-user-info.component.html',
-  styleUrl: './edit-user-info.component.css',
+    selector: 'app-edit-user-info',
+    templateUrl: './edit-user-info.component.html',
+    styleUrl: './edit-user-info.component.css',
+    standalone: false
 })
 export class EditUserInfoComponent {
   urls = [

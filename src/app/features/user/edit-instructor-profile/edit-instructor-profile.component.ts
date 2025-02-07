@@ -3,9 +3,10 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-edit-instructor-profile',
-  templateUrl: './edit-instructor-profile.component.html',
-  styleUrl: './edit-instructor-profile.component.css',
+    selector: 'app-edit-instructor-profile',
+    templateUrl: './edit-instructor-profile.component.html',
+    styleUrl: './edit-instructor-profile.component.css',
+    standalone: false
 })
 export class EditInstructorProfileComponent {
   urls = [
