@@ -1,4 +1,4 @@
-import { NgModule, Component } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { QuillModule } from 'ngx-quill';
@@ -53,6 +53,7 @@ import { AdminUserComponent } from './features/admin/admin-user/admin-user.compo
 import { AdminRevenueComponent } from './features/admin/admin-revenue/admin-revenue.component';
 import { AdminCoursesComponent } from './features/admin/admin-courses/admin-courses.component';
 import { AdminPayComponent } from './features/admin/admin-pay/admin-pay.component';
+import { TableDataUserAdminComponent } from './components/table-data-user-admin/table-data-user-admin.component';
 
 @NgModule({
   declarations: [
@@ -106,6 +107,7 @@ import { AdminPayComponent } from './features/admin/admin-pay/admin-pay.componen
     ProgressLearningComponent,
     CourseItemMyLearningComponent,
     CourseItemShoppingCartComponent,
+    TableDataUserAdminComponent,
   ],
   imports: [
     BrowserModule,
@@ -117,5 +119,6 @@ import { AdminPayComponent } from './features/admin/admin-pay/admin-pay.componen
   ],
   providers: [provideClientHydration()],
   bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}
