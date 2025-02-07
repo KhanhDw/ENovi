@@ -1,1 +1,99 @@
-<p>admin works!</p>
+<div class="flex w-full h-screen">
+  <!-- left -->
+  <div
+    [ngClass]="isShowSidebar ? 'w-[20%]' : 'w-16'"
+    class="flex pt-2 flex-col h-full bg-[#231D1D] border-gray-600 text-white"
+  >
+    <!-- header -->
+    <div class="flex items-center justify-center w-full px-2">
+      <a
+        href="#"
+        class="flex hover:bg-[#41424a] bg-[#2a2424] items-center justify-between rounded-md w-full cursor-pointer"
+        ><div></div>
+        <i
+          class="flex items-center justify-center w-full py-2 text-xl rounded-md cursor-pointer bi bi-house"
+        ></i
+        ><img
+          *ngIf="isShowSidebar"
+          class="w-5 h-5"
+          src="/img/miku.png"
+          alt=""
+        />
+      </a>
+    </div>
+    <div class="flex items-center w-full gap-1 mt-5 mb-5">
+      <button
+        (click)="toggleShowSidebar()"
+        type="button"
+        class="flex items-center justify-center w-full px-2 font-bold uppercase transition-all duration-500 hover:text-orange-300"
+      >
+        <span *ngIf="isShowSidebar" class="w-full text-xl cursor-pointer"
+          >Bảng điều khiển</span
+        >
+        <span
+          *ngIf="!isShowSidebar"
+          class="w-full text-2xl cursor-pointer hover:bg-gray-700 hover:rounded-md font-signika"
+          >EI</span
+        >
+        <i
+          [ngClass]="
+            isShowSidebar ? 'bi-caret-left-fill' : 'bi-caret-right-fill'
+          "
+          class="text-sm cursor-pointer bi"
+        ></i>
+      </button>
+    </div>
+    <!-- body -->
+    <div
+      id="sidebarRight"
+      class="flex flex-col items-start justify-start w-full gap-0 overflow-y-auto text-xl"
+    >
+      <a
+        *ngFor="let item of sideBar; let i = index"
+        (click)="setActiveButton(i)"
+        routerLinkActive="border-l-8 bg-slate-700"
+        [routerLinkActiveOptions]="{ exact: true }"
+        [ngClass]="{
+          'hover:font-bold hover:border-l-8 hover:bg-slate-700':
+            item.name !== '',
+          'opacity-50 pointer-events-none': item.url === '/notfound',
+          'border-l-8 bg-slate-700': activeButtonIndex === i
+        }"
+        [routerLink]="item.url"
+        class="flex items-center justify-start w-full gap-2 px-2 py-2 transition-all duration-150"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="#fff"
+        >
+          <path [attr.d]="item.icon" />
+        </svg>
+        <span *ngIf="isShowSidebar" style="font-size: 17px">{{
+          item.name
+        }}</span>
+      </a>
+    </div>
+  </div>
+  <!-- right -->
+  <div class="w-full h-screen overflow-y-hidden bg-black">
+    <div class="w-full bg-white">
+      <!-- user 0 -->
+
+      <!-- <div
+          class="flex items-center justify-center w-full text-white bg-black"
+          *ngIf="routerDirection == 0"
+        >
+          <div
+            class="flex flex-col gap-3 px-10 py-5 mb-10 text-2xl font-bold bg-black rounded-lg shadow-2xl font-signika shadow-black"
+          >
+            <h1>Xin chào!</h1>
+          </div>
+        </div> -->
+
+      <router-outlet />
+    </div>
+  </div>
+</div>

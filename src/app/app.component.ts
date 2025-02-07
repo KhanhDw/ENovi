@@ -22,6 +22,11 @@ export class AppComponent {
           event.url === '/register' ||
           event.url === '/lecture' ||
           event.url === '/user' ||
+          event.url === '/admin' ||
+          event.url === '/admin/courses' ||
+          event.url === '/admin/user' ||
+          event.url === '/admin/revenue' ||
+          event.url === '/admin/pay' ||
           event.url === '/user/courses-instructor' ||
           event.url === '/user/basic-information' ||
           event.url === '/user/photo' ||
@@ -52,6 +57,11 @@ export class AppComponent {
           event.url === '/register' ||
           event.url === '/lecture' ||
           event.url === '/user' ||
+          event.url === '/admin' ||
+          event.url === '/admin/courses' ||
+          event.url === '/admin/user' ||
+          event.url === '/admin/revenue' ||
+          event.url === '/admin/pay' ||
           event.url === '/user/courses-instructor' ||
           event.url === '/user/basic-information' ||
           event.url === '/user/photo' ||

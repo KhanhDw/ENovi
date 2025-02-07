@@ -24,12 +24,16 @@ import { ReceiveComponent } from './features/user/payments/receive/receive.compo
 import { TransferComponent } from './features/user/payments/transfer/transfer.component';
 import { SecurityComponent } from './features/user/security/security.component';
 import { DeleteAccountComponent } from './features/user/delete-account/delete-account.component';
-import { UserInfoComponent } from './features/user/user-info/user-info.component';
 import { EditUserInfoComponent } from './features/user/edit-user-info/edit-user-info.component';
 import { BasicInfoUserComponent } from './features/user/edit-user-info/basic-info-user/basic-info-user.component';
 import { UploadPhotoUserComponent } from './features/user/edit-user-info/upload-photo-user/upload-photo-user.component';
 import { UserProfileComponent } from './features/user/user-profile/user-profile.component';
 import { RattingInstructorComponent } from './features/user/ratting-instructor/ratting-instructor.component';
+import { AdminComponent } from './features/admin/admin.component';
+import { AdminUserComponent } from './features/admin/admin-user/admin-user.component';
+import { AdminRevenueComponent } from './features/admin/admin-revenue/admin-revenue.component';
+import { AdminCoursesComponent } from './features/admin/admin-courses/admin-courses.component';
+import { AdminPayComponent } from './features/admin/admin-pay/admin-pay.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -50,11 +54,11 @@ const routes: Routes = [
     path: 'user',
     component: userComponent,
     children: [
+      { path: '', redirectTo: 'basic-information', pathMatch: 'full' },
       // =====
       // user
       // =====
       { path: 'security', component: SecurityComponent },
-      { path: 'basic-information', component: UserInfoComponent },
       {
         path: 'edit-information',
         component: EditUserInfoComponent,
@@ -113,10 +117,20 @@ const routes: Routes = [
           },
         ],
       },
+    ],
+  },
 
-      // =====
-      // admin
-      // =====
+  // =====
+  // admin
+  // =====
+  {
+    path: 'admin',
+    component: AdminComponent,
+    children: [
+      { path: 'courses', component: AdminCoursesComponent },
+      { path: 'user', component: AdminUserComponent },
+      { path: 'revenue', component: AdminRevenueComponent },
+      { path: 'pay', component: AdminPayComponent },
     ],
   },
 
