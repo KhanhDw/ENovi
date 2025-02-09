@@ -1,4 +1,4 @@
-<div class="w-full min-h-screen p-6 overflow-y-auto bg-gray-100">
+<div class="w-full h-screen p-6 overflow-y-auto bg-gray-100">
   <header class="mb-6">
     <div
       class="flex flex-col justify-between gap-2 mb-6 lg:flex-row lg:items-center"
@@ -9,16 +9,19 @@
 
       <nav class="flex flex-wrap gap-2">
         <button
+          (click)="toggleDataTable(1)"
           class="px-4 py-2 text-gray-700 transition-colors bg-white border border-gray-200 rounded-md hover:bg-gray-100"
         >
           Thông tin chung
         </button>
         <button
+          (click)="toggleDataTable(2)"
           class="px-4 py-2 text-gray-700 transition-colors bg-white border border-gray-200 rounded-md hover:bg-gray-100"
         >
           Quản lý học viên
         </button>
         <button
+          (click)="toggleDataTable(3)"
           class="px-4 py-2 text-gray-700 transition-colors bg-white border border-gray-200 rounded-md hover:bg-gray-100"
         >
           Quản lý giảng viên
@@ -108,46 +111,62 @@
         #chartContainer
         class="px-2 my-4 mb-4 overflow-y-auto text-lg font-medium text-gray-800 h-[690px] bg-white"
       >
-        bảng<br />
-        dữ liệu bảng dữ liệu bảng dữ liệu bảng dữ liệu bảng dữ liệu bảng dữ liệu
-        bảng dữ liệu<br />
-        bảng dữ liệu b<br />ảng dữ l<br />iệu bảng dữ l<br />iệu bảng dữ liệu
-        bảng dữ liệu bảng dữ liệu bảng dữ liệu bảng dữ liệu<br />
-        bảng dữ <br />liệu bảng dữ liệu bảng dữ li<br />ệu bảng dữ<br />
-        liệu bả<br />ng dữ liệu b<br />ảng dữ liệu<br />
-        bảng dữ liệuệu b<br />ảng dữ l<br />iệu bảng dữ l<br />iệu bảng dữ liệu
-        bảng dữ liệu bảng dữ liệu bảng dữ liệu bảng dữ liệu<br />
-        bảng dữ <br />liệu bảng dữ liệu bảng dữ li<br />ệu bảng dữ<br />
-        liệu bả<br />ng dữ liệu b<br />ảng dữ liệu<br />
-        bảng dữ liệu bảng dữ liệu b<br />ảng dữ l<br />iệu bảng dữ l<br />iệu
-        bảng dữ liệu bảng dữ liệu bảng dữ liệu bảng dữ liệu bảng dữ liệu<br />
-        bảng dữ <br />liệu bảng dữ liệu bảng dữ li<br />ệu bảng dữ<br />
-        liệu bả<br />ng dữ liệu b<br />ảng dữ liệu<br />
-        bảng dữ liệu bảng dữ liệu b<br />ảng dữ l<br />iệu bảng dữ l<br />iệu
-        bảng dữ liệu bảng dữ liệu bảng dữ liệu bảng dữ liệu bảng dữ liệu<br />
-        bảng dữ <br />liệu bảng dữ liệu bảng dữ li<br />ệu bảng dữ<br />
-        liệu bả<br />ng dữ liệu b<br />ảng dữ liệu<br />
-        bảng dữ liệu
+        <app-table-data-user-admin
+          [data]="products"
+        ></app-table-data-user-admin>
       </div>
       <!-- Table content would go here -->
     </div>
     <!-- biểu đồ -->
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col h-full gap-4">
       <div class="flex items-center justify-between">
         <h1 class="flex items-center px-5 text-2xl font-bold uppercase">
           Biểu đồ
         </h1>
-        <button
-          type="button"
-          hidden
-          class="px-2 py-1 bg-white border rounded-lg hover:bg-gray-100 hover:border-slate-500"
-        >
-          <i class="cursor-pointer bi bi-arrows-fullscreen"></i>
-        </button>
+        <div class="flex items-center">
+          <button
+            type="button"
+            hidden
+            class="px-2 py-1 bg-white border rounded-lg hover:bg-gray-100 hover:border-slate-500"
+          >
+            <i class="cursor-pointer bi bi-arrows-fullscreen"></i>
+          </button>
+          <!-- over view : revenue : number of student : rate of courses -->
+          <div class="flex items-center justify-between w-full">
+            <div class="flex">
+              <!-- select and option for choose chart type -->
+              <select
+                (change)="onChangeTypeChart($event)"
+                class="w-[180px] py-2 border rounded-md focus:outline-none shadow-sm shadow-gray-400"
+              >
+                <option
+                  *ngFor="let item of typeChartList; let i = index"
+                  [value]="typeChartList[i].name"
+                >
+                  {{ item.title }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
       <div
         class="bg-white rounded-lg shadow-sm shadow-gray-500 h-[600px] min-h-[400px] p-4 border border-gray-200 overflow-y-auto"
-      ></div>
+      >
+        <!-- biều đồ -->
+        <apx-chart
+          *ngIf="
+            chartOptions1.series &&
+            chartOptions1.chart &&
+            chartOptions1.xaxis &&
+            chartOptions1.title
+          "
+          [series]="chartOptions1.series"
+          [chart]="chartOptions1.chart"
+          [xaxis]="chartOptions1.xaxis"
+          [title]="chartOptions1.title"
+        ></apx-chart>
+      </div>
     </div>
   </main>
 </div>

@@ -131,7 +131,7 @@
 
   <div class="flex flex-wrap items-center justify-center">
     <a
-      href="/user/courses-instructor"
+      [routerLink]="instructorDashboardURL"
       class="flex items-center justify-center gap-2 px-3 py-2 mx-2 text-sm font-semibold group hover:text-red-300"
       ><i class="text-3xl bi bi-mortarboard-fill"></i>
       <div
@@ -142,7 +142,7 @@
       </div>
     </a>
     <a
-      href="#"
+      [routerLink]="adminDashboardURL"
       class="flex items-center justify-center gap-2 px-3 py-2 mx-2 font-semibold hover:text-red-300"
       ><i class="text-3xl bi bi-person-fill-gear"></i>
       <div class="flex flex-col text-sm">
@@ -152,7 +152,7 @@
     </a>
 
     <a
-      href="/cart"
+      [routerLink]="cartURL"
       class="flex items-center justify-center h-full px-4 py-2 mx-2 text-xl transition duration-300 rounded hover:bg-gray-700"
       ><i class="bi bi-cart"></i
     ></a>

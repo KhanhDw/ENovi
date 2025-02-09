@@ -52,7 +52,7 @@
         *ngFor="let item of sideBar; let i = index"
         (click)="setActiveButton(i)"
         routerLinkActive="border-l-8 bg-slate-700"
-        [routerLinkActiveOptions]="{ exact: true }"
+        [routerLinkActiveOptions]="{ exact: false }"
         [ngClass]="{
           'hover:font-bold hover:border-l-8 hover:bg-slate-700':
             item.name !== '',
@@ -78,7 +78,7 @@
     </div>
   </div>
   <!-- right -->
-  <div class="w-full h-screen overflow-y-auto">
+  <div class="w-full h-screen overflow-y-hidden">
     <div class="w-full bg-white">
       <!-- user 0 -->
 

@@ -32,3 +32,18 @@ lệnh kiểm tra phiên bản của một thư viện:
 --> npm view <tên thư viện> versions
 
 
+một số thư viện đã dùng từ bên ngoài:
+npm i apexcharts@latest  ng-apexcharts@latest  ngx-quill@latest  quill@latest
+
+đối với angular mà bị lỗi vite như vầy: 
+09:49:14 [vite] Pre-transform error: Failed to load url /user/edit-information/polyfills.js (resolved id: /user/edit-information/polyfills.js). Does the file exist?
+thì làm như sau:
+1. xóa dist: rm -r -fo dist
+2. buil lại dist: ng build --configuration=development
+3. kiểm tra vite đã cài chưa: npx vite --version
+4. Nếu chưa cài thì cài lại: npm install vite --save-dev
+5. chạy lệnh vite: npx vite --debug
+6. chạy vite chế độ phát triên: npx vite
+7. -- vẫn chưa fix được --
+
+

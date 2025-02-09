@@ -26,7 +26,11 @@ interface Field {
 })
 export class HeaderComponent {
   isLogin: number = 1;
-  publishProfileURL: string = '/profile-instructor-public';
+  adminDashboardURL: string = '/admin';
+  userDashboardURL: string = '/user/';
+  instructorDashboardURL: string = '/user/instructor';
+  publishProfileURL: string = '/user/profile';
+  cartURL: string = '/cart';
   LogOutUrl: string = '/notfound';
   nameUser: string = 'GiaKhanh';
   emailUser: string = 'GiaKhanh@gmail.com';

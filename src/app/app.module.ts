@@ -54,6 +54,8 @@ import { AdminRevenueComponent } from './features/admin/admin-revenue/admin-reve
 import { AdminCoursesComponent } from './features/admin/admin-courses/admin-courses.component';
 import { AdminPayComponent } from './features/admin/admin-pay/admin-pay.component';
 import { TableDataUserAdminComponent } from './components/table-data-user-admin/table-data-user-admin.component';
+import { ListCoursesAdminComponent } from './components/list-courses-admin/list-courses-admin.component';
+import { AdminCourseDetailComponent } from './features/admin/admin-courses/admin-course-detail/admin-course-detail.component';
 
 @NgModule({
   declarations: [
@@ -101,6 +103,7 @@ import { TableDataUserAdminComponent } from './components/table-data-user-admin/
     UserProfileComponent,
     AdminComponent,
     UploadPhotoUserComponent,
+    AdminCourseDetailComponent,
     // components
     YoutubePlayerComponent,
     CourseItemSearchComponent,
@@ -108,6 +111,7 @@ import { TableDataUserAdminComponent } from './components/table-data-user-admin/
     CourseItemMyLearningComponent,
     CourseItemShoppingCartComponent,
     TableDataUserAdminComponent,
+    ListCoursesAdminComponent,
   ],
   imports: [
     BrowserModule,

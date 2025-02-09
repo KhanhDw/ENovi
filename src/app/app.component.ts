@@ -50,6 +50,7 @@ export class AppComponent {
           event.url === '/user/instructor/profile' ||
           event.url === '/user/payments/recive' ||
           event.url === '/course/lecture' ||
+          event.url === '/admin/courses/detail' ||
           event.url === '/user/purchase-history'
         );
         this.hiddenFooter = !(
@@ -85,6 +86,7 @@ export class AppComponent {
           event.url === '/user/instructor/profile' ||
           event.url === '/user/payments/recive' ||
           event.url === '/course/lecture' ||
+          event.url === '/admin/courses/detail' ||
           event.url === '/user/purchase-history'
         );
       }

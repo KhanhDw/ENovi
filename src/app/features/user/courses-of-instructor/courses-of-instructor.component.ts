@@ -3,10 +3,10 @@ import { Component } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
-    selector: 'app-courses-of-instructor',
-    templateUrl: './courses-of-instructor.component.html',
-    styleUrl: './courses-of-instructor.component.css',
-    standalone: false
+  selector: 'app-courses-of-instructor',
+  templateUrl: './courses-of-instructor.component.html',
+  styleUrl: './courses-of-instructor.component.css',
+  standalone: false,
 })
 export class CoursesOfInstructorComponent {
   courses: Course[] = [
@@ -18,6 +18,7 @@ export class CoursesOfInstructorComponent {
         'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B8D3F060E-0D4E-4C7C-9D42-A4E9F49E7936%7D-jNng7IdvT77IUHB8f6nJ3Q3M6Xucnc.png',
       enrollments: 31,
       rating: 4.5,
+      duration: '10 giờ',
     },
     {
       id: 2,
@@ -26,6 +27,7 @@ export class CoursesOfInstructorComponent {
         'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B8D3F060E-0D4E-4C7C-9D42-A4E9F49E7936%7D-jNng7IdvT77IUHB8f6nJ3Q3M6Xucnc.png',
       enrollments: 14,
       rating: 4.86,
+      duration: '10 giờ',
     },
     {
       id: 3,
@@ -34,6 +36,7 @@ export class CoursesOfInstructorComponent {
         'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B8D3F060E-0D4E-4C7C-9D42-A4E9F49E7936%7D-jNng7IdvT77IUHB8f6nJ3Q3M6Xucnc.png',
       enrollments: 23,
       rating: 4.0,
+      duration: '10 giờ',
     },
     {
       id: 4,
@@ -42,6 +45,7 @@ export class CoursesOfInstructorComponent {
         'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B8D3F060E-0D4E-4C7C-9D42-A4E9F49E7936%7D-jNng7IdvT77IUHB8f6nJ3Q3M6Xucnc.png',
       enrollments: 7,
       rating: 5.0,
+      duration: '10 giờ',
     },
     {
       id: 5,
@@ -50,6 +54,7 @@ export class CoursesOfInstructorComponent {
         'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B8D3F060E-0D4E-4C7C-9D42-A4E9F49E7936%7D-jNng7IdvT77IUHB8f6nJ3Q3M6Xucnc.png',
       enrollments: 7,
       rating: 5.0,
+      duration: '10 giờ',
     },
   ];
 
@@ -72,8 +77,10 @@ export class CoursesOfInstructorComponent {
   }
 
   getStarArray(rating: number): number[] {
+    duration: '10 giờ';
     return Array(5)
       .fill(0)
       .map((_, i) => (i < Math.floor(rating) ? 1 : 0));
+    duration: '10 giờ';
   }
 }

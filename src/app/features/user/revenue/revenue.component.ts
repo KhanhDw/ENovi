@@ -50,10 +50,10 @@ interface WithdrawalTransaction {
 }
 
 @Component({
-    selector: 'app-revenue',
-    templateUrl: './revenue.component.html',
-    styleUrl: './revenue.component.css',
-    standalone: false
+  selector: 'app-revenue',
+  templateUrl: './revenue.component.html',
+  styleUrl: './revenue.component.css',
+  standalone: false,
 })
 export class RevenueComponent implements AfterViewInit, OnInit {
   // =========================
@@ -408,12 +408,11 @@ export class RevenueComponent implements AfterViewInit, OnInit {
   // chart
   // =============
 
-  @ViewChild('chart') chart!: ChartComponent;
-  public chartOptions!: Partial<ChartOptions>;
+  public chartOptions: Partial<ChartOptions> = {};
   // dữ liệU biểu đồ để trên contructor
 
   nameChart = 'Tổng doanh thu các khóa học';
-  dataChart = [10, 41, 35, 51, 49, 62, 69, 91, 148, 168, 248, 348];
+  dataChart = [10, 41, 35, 51, 405, 62, 69, 91, 148, 168, 248, 348];
   typeChartInput: ChartType = 'line';
   typeChartList = [
     { name: 'line', title: 'Biểu đồ đường' },

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './features/home/home.component';
 import { NotfoundComponent } from './features/notfound/notfound.component';
@@ -34,6 +34,8 @@ import { AdminUserComponent } from './features/admin/admin-user/admin-user.compo
 import { AdminRevenueComponent } from './features/admin/admin-revenue/admin-revenue.component';
 import { AdminCoursesComponent } from './features/admin/admin-courses/admin-courses.component';
 import { AdminPayComponent } from './features/admin/admin-pay/admin-pay.component';
+import { AdminCourseDetailComponent } from './features/admin/admin-courses/admin-course-detail/admin-course-detail.component';
+import path from 'path';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -50,11 +52,15 @@ const routes: Routes = [
     children: [{ path: 'lecture', component: LectureComponent }],
   },
 
+  // =====
+  // user
+  // =====
+
   {
     path: 'user',
     component: userComponent,
     children: [
-      { path: '', redirectTo: 'basic-information', pathMatch: 'full' },
+      { path: '', redirectTo: 'edit-information', pathMatch: 'full' },
       // =====
       // user
       // =====
@@ -127,7 +133,20 @@ const routes: Routes = [
     path: 'admin',
     component: AdminComponent,
     children: [
-      { path: 'courses', component: AdminCoursesComponent },
+      {
+        path: 'courses',
+        component: AdminCoursesComponent,
+      },
+      {
+        path: 'courses',
+        children: [
+          {
+            path: 'detail',
+            component: AdminCourseDetailComponent,
+          },
+        ],
+      },
+
       { path: 'user', component: AdminUserComponent },
       { path: 'revenue', component: AdminRevenueComponent },
       { path: 'pay', component: AdminPayComponent },

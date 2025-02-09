@@ -1,0 +1,334 @@
+<div
+  id="detailCourse"
+  class="h-screen p-6 overflow-y-auto text-gray-100 bg-gray-900"
+>
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-4">
+    <!-- Main Content -->
+    <div class="space-y-6 lg:col-span-3">
+      <!-- Header -->
+      <div class="flex items-start justify-between">
+        <div class="flex items-center justify-start gap-4">
+          <a
+            [routerLink]="gotoBack"
+            class="rounded-full flex items-center justify-center cursor-pointer bg-[#1F2937] hover:bg-[#2e3b4f] duration-300 transition-all w-10 h-10"
+            ><i class="cursor-pointer bi bi-arrow-left"></i
+          ></a>
+          <div>
+            <div class="font-semibold text-gray-300">
+              Trạng thái khóa học:
+              <span class="text-white">{{ TrangThaiKhoaHoc[0].name }}</span>
+            </div>
+            <div class="text-sm font-semibold text-gray-400">
+              Ngày tạo: 12/03/2056
+            </div>
+          </div>
+        </div>
+        <!-- User Info -->
+        <div class="flex items-center gap-4">
+          <button
+            type="button"
+            class="p-4 bg-gray-800 rounded hover:bg-zinc-800"
+          >
+            <a class="font-semibold text-gray-300">Hủy</a>
+          </button>
+          <button
+            type="button"
+            class="p-4 bg-gray-800 rounded hover:bg-sky-900"
+          >
+            <a class="font-semibold text-gray-300">Lưu thay đổi</a>
+          </button>
+        </div>
+      </div>
+
+      <!-- Course Name -->
+      <div class="relative p-4 bg-gray-800 rounded">
+        <div class="text-gray-300">{{ CourseDetailRecive.title }}</div>
+        <p
+          class="absolute flex px-1 text-sm font-semibold text-gray-300 bg-gray-800 rounded-t-md -top-4"
+        >
+          Tên khóa học
+        </p>
+      </div>
+
+      <!-- Domain -->
+      <div class="relative p-4 bg-gray-800 rounded">
+        <div class="text-gray-300">{{ CourseDetailRecive.category }}</div>
+        <p
+          class="absolute flex px-1 text-sm font-semibold text-gray-300 bg-gray-800 rounded-t-md -top-4"
+        >
+          Lĩnh vực
+        </p>
+      </div>
+
+      <!-- Description -->
+      <div class="relative p-4 bg-gray-800 rounded">
+        <div class="text-gray-300">mô tả khóa học</div>
+        <p
+          class="absolute flex px-1 text-sm font-semibold text-gray-300 bg-gray-800 rounded-t-md -top-4"
+        >
+          Mô tả
+        </p>
+      </div>
+
+      <!-- Sections -->
+      <div class="relative p-4 bg-gray-800 rounded">
+        <div class="text-gray-300">
+          danh sách section và bài giảng <br />danh sách section và bài giảng
+          <br />danh sách section và bài giảng <br />danh sách section và bài
+          giảng <br />danh sách section và bài giảng <br />danh sách section và
+          bài giảng <br />danh sách section và bài giảng <br />danh sách section
+          và bài giảng <br />danh sách section và bài giảng <br />danh sách
+          section và bài giảng <br />danh sách section và bài giảng <br />danh
+          sách section và bài giảng <br />danh sách section và bài giảng
+          <br />danh sách section và bài giảng <br />danh sách section và bài
+          giảng <br />danh sách section và bài giảng <br />danh sách section và
+          bài giảng <br />danh sách section và bài giảng <br />danh sách section
+          và bài giảng <br />danh sách section và bài giảng <br />danh sách
+          section và bài giảng <br />danh sách section và bài giảng <br />danh
+          sách section và bài giảng <br />danh sách section và bài giảng
+          <br />danh sách section và bài giảng <br />danh sách section và bài
+          giảng <br />danh sách section và bài giảng <br />danh sách section và
+          bài giảng <br />danh sách section và bài giảng <br />danh sách section
+          và bài giảng <br />danh sách section và bài giảng <br />danh sách
+          section và bài giảng <br />danh sách section và bài giảng <br />danh
+          sách section và bài giảng <br />danh sách section và bài giảng
+          <br />danh sách section và bài giảng <br />danh sách section và bài
+          giảng <br />danh sách section và bài giảng <br />danh sách section và
+          bài giảng <br />danh sách section và bài giảng <br />danh sách section
+          và bài giảng <br />danh sách section và bài giảng <br />danh sách
+          section và bài giảng <br />
+        </div>
+        <p
+          class="absolute flex px-1 text-sm font-semibold text-gray-300 bg-gray-800 rounded-t-md -top-4"
+        >
+          Danh sách bài giảng
+        </p>
+      </div>
+
+      <!-- Attachments -->
+      <div class="relative p-4 bg-gray-800 rounded">
+        <div class="text-gray-300">tài liệu đính kèm: 5</div>
+        <p
+          class="absolute flex px-1 text-sm font-semibold text-gray-300 bg-gray-800 rounded-t-md -top-4"
+        >
+          Tài liệu
+        </p>
+      </div>
+
+      <!-- Exercises -->
+      <div class="relative p-4 bg-gray-800 rounded">
+        <div class="text-gray-300">bài tập đính kèm: 4</div>
+        <p
+          class="absolute flex px-1 text-sm font-semibold text-gray-300 bg-gray-800 rounded-t-md -top-4"
+        >
+          Bài tập
+        </p>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <!-- detail course -->
+    <div
+      class="sticky top-0 flex-col items-center justify-start w-full px-3 py-5 text-white transition-all duration-300 bg-gray-800 h-fit"
+    >
+      <!-- title -->
+      <div class="flex items-center justify-between w-full">
+        <h1 class="text-xl font-bold uppercase">Thông tin chi tiết</h1>
+        <div></div>
+      </div>
+      <!-- title of course -->
+      <div class="flex flex-col w-full my-5">
+        <div class="flex items-start justify-between">
+          <h1 class="text-xl">Tên khóa học</h1>
+          <a
+            href="#"
+            class="px-2 border rounded-lg cursor-pointer hover:text-red-400"
+            >Đến khóa học</a
+          >
+        </div>
+        <p class="text-xl font-semibold text-yellow-100">
+          {{ CourseDetailRecive.title }}
+        </p>
+      </div>
+      <!-- price -->
+      <div class="flex w-full gap-2 mt-1">
+        <h1 class="text-2xl font-semibold">Giá:</h1>
+        <p class="text-2xl font-semibold text-blue-300">
+          {{ CourseDetailRecive.price | currency : "VND" : "symbol" : "1.0-0" }}
+        </p>
+      </div>
+      <!-- the number of course -->
+      <div class="flex w-full gap-2 mt-1">
+        <h1 class="text-xl">Tổng thời lượng:</h1>
+        <p class="text-xl font-semibold text-yellow-100">
+          {{ CourseDetailRecive.duration }} giờ
+        </p>
+      </div>
+      <!-- the number of course -->
+      <div class="flex w-full gap-2 mt-1">
+        <h1 class="text-xl">Tổng bài giảng:</h1>
+        <p class="text-xl font-semibold text-yellow-100">
+          {{ CourseDetailRecive.lecture }} bài
+        </p>
+      </div>
+      <!-- the number of student -->
+      <div class="flex w-full gap-2 mt-1">
+        <h1 class="text-xl">Tổng học viên:</h1>
+        <p class="text-xl font-semibold text-yellow-100">
+          {{ CourseDetailRecive.enrollments }} người
+        </p>
+      </div>
+      <!-- revenue -->
+      <div class="flex w-full gap-2 mt-3">
+        <h1 class="text-xl font-semibold">Doanh thu:</h1>
+        <p class="text-xl font-bold text-green-500">
+          {{ CourseDetailRecive.revenue }}đ
+        </p>
+      </div>
+      <!-- commission which website recived -->
+      <div class="flex w-full gap-2 mt-3">
+        <h1 class="text-xl font-semibold">Hoa hồng:</h1>
+        <p class="text-xl font-bold text-pink-300">
+          {{ CourseDetailRecive.commission }} đ
+        </p>
+      </div>
+      <!-- íntructor -->
+      <div class="flex flex-col w-full gap-2 mt-5">
+        <h1 class="text-xl font-semibold">Giảng viên</h1>
+        <div class="flex items-center justify-start gap-2">
+          <img
+            class="object-contain border-2 rounded-full w-14 h-14"
+            src="https://d3hi6wehcrq5by.cloudfront.net/itnavi-blog/2020/07/Angular-l%C3%A0-g%C3%AC-6.jpg"
+            alt="avatar"
+          />
+          <div class="flex flex-col w-full">
+            <h1 class="text-xl font-bold">
+              {{ CourseDetailRecive.instructor }}
+            </h1>
+            <h1 class="text-gray-300">{{ CourseDetailRecive.category }}</h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col w-full mt-10">
+        <div class="flex">
+          <div class="w-full max-w-sm min-w-[200px]">
+            <label class="block mb-1 text-sm text-slate-400">
+              Điều chỉnh trạng thái khóa học
+            </label>
+
+            <div class="relative mb-5">
+              <select
+                class="w-full py-2 pl-3 pr-8 text-sm transition duration-300 bg-transparent border rounded shadow-sm appearance-none cursor-pointer placeholder:text-slate-400 text-slate-400 border-slate-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 focus:shadow-md"
+              >
+                <option
+                  class="text-white bg-slate-800"
+                  *ngFor="let item of TrangThaiKhoaHoc"
+                  value="{{ item.name }}"
+                >
+                  {{ item.name }}
+                </option>
+              </select>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.2"
+                stroke="currentColor"
+                class="h-5 w-5 ml-1 absolute top-2.5 right-2.5 text-slate-700"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <button
+          (click)="toggleShowModalsubmitDeleteCourse()"
+          type="button"
+          class="w-full py-2 text-2xl text-center hover:bg-[#2b2424] border-y-2 border-slate-600"
+        >
+          Xóa
+        </button>
+      </div>
+    </div>
+
+    <!-- modal delete -->
+
+    <div
+      id="popup-modal"
+      tabindex="-1"
+      [ngClass]="ShowModalsubmitDeleteCourse ? 'flex' : 'hidden'"
+      class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+    >
+      <div class="relative w-full max-w-md max-h-full p-4">
+        <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+          <button
+            (click)="toggleShowModalsubmitDeleteCourse()"
+            type="button"
+            class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+            data-modal-hide="popup-modal"
+          >
+            <svg
+              class="w-3 h-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+          <div class="p-4 text-center md:p-5">
+            <svg
+              class="w-12 h-12 mx-auto mb-4 text-gray-400 dark:text-gray-200"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 20"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+            <h3
+              class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400"
+            >
+              Bạn có chắc muốn xóa khóa học này không?
+            </h3>
+            <button
+              (click)="toggleShowModalsubmitDeleteCourse()"
+              data-modal-hide="popup-modal"
+              type="button"
+              class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+            >
+              Đồng ý xóa
+            </button>
+            <button
+              (click)="toggleShowModalsubmitDeleteCourse()"
+              data-modal-hide="popup-modal"
+              type="button"
+              class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+            >
+              Hủy bỏ
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

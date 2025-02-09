@@ -1,1 +1,379 @@
-<p>admin-courses works!</p>
+<div
+  #scrollContainer
+  (scroll)="onScroll()"
+  class="relative w-full h-screen overflow-y-auto font-sans antialiased bg-slate-300"
+>
+  <!-- header hidden show when scoll -->
+  <div
+    *ngIf="isScrolled"
+    class="sticky inset-0 top-0 right-0 flex items-center justify-between px-10 bg-gray-800 w-ful z-[99]"
+  >
+    <h1 class="w-full text-2xl font-bold text-white">Quản lý khóa học</h1>
+    <div
+      class="flex items-center justify-end w-full my-2 space-y-4 md:flex-row md:space-y-0 md:space-x-4"
+    >
+      <div class="relative w-full md:w-auto">
+        <input
+          type="text"
+          placeholder="Tìm kiêm khóa học..."
+          class="py-2 pl-10 pr-5 border w-[300px] border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <div
+          class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+        >
+          <svg
+            class="w-5 h-5 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            ></path>
+          </svg>
+        </div>
+      </div>
+
+      <div class="relative w-full md:w-auto">
+        <div class="relative inline-block w-full">
+          <select
+            class="block w-full px-4 py-2 pr-8 leading-tight transition-all duration-200 bg-white border border-gray-300 rounded-lg shadow-sm appearance-none hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option
+              [value]="item.value"
+              class="text-gray-700"
+              *ngFor="let item of sortCourses"
+            >
+              {{ item.name }}
+            </option>
+          </select>
+          <div
+            class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none"
+          >
+            <svg
+              class="w-4 h-4 fill-current"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              />
+            </svg>
+          </div>
+        </div>
+        <div
+          class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none"
+        >
+          <svg
+            class="w-4 h-4 fill-current"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+          >
+            <path
+              d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- detail course -->
+  <div
+    [ngClass]="{
+      'py-[75px]': isScrolled,
+      'py-5': !isScrolled,
+      flex: showDetailInfo,
+      hidden: !showDetailInfo
+    }"
+    class="fixed z-[9999] text-white items-center justify-start flex-col top-0 right-0 w-1/4 h-screen px-3 transition-all duration-300 bg-[#231D1D] hover:opacity-100 opacity-40"
+  >
+    <!-- title -->
+    <div class="flex items-center justify-between w-full">
+      <button
+        type="button"
+        class="text-xl border rounded-r-full hover:text-red-500 border-slate-500"
+        (click)="toggleShowDetailInfo()"
+      >
+        <i class="cursor-pointer bi bi-x"></i>
+      </button>
+      <h1 class="text-xl font-bold uppercase">Thông tin chi tiết</h1>
+      <div></div>
+    </div>
+    <!-- title of course -->
+    <div class="flex flex-col w-full my-5">
+      <div class="flex items-start justify-between">
+        <h1 class="text-xl">Tên khóa học</h1>
+        <a
+          href="#"
+          class="px-2 border rounded-lg cursor-pointer hover:text-red-400"
+          >Đến khóa học</a
+        >
+      </div>
+      <p class="text-xl font-semibold text-yellow-100">
+        {{ CourseDetailRecive.title }}
+      </p>
+    </div>
+    <!-- price -->
+    <div class="flex w-full gap-2 mt-1">
+      <h1 class="text-2xl font-semibold">Giá:</h1>
+      <p class="text-2xl font-semibold text-blue-300">
+        {{ CourseDetailRecive.price | currency : "VND" : "symbol" : "1.0-0" }}
+      </p>
+    </div>
+    <!-- the number of course -->
+    <div class="flex w-full gap-2 mt-1">
+      <h1 class="text-xl">Tổng thời lượng:</h1>
+      <p class="text-xl font-semibold text-yellow-100">
+        {{ CourseDetailRecive.duration }} giờ
+      </p>
+    </div>
+    <!-- the number of course -->
+    <div class="flex w-full gap-2 mt-1">
+      <h1 class="text-xl">Tổng bài giảng:</h1>
+      <p class="text-xl font-semibold text-yellow-100">
+        {{ CourseDetailRecive.lecture }} bài
+      </p>
+    </div>
+    <!-- the number of student -->
+    <div class="flex w-full gap-2 mt-1">
+      <h1 class="text-xl">Tổng học viên:</h1>
+      <p class="text-xl font-semibold text-yellow-100">
+        {{ CourseDetailRecive.enrollments }} người
+      </p>
+    </div>
+    <!-- revenue -->
+    <div class="flex w-full gap-2 mt-3">
+      <h1 class="text-xl font-semibold">Doanh thu:</h1>
+      <p class="text-xl font-bold text-green-500">
+        {{ CourseDetailRecive.revenue }}đ
+      </p>
+    </div>
+    <!-- commission which website recived -->
+    <div class="flex w-full gap-2 mt-3">
+      <h1 class="text-xl font-semibold">Hoa hồng:</h1>
+      <p class="text-xl font-bold text-pink-300">
+        {{ CourseDetailRecive.commission }} đ
+      </p>
+    </div>
+    <!-- íntructor -->
+    <div class="flex flex-col w-full gap-2 mt-5">
+      <h1 class="text-xl font-semibold">Giảng viên</h1>
+      <div class="flex items-center justify-start gap-2">
+        <img
+          class="object-contain border-2 rounded-full w-14 h-14"
+          src="https://d3hi6wehcrq5by.cloudfront.net/itnavi-blog/2020/07/Angular-l%C3%A0-g%C3%AC-6.jpg"
+          alt="avatar"
+        />
+        <div class="flex flex-col w-full">
+          <h1 class="text-xl font-bold">{{ CourseDetailRecive.instructor }}</h1>
+          <h1 class="text-gray-300">{{ CourseDetailRecive.category }}</h1>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col w-full mt-10">
+      <a
+        [routerLink]="gotoDetail"
+        class="w-full py-2 text-2xl text-center hover:bg-[#2b2424] border-y-2 border-slate-600"
+        >Quản lý chi tiết</a
+      >
+      <button
+        (click)="toggleShowModalsubmitDeleteCourse()"
+        type="button"
+        class="w-full py-2 text-2xl text-center hover:bg-[#2b2424] border-y-2 border-slate-600"
+      >
+        Xóa
+      </button>
+    </div>
+  </div>
+
+  <div class="flex flex-col items-center w-full px-4 py-10 mx-auto">
+    <div class="flex flex-col items-center justify-center pb-5 w-ful">
+      <h1 class="mb-6 text-4xl font-bold uppercase font-signika">
+        Quản lý khóa học
+      </h1>
+
+      <div
+        class="flex flex-col items-center w-full mb-2 space-y-4 md:flex-row md:space-y-0 md:space-x-4"
+      >
+        <div class="relative w-full md:w-auto">
+          <input
+            type="text"
+            placeholder="Tìm kiêm khóa học..."
+            class="w-full py-2 pl-10 pr-5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <div
+            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+          >
+            <svg
+              class="w-5 h-5 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              ></path>
+            </svg>
+          </div>
+        </div>
+
+        <div class="relative w-full md:w-auto">
+          <div class="relative inline-block w-full">
+            <select
+              class="block w-full px-4 py-2 pr-8 leading-tight transition-all duration-200 bg-white border border-gray-300 rounded-lg shadow-sm appearance-none hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option
+                [value]="item.value"
+                class="text-gray-700"
+                *ngFor="let item of sortCourses"
+              >
+                {{ item.name }}
+              </option>
+            </select>
+            <div
+              class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none"
+            >
+              <svg
+                class="w-4 h-4 fill-current"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                />
+              </svg>
+            </div>
+          </div>
+          <div
+            class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none"
+          >
+            <svg
+              class="w-4 h-4 fill-current"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <button
+          [ngClass]="!listORCard ? 'bg-yellow-200' : 'bg-gray-200'"
+          (click)="toggleToList()"
+          type="button"
+          class="px-3 py-1 text-xl text-gray-600 border rounded-lg hover:bg-gray-100"
+        >
+          <i class="cursor-pointer bi bi-card-list"></i>
+        </button>
+        <button
+          [ngClass]="listORCard ? 'bg-yellow-200' : 'bg-gray-200'"
+          (click)="toggleToCart()"
+          type="button"
+          class="px-3 py-1 text-xl text-gray-600 border rounded-lg hover:bg-gray-100"
+        >
+          <i class="cursor-pointer bi bi-grid-3x3-gap-fill"></i>
+        </button>
+      </div>
+      <p class="text-sm text-gray-600 font-signika">
+        <i class="mx-2 bi bi-info-circle"></i
+        ><span>Nhấp phải để ẩn chi tiết thông tin khóa học</span>
+      </p>
+    </div>
+    <div class="flex items-center justify-between w-full">
+      <div class="w-full h-full">
+        <app-list-courses-admin
+          (itemClicked)="handleCourseClick($event)"
+          [listCourseAdmin]="listCourseAdmin"
+          [listORCard]="listORCard"
+        ></app-list-courses-admin>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal delete -->
+
+  <div
+    id="popup-modal"
+    tabindex="-1"
+    [ngClass]="ShowModalsubmitDeleteCourse ? 'flex' : 'hidden'"
+    class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+  >
+    <div class="relative w-full max-w-md max-h-full p-4">
+      <div
+        class="relative bg-white rounded-lg shadow-md shadow-black dark:bg-gray-700"
+      >
+        <button
+          (click)="toggleShowModalsubmitDeleteCourse()"
+          type="button"
+          class="absolute top-3 end-2.5 text-gray-100 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+          data-modal-hide="popup-modal"
+        >
+          <svg
+            class="w-3 h-3"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 14 14"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+            />
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+        <div class="p-4 text-center md:p-5">
+          <svg
+            class="w-12 h-12 mx-auto mb-4 text-gray-400 dark:text-gray-200"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 20"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            />
+          </svg>
+          <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+            Bạn có chắc muốn xóa khóa học này không?
+          </h3>
+          <button
+            (click)="toggleShowModalsubmitDeleteCourse()"
+            data-modal-hide="popup-modal"
+            type="button"
+            class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+          >
+            Đồng ý xóa
+          </button>
+          <button
+            (click)="toggleShowModalsubmitDeleteCourse()"
+            data-modal-hide="popup-modal"
+            type="button"
+            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+          >
+            Hủy bỏ
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

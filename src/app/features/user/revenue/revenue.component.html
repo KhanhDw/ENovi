@@ -125,6 +125,12 @@
           >
             <!-- biểu đồ tại đây -->
             <apx-chart
+              *ngIf="
+                chartOptions.series &&
+                chartOptions.chart &&
+                chartOptions.xaxis &&
+                chartOptions.title
+              "
               class="w-full h-full"
               [series]="chartOptions.series"
               [chart]="chartOptions.chart"

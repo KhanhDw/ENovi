@@ -1,1 +1,55 @@
-<div class="w-full h-full"></div>
+<div class="w-full h-full">
+  <div class="overflow-hidden rounded-md shadow-md">
+    <table class="min-w-full leading-normal">
+      <thead>
+        <tr>
+          <th
+            class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
+          >
+            Tên Sản Phẩm
+          </th>
+          <th
+            class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
+          >
+            Giá
+          </th>
+          <th
+            class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
+          >
+            Số Lượng
+          </th>
+          <th
+            class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
+          >
+            Trạng Thái
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-white">
+        <tr *ngFor="let item of data">
+          <td class="px-5 py-5 text-sm border-b border-gray-200">
+            <p class="text-gray-900 whitespace-no-wrap">{{ item.name }}</p>
+          </td>
+          <td class="px-5 py-5 text-sm border-b border-gray-200">
+            <p class="text-gray-900 whitespace-no-wrap">${{ item.price }}</p>
+          </td>
+          <td class="px-5 py-5 text-sm border-b border-gray-200">
+            <p class="text-gray-900 whitespace-no-wrap">{{ item.quantity }}</p>
+          </td>
+          <td class="px-5 py-5 text-sm border-b border-gray-200">
+            <span
+              class="relative inline-block px-3 py-1 font-semibold leading-tight"
+              [class]="getStatusClass(item.status)"
+            >
+              <span
+                aria-hidden
+                class="absolute inset-0 rounded-full opacity-50"
+              ></span>
+              <span class="relative">{{ item.status }}</span>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
