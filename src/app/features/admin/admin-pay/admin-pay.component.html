@@ -1,1 +1,251 @@
-<p>admin-pay works!</p>
+<div class="flex w-full h-screen overflow-y-auto">
+  <div class="flex flex-col w-full h-full">
+    <!-- header -->
+    <div class="flex items-center justify-center mx-6 my-5">
+      <div class="flex items-center justify-between w-full">
+        <h1 class="w-full text-4xl font-bold uppercase font-signika">
+          Quản lý thanh toán
+        </h1>
+      </div>
+    </div>
+    <!-- body -->
+    <div class="flex flex-col w-auto h-full mx-3 mt-1">
+      <div class="flex flex-col w-full h-full gap-10 px-10">
+        <!-- table data transaction wait to pay -->
+        <div class="container mx-auto mt-5 h-[500px] mb-10">
+          <div class="flex items-center justify-between w-full py-5 my-3">
+            <h1 class="text-2xl font-bold">Các giao dịch đang chờ</h1>
+            <!-- component -->
+            <!-- search bar -->
+            <div
+              class="w-full max-w-lg mx-auto bg-white rounded-lg shadow-sm shadow-black"
+            >
+              <div
+                class="flex items-center px-3.5 py-2 text-gray-400 group hover:ring-1 hover:ring-gray-300 focus-within:!ring-2 ring-inset focus-within:!ring-teal-500 rounded-md"
+              >
+                <svg
+                  class="w-5 h-5 mr-2 stroke-slate-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  ></path>
+                </svg>
+                <input
+                  class="block w-full text-base text-gray-700 bg-transparent appearance-none placeholder:text-gray-400 focus:outline-none sm:text-sm sm:leading-6"
+                  placeholder="Nhập nội dung tìm kiếm..."
+                  aria-label="Search components"
+                  id="headlessui-combobox-input-:r5n:"
+                  role="combobox"
+                  type="text"
+                  aria-expanded="false"
+                  aria-autocomplete="list"
+                  value=""
+                  style="caret-color: rgb(107, 114, 128)"
+                />
+              </div>
+            </div>
+            <!-- end search bar -->
+            <button
+              type="button"
+              class="px-3 py-2 text-white bg-green-600 border-green-800 rounded-lg shadow-md shadow-green-400"
+            >
+              Xuất file Excel
+            </button>
+          </div>
+          <div
+            class="h-full overflow-x-auto overflow-y-auto bg-white rounded-lg shadow-sm shadow-black"
+          >
+            <table
+              class="h-full min-w-full overflow-y-auto divide-y divide-gray-200"
+            >
+              <thead class="sticky top-0 z-10 bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                  >
+                    STT
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                  >
+                    Ngày
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                  >
+                    Loại giao dịch
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                  >
+                    Số tiền
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                  >
+                    Người thực hiện
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                  >
+                    Trạng thái
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="h-full bg-white divide-y divide-gray-200">
+                <tr *ngFor="let item of revenueData; let i = index">
+                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                    {{ i + 1 }}
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                    {{ item.date }}
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                    {{ formatCurrency(item.revenue) }}
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                    {{ item.courseSold }}
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                    {{ formatCurrency(item.websiteCommission) }}
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                    {{ formatCurrency(item.instructorPayment) }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- table data transaction paid -->
+        <div class="container mx-auto mt-5 min-h-[500px] h-[500px] mb-[100px]">
+          <div class="flex items-center justify-between w-full py-5 my-3">
+            <h1 class="text-2xl font-bold">Các giao dịch đã thanh toán</h1>
+            <!-- search bar -->
+            <div
+              class="w-full max-w-lg mx-auto bg-white rounded-lg shadow-sm shadow-black"
+            >
+              <div
+                class="flex items-center px-3.5 py-2 text-gray-400 group hover:ring-1 hover:ring-gray-300 focus-within:!ring-2 ring-inset focus-within:!ring-teal-500 rounded-md"
+              >
+                <svg
+                  class="w-5 h-5 mr-2 stroke-slate-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  ></path>
+                </svg>
+                <input
+                  class="block w-full text-base text-gray-700 bg-transparent appearance-none placeholder:text-gray-400 focus:outline-none sm:text-sm sm:leading-6"
+                  placeholder="Nhập nội dung tìm kiếm..."
+                  aria-label="Search components"
+                  id="headlessui-combobox-input-:r5n:"
+                  role="combobox"
+                  type="text"
+                  aria-expanded="false"
+                  aria-autocomplete="list"
+                  value=""
+                  style="caret-color: rgb(107, 114, 128)"
+                />
+              </div>
+            </div>
+            <!-- end search bar -->
+            <button
+              type="button"
+              class="px-3 py-2 text-white bg-green-600 border-green-800 rounded-lg shadow-md shadow-green-400"
+            >
+              Xuất file Excel
+            </button>
+          </div>
+          <div
+            class="h-full overflow-x-auto overflow-y-auto bg-white rounded-lg shadow-sm shadow-black"
+          >
+            <table
+              class="h-full min-w-full overflow-y-auto divide-y divide-gray-200"
+            >
+              <thead class="sticky top-0 z-10 bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                  >
+                    STT
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                  >
+                    Ngày
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                  >
+                    Loại giao dịch
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                  >
+                    Số tiền
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                  >
+                    Người thực hiện
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                  >
+                    Trạng thái
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="h-full bg-white divide-y divide-gray-200">
+                <tr *ngFor="let item of revenueData; let i = index">
+                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                    {{ i + 1 }}
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                    {{ item.date }}
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                    {{ formatCurrency(item.revenue) }}
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                    {{ item.courseSold }}
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                    {{ formatCurrency(item.websiteCommission) }}
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                    {{ formatCurrency(item.instructorPayment) }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="w-full h-10 border"></div>
+      </div>
+    </div>
+  </div>
+</div>

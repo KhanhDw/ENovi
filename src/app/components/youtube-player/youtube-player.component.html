@@ -1,27 +1,67 @@
 <div class="flex flex-col w-full">
-  <div id="player" #player class="w-full"></div>
-  <div class="flex items-start justify-between w-full px-4 my-5">
-    <!-- Thời gian hiện tại và tổng thời lượng video -->
-    <!-- <p hidden>Tổng thời gian {{ formatTime(videoDuration) }}</p> -->
-    <div class="flex flex-col flex-wrap items-start font-signika">
-      <h1 class="text-2xl">{{ titleCourse }}</h1>
-      <p class="text-sm text-gray-500">Cập nhật 12/12/2023</p>
-    </div>
-    <button
-      type="button"
-      class="flex items-start justify-start w-1/4 gap-2 px-3 py-3 transition-all duration-500 rounded-lg bg-zinc-200 hover:bg-slate-300"
+  <div class="relative w-full">
+    <!-- khung chứa video -->
+    <div id="player" #player class="z-10 w-full"></div>
+    <!-- end khung chứa video -->
+    <div
+      #mangche
+      id="mangcheVideo"
+      [ngClass]="hiddenBanner ? 'hidden' : 'flex'"
+      class="absolute top-0 left-0 z-[999] h-full w-full items-center justify-center"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        height="24px"
-        viewBox="0 -960 960 960"
-        width="24px"
-        fill="#000"
+      <button
+        (click)="playVideo()"
+        type="button"
+        class="p-1 -mt-10 text-green-500 transition-all duration-500 bg-black rounded-full cursor-pointer text-8xl group hover:text-red-100 hover:bg-black hover:shadow-sm shadow-black"
       >
-        <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
-      </svg>
-      <span class="flex-none">Thêm ghi chú tại:</span>
-      <span class="font-bold">{{ formatTime(currentTime) }}</span>
-    </button>
+        <i class="cursor-pointer bi bi-play-circle-fill"></i>
+      </button>
+    </div>
+  </div>
+  <div class="flex flex-col w-full">
+    <div class="flex items-start justify-between w-full px-4 my-5">
+      <!-- Thời gian hiện tại và tổng thời lượng video -->
+      <!-- <p hidden>Tổng thời gian {{ formatTime(videoDuration) }}</p> -->
+      <div class="flex flex-col flex-wrap items-start font-signika">
+        <h1 class="text-2xl">{{ titleCourse }}</h1>
+        <p class="text-sm text-gray-500">Cập nhật 12/12/2023</p>
+      </div>
+      <button
+        (click)="toggleNote()"
+        type="button"
+        class="flex items-start justify-start w-1/4 gap-2 px-3 py-3 transition-all duration-500 rounded-lg bg-zinc-200 hover:bg-slate-300"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="#000"
+        >
+          <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
+        </svg>
+        <span class="flex-none">Thêm ghi chú tại:</span>
+        <span class="font-bold">{{ formatTime(currentTime) }}</span>
+      </button>
+    </div>
+
+    <div
+      [ngClass]="showNote ? '' : 'hidden'"
+      class="flex items-start w-full gap-2 px-4 mb-5"
+    >
+      <textarea
+        class="w-full p-2 border-2 border-gray-400 rounded-md h-96 font-signika focus:outline-none"
+        name="note"
+        id="note"
+        placeholder="Ghi chú nội dung cần nhớ"
+      ></textarea>
+      <button
+        (click)="toggleNote()"
+        type="button"
+        class="px-3 py-2 text-xl font-semibold text-white bg-green-500 rounded-md"
+      >
+        Lưu
+      </button>
+    </div>
   </div>
 </div>

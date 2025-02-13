@@ -19,7 +19,7 @@ import { InstructorProfileComponent } from './features/user/instructor-profile/i
 import { EditInstructorProfileComponent } from './features/user/edit-instructor-profile/edit-instructor-profile.component';
 import { UpdatePhotoComponent } from './features/user/edit-instructor-profile/update-photo/update-photo.component';
 import { BasicInformationComponent } from './features/user/edit-instructor-profile/basic-information/basic-information.component';
-import { PaymentsComponent } from './features/user/payments/payments.component';
+import { PaymentComponent } from './features/payment/payment.component';
 import { ReceiveComponent } from './features/user/payments/receive/receive.component';
 import { TransferComponent } from './features/user/payments/transfer/transfer.component';
 import { SecurityComponent } from './features/user/security/security.component';
@@ -35,7 +35,7 @@ import { AdminRevenueComponent } from './features/admin/admin-revenue/admin-reve
 import { AdminCoursesComponent } from './features/admin/admin-courses/admin-courses.component';
 import { AdminPayComponent } from './features/admin/admin-pay/admin-pay.component';
 import { AdminCourseDetailComponent } from './features/admin/admin-courses/admin-course-detail/admin-course-detail.component';
-import path from 'path';
+import { PaymentsComponent } from './features/user/payments/payments.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -46,6 +46,7 @@ const routes: Routes = [
   { path: 'cart', component: ShoppingCartComponent },
   { path: 'my-learning', component: MyLearningComponent },
   { path: 'course', component: CourseComponent },
+  { path: 'payment', component: PaymentComponent },
 
   {
     path: 'course',

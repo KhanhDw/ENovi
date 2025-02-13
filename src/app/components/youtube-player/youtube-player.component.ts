@@ -8,10 +8,10 @@ import {
 } from '@angular/core';
 
 @Component({
-    selector: 'app-youtube-player',
-    templateUrl: './youtube-player.component.html',
-    styleUrl: './youtube-player.component.css',
-    standalone: false
+  selector: 'app-youtube-player',
+  templateUrl: './youtube-player.component.html',
+  styleUrl: './youtube-player.component.css',
+  standalone: false,
 })
 export class YoutubePlayerComponent implements OnInit {
   constructor(private zone: NgZone) {} // Thêm `NgZone` vào constructor
@@ -21,6 +21,9 @@ export class YoutubePlayerComponent implements OnInit {
   declare YT: any;
   done = false;
   player: any = null;
+  hiddenBanner = false;
+  isPlaying = false;
+  showNote = false;
 
   currentTime: number = 0; // Thời gian hiện tại của video
   videoDuration: number = 0; // Tổng thời lượng video
@@ -34,6 +37,9 @@ export class YoutubePlayerComponent implements OnInit {
         this.loadPlayer();
       };
     }
+
+    // luôn hiển thị banner khi từ nới khác đến
+    this.hiddenBanner = false;
   }
 
   @ViewChild('player', { static: false }) playerElement!: ElementRef;
@@ -63,6 +69,8 @@ export class YoutubePlayerComponent implements OnInit {
           rel: 0,
           showinfo: 0,
           autohide: 1,
+          disablekb: 1,
+          iv_load_policy: 3,
         },
         events: {
           onReady: (event: any) => this.onPlayerReady(event),
@@ -73,7 +81,7 @@ export class YoutubePlayerComponent implements OnInit {
   }
 
   onPlayerReady(event: any) {
-    event.target.playVideo(); // Bắt đầu phát video khi sẵn sàng
+    // event.target.playVideo(); // Bắt đầu phát video khi sẵn sàng
     this.videoDuration = event.target.getDuration(); // Lấy tổng thời lượng video
     this.updateCurrentTime(); // Bắt đầu cập nhật thời gian hiện tại
   }
@@ -82,6 +90,26 @@ export class YoutubePlayerComponent implements OnInit {
     if (event.data === (window as any).YT.PlayerState.PLAYING && !this.done) {
       this.updateCurrentTime();
       this.done = true;
+      this.isPlaying = true; // Cập nhật biến trạng thái
+    } else if (
+      event.data === (window as any).YT.PlayerState.PAUSED ||
+      event.data === (window as any).YT.PlayerState.ENDED ||
+      event.data === (window as any).YT.PlayerState.UNSTARTED
+    ) {
+      this.isPlaying = false; // Cập nhật biến trạng thái
+    }
+  }
+
+  playVideo() {
+    if (this.player) {
+      this.player.playVideo();
+      this.hiddenBanner = true;
+    }
+  }
+
+  pauseVideo() {
+    if (this.player) {
+      this.player.pauseVideo();
     }
   }
 
@@ -116,5 +144,13 @@ export class YoutubePlayerComponent implements OnInit {
     if (this.player) {
       this.player.seekTo(seconds, true);
     }
+  }
+
+  // ===================
+  // Note
+  // ===================
+
+  toggleNote() {
+    this.showNote = !this.showNote;
   }
 }

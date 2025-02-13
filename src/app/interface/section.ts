@@ -4,4 +4,5 @@ export interface Section {
   duration: string;
   finish: boolean;
   isExpanded: boolean;
+  homework: boolean;
 }

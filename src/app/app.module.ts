@@ -103,6 +103,7 @@ import { AdminCourseDetailComponent } from './features/admin/admin-courses/admin
     UserProfileComponent,
     AdminComponent,
     UploadPhotoUserComponent,
+    PaymentsComponent,
     AdminCourseDetailComponent,
     // components
     YoutubePlayerComponent,

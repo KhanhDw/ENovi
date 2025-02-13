@@ -1,0 +1,169 @@
+<section class="h-screen py-8 antialiased bg-white dark:bg-gray-900 md:py-16">
+  <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0">
+    <div class="max-w-5xl mx-auto">
+      <h2
+        class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl"
+      >
+        Thanh toán
+      </h2>
+
+      <div class="mt-6 sm:mt-8 lg:flex lg:items-start lg:gap-12">
+        <form
+          action="#"
+          class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6 lg:max-w-xl lg:p-8"
+        >
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div class="col-span-2 sm:col-span-1">
+              <label
+                for="full_name"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Họ tên đầy đủ
+              </label>
+              <input
+                type="text"
+                id="full_name"
+                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                placeholder="Bonnie Green"
+                required
+              />
+            </div>
+
+            <div class="col-span-2 sm:col-span-1">
+              <label
+                for="card-number-input"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Số tài khoản
+              </label>
+              <input
+                type="text"
+                id="card-number-input"
+                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pe-10 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                placeholder="Nhập số tài khoản"
+                required
+              />
+            </div>
+
+            <div>
+              <label
+                for="card-expiration-input"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Ngân hàng
+              </label>
+              <div class="relative">
+                <div
+                  class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5"
+                ></div>
+                <select
+                  class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 ps-9 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  name="nganhangselected"
+                  id="nganhangselected"
+                >
+                  <option value="#">VCB</option>
+                  <option value="#">VCB</option>
+                  <option value="#">VCB</option>
+                  <option value="#">VCB</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label
+                for="cvv-input"
+                class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Nội dung chuyển khoản
+                <button
+                  data-tooltip-target="cvv-desc"
+                  data-tooltip-trigger="hover"
+                  class="text-gray-400 hover:text-gray-900 dark:text-gray-500 dark:hover:text-white"
+                ></button>
+              </label>
+              <input
+                type="text"
+                id="cvv-input"
+                aria-describedby="helper-text-explanation"
+                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                placeholder="•••"
+                required
+                readonly
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            class="flex w-full bg-blue-500 items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+          >
+            Thanh toán ngay
+          </button>
+        </form>
+
+        <div class="mt-6 grow sm:mt-8 lg:mt-0">
+          <div
+            class="p-6 space-y-4 border border-gray-100 rounded-lg bg-gray-50 dark:border-gray-700 dark:bg-gray-800"
+          >
+            <div class="space-y-2">
+              <dl class="flex items-center justify-between gap-4">
+                <dt
+                  class="text-base font-normal text-gray-500 dark:text-gray-400"
+                >
+                  Giá bán đầu
+                </dt>
+                <dd class="text-base font-medium text-gray-900 dark:text-white">
+                  $6,592.00
+                </dd>
+              </dl>
+
+              <dl class="flex items-center justify-between gap-4">
+                <dt
+                  class="text-base font-normal text-gray-500 dark:text-gray-400"
+                >
+                  Giảm
+                </dt>
+                <dd class="text-base font-medium text-green-500">-$299.00</dd>
+              </dl>
+            </div>
+
+            <dl
+              class="flex items-center justify-between gap-4 pt-2 border-t border-gray-200 dark:border-gray-700"
+            >
+              <dt class="text-base font-bold text-gray-900 dark:text-white">
+                Total
+              </dt>
+              <dd class="text-base font-bold text-gray-900 dark:text-white">
+                $7,191.00
+              </dd>
+            </dl>
+          </div>
+
+          <div class="flex items-center justify-center gap-8 mt-6">
+            <!-- logo ngân hàng -->
+          </div>
+        </div>
+      </div>
+
+      <!-- <p
+        class="mt-6 text-center text-gray-500 dark:text-gray-400 sm:mt-8 lg:text-left"
+      >
+        Payment processed by
+        <a
+          href="#"
+          title=""
+          class="font-medium underline text-primary-700 hover:no-underline dark:text-primary-500"
+          >Paddle</a
+        >
+        for
+        <a
+          href="#"
+          title=""
+          class="font-medium underline text-primary-700 hover:no-underline dark:text-primary-500"
+          >Flowbite LLC</a
+        >
+        - United States Of America
+      </p> -->
+    </div>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>

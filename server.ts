@@ -13,7 +13,10 @@ export function app(): express.Express {
   const browserDistFolder = resolve(serverDistFolder, '../browser');
   const indexHtml = join(serverDistFolder, 'index.server.html');
 
-  const commonEngine = new CommonEngine();
+  // const commonEngine = new CommonEngine();
+  const commonEngine = new CommonEngine({
+    enablePerformanceProfiler: true,
+  }); //==>  thu thập dữ liệu hồ sơ hiệu suất và hiển thị kết quả trong bảng điều khiển máy chủ
 
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
@@ -30,7 +33,21 @@ export function app(): express.Express {
   );
 
   // All regular routes use the Angular engine
-  server.get('**', (req, res, next) => {
+  // server.get('**', (req, res, next) => {
+  //   const { protocol, originalUrl, baseUrl, headers } = req;
+
+  //   commonEngine
+  //     .render({
+  //       bootstrap: AppServerModule,
+  //       documentFilePath: indexHtml,
+  //       url: `${protocol}://${headers.host}${originalUrl}`,
+  //       publicPath: browserDistFolder,
+  //       providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+  //     })
+  //     .then((html) => res.send(html))
+  //     .catch((err) => next(err));
+  // });
+  server.get('*', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
 
     commonEngine
@@ -39,7 +56,7 @@ export function app(): express.Express {
         documentFilePath: indexHtml,
         url: `${protocol}://${headers.host}${originalUrl}`,
         publicPath: browserDistFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+        providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }],
       })
       .then((html) => res.send(html))
       .catch((err) => next(err));

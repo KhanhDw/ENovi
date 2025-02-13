@@ -55,6 +55,7 @@ export class AppComponent {
         );
         this.hiddenFooter = !(
           event.url === '/login' ||
+          event.url === '/payment' ||
           event.url === '/register' ||
           event.url === '/lecture' ||
           event.url === '/user' ||

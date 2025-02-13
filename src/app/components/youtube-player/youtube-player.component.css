@@ -1,0 +1,6 @@
+#mangcheVideo {
+  background-size: cover; /* Hoặc contain, hoặc tùy chỉnh */
+  background-repeat: no-repeat; /* Tùy chọn */
+  background-position: center; /* Tùy chọn */
+  background-image: url("/img/bannerLecture.JPG");
+}

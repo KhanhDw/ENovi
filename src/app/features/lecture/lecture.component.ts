@@ -1,3 +1,4 @@
+import { BlobOptions } from 'node:buffer';
 import { Section } from './../../interface/section';
 import {
   Component,
@@ -8,11 +9,20 @@ import {
   NgZone,
 } from '@angular/core';
 
+interface NoteItemSaved {
+  id: number;
+  titleLecture: string;
+  valueNote: string;
+  urlLecture: string;
+  titleSection: string;
+  duration: string;
+}
+
 @Component({
-    selector: 'app-lecture',
-    templateUrl: './lecture.component.html',
-    styleUrl: './lecture.component.css',
-    standalone: false
+  selector: 'app-lecture',
+  templateUrl: './lecture.component.html',
+  styleUrl: './lecture.component.css',
+  standalone: false,
 })
 export class LectureComponent implements AfterViewInit {
   // ==================
@@ -32,15 +42,7 @@ export class LectureComponent implements AfterViewInit {
   // ==================
   // section of course
   // ==================
-
-  section: Section = {
-    id: 1,
-    title: 'tổng quan',
-    duration: '1:23',
-    finish: false,
-    isExpanded: false,
-  };
-
+  linkTaiBaiTap = '#';
   sections: Section[] = [
     {
       id: 1,
@@ -48,6 +50,7 @@ export class LectureComponent implements AfterViewInit {
       duration: '01:23',
       finish: true,
       isExpanded: false,
+      homework: true,
     },
     {
       id: 2,
@@ -55,6 +58,7 @@ export class LectureComponent implements AfterViewInit {
       duration: '05:43',
       finish: false,
       isExpanded: false,
+      homework: true,
     },
     {
       id: 3,
@@ -62,6 +66,7 @@ export class LectureComponent implements AfterViewInit {
       duration: '01:23',
       finish: true,
       isExpanded: false,
+      homework: true,
     },
     {
       id: 4,
@@ -69,6 +74,7 @@ export class LectureComponent implements AfterViewInit {
       duration: '05:43',
       finish: false,
       isExpanded: false,
+      homework: true,
     },
     {
       id: 5,
@@ -76,6 +82,7 @@ export class LectureComponent implements AfterViewInit {
       duration: '01:23',
       finish: true,
       isExpanded: false,
+      homework: true,
     },
     {
       id: 6,
@@ -83,6 +90,7 @@ export class LectureComponent implements AfterViewInit {
       duration: '05:43',
       finish: false,
       isExpanded: false,
+      homework: true,
     },
     {
       id: 7,
@@ -90,6 +98,7 @@ export class LectureComponent implements AfterViewInit {
       duration: '01:23',
       finish: true,
       isExpanded: false,
+      homework: true,
     },
     {
       id: 8,
@@ -97,6 +106,7 @@ export class LectureComponent implements AfterViewInit {
       duration: '05:43',
       finish: false,
       isExpanded: false,
+      homework: true,
     },
     {
       id: 9,
@@ -104,17 +114,37 @@ export class LectureComponent implements AfterViewInit {
       duration: '01:23',
       finish: true,
       isExpanded: false,
+      homework: true,
     },
   ];
 
   isShowSectionItem: boolean = false;
 
-  toggleSectionItem(sectionId: number): void {
+  collapseSectionItem(): void {
     this.sections = this.sections.map((section) => ({
       ...section,
-      isExpanded:
-        section.id === sectionId ? !section.isExpanded : section.isExpanded,
+      isExpanded: false,
     }));
+  }
+
+  toggleSectionItem(sectionId: number): void {
+    this.sections = this.sections.map((section) => {
+      if (section.id === sectionId) {
+        return {
+          // đây là cách 1
+          // id: section.id,
+          // title: section.title,
+          // duration: section.duration,
+          // finish: section.finish,
+
+          // đây là cách 2: lấy hết các thuộc tính tránh sai sót khi thiếu
+          ...section,
+          isExpanded: !section.isExpanded,
+        };
+      } else {
+        return section;
+      }
+    });
   }
 
   titleCourse: string =
@@ -128,8 +158,6 @@ export class LectureComponent implements AfterViewInit {
 
   ishowEditNote = false;
 
-  dataTextArea: string = 'nội dung này truyền từ typescript';
-
   @ViewChild('textAreaEditNote', { static: false })
   textAreaEditNoteElement!: ElementRef;
 
@@ -137,7 +165,8 @@ export class LectureComponent implements AfterViewInit {
 
   toggleShowEditNote() {
     if (this.textAreaEditNoteElement !== undefined) {
-      this.textAreaEditNoteElement.nativeElement.value = this.dataTextArea;
+      this.textAreaEditNoteElement.nativeElement.value =
+        this.myNotes[0].valueNote;
     }
 
     this.ishowEditNote = !this.ishowEditNote;
@@ -145,5 +174,33 @@ export class LectureComponent implements AfterViewInit {
 
   toggleShowNoteScreen() {
     this.isShowNoteScreen = !this.isShowNoteScreen;
+  }
+
+  // ==================
+  // note saved
+  // ==================
+  myNotes: NoteItemSaved[] = [
+    {
+      id: 1,
+      titleLecture: 'Bài giảng mới 1',
+      duration: '1:15',
+      valueNote: 'Ghi chú bài giảng mới...',
+      urlLecture: '#',
+      titleSection: 'title section',
+    },
+  ];
+
+  newNote: NoteItemSaved = {
+    id: 4,
+    titleLecture: 'Bài giảng mới',
+    duration: '1:15',
+    valueNote: 'Ghi chú bài giảng mới...',
+    urlLecture: '#',
+    titleSection: 'title section',
+  };
+
+  AddNote() {
+    //thêm tham số để truyền khi qua backend)
+    this.myNotes.push(this.newNote);
   }
 }
