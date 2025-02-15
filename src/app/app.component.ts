@@ -22,6 +22,7 @@ export class AppComponent {
           event.url === '/register' ||
           event.url === '/lecture' ||
           event.url === '/user' ||
+          event.url === '/fogot-password' ||
           event.url === '/admin' ||
           event.url === '/admin/courses' ||
           event.url === '/admin/user' ||
@@ -37,7 +38,8 @@ export class AppComponent {
           event.url === '/user/instructor/revenue' ||
           event.url === '/user/instructor/ratting' ||
           event.url === '/user/instructor/courses-instructor' ||
-          event.url === '/user/instructor/courses-instructor/course-update' ||
+          event.url === '/user/instructor/courses-instructor/update' ||
+          event.url === '/user/instructor/courses-instructor/new' ||
           event.url === '/user/instructor/message' ||
           event.url === '/user/instructor/basic-information' ||
           event.url === '/user/instructor/photo' ||
@@ -50,18 +52,24 @@ export class AppComponent {
           event.url === '/user/instructor/profile' ||
           event.url === '/user/payments/recive' ||
           event.url === '/course/lecture' ||
+          event.url ===
+            '/user/instructor/profile/updateInfo/basic-information' ||
           event.url === '/admin/courses/detail' ||
+          event.url === '/admin/categories' ||
           event.url === '/user/purchase-history'
         );
         this.hiddenFooter = !(
           event.url === '/login' ||
           event.url === '/payment' ||
           event.url === '/register' ||
+          event.url === '/fogot-password' ||
           event.url === '/lecture' ||
           event.url === '/user' ||
           event.url === '/admin' ||
           event.url === '/admin/courses' ||
           event.url === '/admin/user' ||
+          event.url ===
+            '/user/instructor/profile/updateInfo/basic-information' ||
           event.url === '/admin/revenue' ||
           event.url === '/admin/pay' ||
           event.url === '/user/courses-instructor' ||
@@ -73,7 +81,8 @@ export class AppComponent {
           event.url === '/user/instructor' ||
           event.url === '/user/instructor/revenue' ||
           event.url === '/user/instructor/ratting' ||
-          event.url === '/user/instructor/courses-instructor/course-update' ||
+          event.url === '/user/instructor/courses-instructor/update' ||
+          event.url === '/user/instructor/courses-instructor/new' ||
           event.url === '/user/instructor/courses-instructor' ||
           event.url === '/user/instructor/message' ||
           event.url === '/user/instructor/basic-information' ||
@@ -88,6 +97,7 @@ export class AppComponent {
           event.url === '/user/payments/recive' ||
           event.url === '/course/lecture' ||
           event.url === '/admin/courses/detail' ||
+          event.url === '/admin/categories' ||
           event.url === '/user/purchase-history'
         );
       }

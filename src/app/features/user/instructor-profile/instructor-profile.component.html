@@ -1,11 +1,11 @@
-<div class="h-screen max-w-6xl px-4 py-8 mx-auto overflow-y-auto">
-  <div class="flex flex-col h-full gap-8 lg:flex-row">
+<div class="flex flex-col w-full h-screen px-4 py-8 overflow-y-auto">
+  <div class="flex flex-col h-full max-w-6xl gap-8 pb-8 mx-auto lg:flex-row">
     <!-- Main Content -->
     <div class="flex-1 h-full">
       <!-- Header -->
       <div class="mb-6">
         <div class="mb-1 text-sm tracking-wider text-gray-600 uppercase">
-          INSTRUCTOR
+          Giảng viên
         </div>
         <h1 class="mb-2 text-4xl font-bold text-gray-900">
           {{ instructor.name }}
@@ -32,14 +32,22 @@
       <!-- About Section -->
       <div class="mb-8">
         <h2 class="mb-4 text-xl font-bold text-gray-900">About me</h2>
-        <div class="space-y-4 text-gray-600 whitespace-pre-line">
+        <div class="h-full mb-10 space-y-4 text-gray-600 whitespace-pre-line">
           {{ instructor.bio }}
         </div>
       </div>
+
+      <!-- padding section -->
+      <div class="flex h-10"></div>
     </div>
 
     <!-- Sidebar -->
     <div class="lg:w-80">
+      <a
+        [routerLink]="editProfileURL"
+        class="flex items-center justify-center w-full py-3 mb-3 text-2xl font-bold text-white bg-black rounded-lg cursor-pointer hover:bg-slate-800"
+        >Điều chỉnh hồ sơ</a
+      >
       <!-- Profile Image -->
       <div class="mb-6">
         <img
@@ -47,7 +55,7 @@
             'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7BF17E03CC-2329-41AB-BBA5-4B194A196E8F%7D-UxMB1NQIIEHcM8begQWMOFwqm3wsjh.png'
           "
           alt="Profile photo"
-          class="object-cover w-64 h-64 mx-auto rounded-full"
+          class="object-cover w-64 h-64 mx-auto border-2 rounded-full border-slate-400"
         />
       </div>
 

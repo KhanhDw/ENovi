@@ -52,7 +52,6 @@
         *ngFor="let item of sideBar; let i = index"
         (click)="setActiveButton(i)"
         routerLinkActive="border-l-8 bg-slate-700"
-        [routerLinkActiveOptions]="{ exact: true }"
         [ngClass]="{
           'hover:font-bold hover:border-l-8 hover:bg-slate-700':
             item.name !== '',

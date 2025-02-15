@@ -36,6 +36,9 @@ import { AdminCoursesComponent } from './features/admin/admin-courses/admin-cour
 import { AdminPayComponent } from './features/admin/admin-pay/admin-pay.component';
 import { AdminCourseDetailComponent } from './features/admin/admin-courses/admin-course-detail/admin-course-detail.component';
 import { PaymentsComponent } from './features/user/payments/payments.component';
+import { ForgotPasswordComponent } from './features/forgot-password/forgot-password.component';
+import { CourseNewComponent } from './features/user/courses-of-instructor/course-new/course-new.component';
+import { CategoriesComponent } from './features/admin/categories/categories.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -44,10 +47,10 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'search', component: SearchComponent },
   { path: 'cart', component: ShoppingCartComponent },
+  { path: 'fogot-password', component: ForgotPasswordComponent },
   { path: 'my-learning', component: MyLearningComponent },
   { path: 'course', component: CourseComponent },
   { path: 'payment', component: PaymentComponent },
-
   {
     path: 'course',
     children: [{ path: 'lecture', component: LectureComponent }],
@@ -93,13 +96,38 @@ const routes: Routes = [
           {
             path: 'courses-instructor',
             children: [
-              { path: 'course-update', component: CourseUpdateComponent },
+              { path: 'update', component: CourseUpdateComponent },
+              { path: 'new', component: CourseNewComponent },
             ],
           },
           { path: 'revenue', component: RevenueComponent },
           { path: 'ratting', component: RattingInstructorComponent },
           { path: 'message', component: MessageComponent },
-          { path: 'profile', component: InstructorProfileComponent },
+          {
+            path: 'profile',
+            component: InstructorProfileComponent,
+          },
+          {
+            path: 'profile',
+            children: [
+              {
+                path: 'updateInfo',
+                component: EditInstructorProfileComponent,
+                children: [
+                  {
+                    path: '',
+                    redirectTo: 'basic-information',
+                    pathMatch: 'full',
+                  }, // Chuyển hướng mặc định khi vào /instructor
+                  {
+                    path: 'basic-information',
+                    component: BasicInformationComponent,
+                  },
+                  { path: 'photo', component: UpdatePhotoComponent },
+                ],
+              },
+            ],
+          },
 
           {
             path: 'payments',
@@ -108,18 +136,6 @@ const routes: Routes = [
               { path: 'recive', component: ReceiveComponent },
               { path: 'transfer', component: TransferComponent },
               { path: '', redirectTo: 'recive', pathMatch: 'full' },
-            ],
-          },
-          {
-            path: 'updateInfo',
-            component: EditInstructorProfileComponent,
-            children: [
-              { path: '', redirectTo: 'basic-information', pathMatch: 'full' }, // Chuyển hướng mặc định khi vào /instructor
-              {
-                path: 'basic-information',
-                component: BasicInformationComponent,
-              },
-              { path: 'photo', component: UpdatePhotoComponent },
             ],
           },
         ],
@@ -151,6 +167,7 @@ const routes: Routes = [
       { path: 'user', component: AdminUserComponent },
       { path: 'revenue', component: AdminRevenueComponent },
       { path: 'pay', component: AdminPayComponent },
+      { path: 'categories', component: CategoriesComponent },
     ],
   },
 

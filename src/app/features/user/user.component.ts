@@ -2,45 +2,12 @@ import { Component } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
-    selector: 'app-user',
-    templateUrl: './user.component.html',
-    styleUrl: './user.component.css',
-    standalone: false
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrl: './user.component.css',
+  standalone: false,
 })
 export class userComponent {
-  // ==========================
-  // đánh dấu router điều hướng
-  // ==========================
-  // routerDirection: number = 0;
-
-  // constructor(private router: Router) {
-  //   this.router.events.subscribe((event) => {
-  //     if (event instanceof NavigationEnd) {
-  //       // Kiểm tra nếu route hiện tại là 'login' hoặc 'register'
-
-  //       if (event.url === '/user') {
-  //         this.routerDirection = 0;
-  //       } else if (event.url === '/user/courses-instructor') {
-  //         this.routerDirection = 1;
-  //       } else if (event.url === '/user/courses-instructor/course-update') {
-  //         this.routerDirection = 101;
-  //       } else if (event.url === '/user/revenue') {
-  //         this.routerDirection = 2;
-  //       } else if (event.url === '/user/message') {
-  //         this.routerDirection = 3;
-  //       } else if (event.url === '') {
-  //         this.routerDirection = 4;
-  //       } else if (event.url === '/user/purchase-history') {
-  //         this.routerDirection = 11;
-  //       } else if (event.url === '/user/instructor-profile') {
-  //         this.routerDirection = 501;
-  //       } else if (event.url === '/user/instructor/basic-information') {
-  //         this.routerDirection = 5;
-  //       }
-  //     }
-  //   });
-  // }
-
   // ====================
   // item in sidebar
   // ====================

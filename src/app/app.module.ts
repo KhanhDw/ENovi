@@ -1,3 +1,4 @@
+import { CategoriesComponent } from './features/admin/categories/categories.component';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -56,6 +57,8 @@ import { AdminPayComponent } from './features/admin/admin-pay/admin-pay.componen
 import { TableDataUserAdminComponent } from './components/table-data-user-admin/table-data-user-admin.component';
 import { ListCoursesAdminComponent } from './components/list-courses-admin/list-courses-admin.component';
 import { AdminCourseDetailComponent } from './features/admin/admin-courses/admin-course-detail/admin-course-detail.component';
+import { ForgotPasswordComponent } from './features/forgot-password/forgot-password.component';
+import { CourseNewComponent } from './features/user/courses-of-instructor/course-new/course-new.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +67,8 @@ import { AdminCourseDetailComponent } from './features/admin/admin-courses/admin
     HeaderComponent,
     FooterComponent,
     // page
+    CategoriesComponent,
+    CourseNewComponent,
     AdminUserComponent,
     AdminRevenueComponent,
     AdminCoursesComponent,
@@ -105,6 +110,8 @@ import { AdminCourseDetailComponent } from './features/admin/admin-courses/admin
     UploadPhotoUserComponent,
     PaymentsComponent,
     AdminCourseDetailComponent,
+    ForgotPasswordComponent,
+
     // components
     YoutubePlayerComponent,
     CourseItemSearchComponent,

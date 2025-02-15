@@ -1,4 +1,4 @@
-<div class="flex flex-col w-full h-full px-5">
+<div class="flex flex-col w-full h-screen px-5 overflow-y-auto">
   <!-- header -->
   <div class="flex items-center justify-between w-full">
     <!-- title -->
@@ -43,7 +43,7 @@
           >Chủ đề khóa học</label
         >
         <input
-          placeholder="Vui lòng nhập chủ đề/tags cho khóa học, phân cách bằng dấu phẩy"
+          placeholder="lập trình;kinh doanh;kỹ năng mềm;"
           type="text"
           name="titleCourse"
           id="titleCourse"
@@ -97,7 +97,7 @@
         </button>
       </div>
       <!-- body -->
-      <div class="flex h-[90%] w-full">
+      <div class="flex h-[90%] w-full bg-zinc-100">
         <div
           class="flex w-full h-full overflow-x-hidden overflow-y-auto"
           id="sectionContaint"
@@ -162,12 +162,23 @@
                 >
                   {{ item.name }}
                 </a>
-                <button
-                  type="button"
-                  class="px-2 py-1 rounded-md hover:bg-zinc-300"
-                >
-                  <i class="cursor-pointer bi bi-trash3"></i>
-                </button>
+                <div class="flex">
+                  <span class="text-sm text-gray-500">chưa có bài tập</span>
+                </div>
+                <div class="flex items-center justify-center">
+                  <button
+                    type="button"
+                    class="px-2 py-1 text-gray-600 rounded-md cursor-pointer hover:bg-zinc-300 hover:text-black"
+                  >
+                    <i class="cursor-pointer bi bi-file-text-fill"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="px-2 py-1 rounded-md cursor-pointer hover:bg-zinc-300"
+                  >
+                    <i class="cursor-pointer bi bi-trash3"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </div>

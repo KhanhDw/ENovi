@@ -1,0 +1,108 @@
+<div class="container h-screen p-6 mx-auto my-auto">
+  <h1 class="mb-10 text-4xl font-bold">Thiết lập lĩnh vực khóa học</h1>
+
+  <!-- Grid Container -->
+  <div class="grid h-[calc(100vh-170px)] grid-cols-1 gap-4 md:grid-cols-3">
+    <!-- Column 1 -->
+    <div
+      class="overflow-hidden bg-gray-200 border border-gray-200 rounded-lg shadow-sm shadow-black"
+    >
+      <div
+        class="flex items-center justify-between px-4 py-3 bg-gray-300 border-b border-gray-200"
+      >
+        <h2 class="font-semibold">Lĩnh vực</h2>
+        <input
+          type="text"
+          name=""
+          id=""
+          required
+          placeholder="Nhập tên lĩnh vực"
+          class="w-1/2 px-2 rounded-md focus:outline-none"
+        />
+        <button type="button" class="cursor-pointer">
+          <i
+            class="cursor-pointer bi bi-plus-square-fill hover:text-orange-600"
+          ></i>
+        </button>
+      </div>
+      <div class="h-full bg-white">
+        <ul class="h-full overflow-y-auto divide-y divide-gray-200">
+          <li
+            *ngFor="let item of linhvuc"
+            class="px-4 py-3 transition-colors hover:bg-rose-400"
+          >
+            {{ item.name }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Column 2 -->
+    <div
+      class="overflow-hidden bg-gray-200 border border-gray-200 rounded-lg shadow-sm shadow-black"
+    >
+      <div
+        class="flex items-center justify-between px-4 py-3 bg-gray-300 border-b border-gray-200"
+      >
+        <h2 class="font-semibold">Chuyên ngành</h2>
+        <input
+          type="text"
+          name=""
+          id=""
+          required
+          placeholder="Nhập tên chuyên ngành"
+          class="w-1/2 px-2 rounded-md focus:outline-none"
+        />
+        <button type="button" class="cursor-pointer">
+          <i
+            class="cursor-pointer bi bi-plus-square-fill hover:text-orange-600"
+          ></i>
+        </button>
+      </div>
+      <div class="h-full bg-white">
+        <ul class="h-full overflow-y-auto divide-y divide-gray-200">
+          <li
+            *ngFor="let item of chuyennganh"
+            class="px-4 py-3 transition-colors hover:bg-rose-400"
+          >
+            {{ item.name }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Column 3 -->
+    <div
+      class="overflow-hidden bg-gray-200 border border-gray-200 rounded-lg shadow-sm shadow-black"
+    >
+      <div
+        class="flex items-center justify-between px-4 py-3 bg-gray-300 border-b border-gray-200"
+      >
+        <h2 class="font-semibold">Phân mục</h2>
+        <input
+          type="text"
+          name=""
+          id=""
+          required
+          placeholder="Nhập tên phân mục"
+          class="w-1/2 px-2 rounded-md focus:outline-none"
+        />
+        <button type="button" class="cursor-pointer">
+          <i
+            class="cursor-pointer bi bi-plus-square-fill hover:text-orange-600"
+          ></i>
+        </button>
+      </div>
+      <div class="h-full bg-white">
+        <ul class="h-full overflow-y-auto divide-y divide-gray-200">
+          <li
+            *ngFor="let item of phanmuc"
+            class="px-4 py-3 transition-colors hover:bg-rose-400"
+          >
+            {{ item.name }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
