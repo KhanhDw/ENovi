@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-interface Product {
-  name: string;
-  price: number;
-  quantity: number;
-  status: 'In Stock' | 'Out of Stock';
+interface user {
+  username: string;
+  email: string;
+  role: string;
+  createdAt: Date;
 }
 @Component({
   selector: 'app-table-data-user-admin',
@@ -13,25 +13,24 @@ interface Product {
   standalone: false,
 })
 export class TableDataUserAdminComponent implements OnInit {
-  @Input() data: Product[] = []; // Nhận dữ liệu từ component cha
+  @Input() data: user[] = []; // Nhận dữ liệu từ component cha
 
   ngOnInit(): void {
     // (Tùy chọn) Thực hiện các tác vụ khởi tạo ở đây, ví dụ: gọi API để lấy dữ liệu
     if (!this.data || this.data.length === 0) {
       this.data = [
         {
-          name: 'Áo Thun Cotton',
-          price: 25,
-          quantity: 150,
-          status: 'In Stock',
+          username: 'john_doe',
+          email: 'john.doe@example.com',
+          role: 'admin',
+          createdAt: new Date('2023-10-26T10:00:00Z'),
         },
         {
-          name: 'Quần Jeans Denim',
-          price: 60,
-          quantity: 80,
-          status: 'Out of Stock',
+          username: 'jane_smith',
+          email: 'jane.smith@example.com',
+          role: 'user',
+          createdAt: new Date('2023-10-27T14:30:00Z'),
         },
-        { name: 'Giày Thể Thao', price: 85, quantity: 120, status: 'In Stock' },
       ];
     }
   }

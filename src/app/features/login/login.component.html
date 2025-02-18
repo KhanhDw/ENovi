@@ -85,8 +85,9 @@
             <span class="h-px bg-gray-400 w-14"></span>
           </span>
           <div class="flex items-center justify-center gap-4">
-            <a
-              href="#"
+            <button
+              (click)="loginWithGoogle()"
+              type="button"
               class="flex items-center justify-center p-2 space-x-2 transition-colors duration-300 border border-gray-800 rounded-full group hover:bg-blue-600 hover:text-white hover:shadow-slate-800 focus:outline-none"
             >
               <span>
@@ -103,7 +104,7 @@
                   />
                 </svg>
               </span>
-            </a>
+            </button>
           </div>
         </div>
       </form>

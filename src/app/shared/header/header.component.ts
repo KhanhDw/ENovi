@@ -1,5 +1,6 @@
 import { Component, HostListener, ElementRef } from '@angular/core';
 import { Route } from '@angular/router';
+import { ApiService } from '@app/services/api.service';
 
 // Định nghĩa kiểu dữ liệu cho subitem
 interface Subitem {
@@ -25,13 +26,15 @@ interface Field {
   standalone: false,
 })
 export class HeaderComponent {
-  isLogin: number = 1;
+  isLogin: number = 0; // 0 - 1 - 2 - 3  : chưa đăng nhập - user - instructor - admin
   adminDashboardURL: string = '/admin';
   userDashboardURL: string = '/user/';
   instructorDashboardURL: string = '/user/instructor';
   publishProfileURL: string = '/user/profile';
   cartURL: string = '/cart';
-  LogOutUrl: string = '/notfound';
+  signupURL: string = '/register';
+  loginURL: string = '/login';
+
   nameUser: string = 'GiaKhanh';
   emailUser: string = 'GiaKhanh@gmail.com';
   // dropdown
@@ -45,7 +48,7 @@ export class HeaderComponent {
     { name: 'Ngôn ngữ', url: '' },
   ];
 
-  constructor(private elementRef: ElementRef) {}
+  constructor(private elementRef: ElementRef, private apiService: ApiService) {}
 
   toggleDropdown() {
     this.isOpen = !this.isOpen;
@@ -264,5 +267,28 @@ export class HeaderComponent {
       this.isShowCol3 = false;
       this.hoveredFieldSubitem = []; // Lưu field được hover vào biến hoveredField
     }
+  }
+
+  // ===================
+  // Đăng xuất
+  // ===================
+
+  // other properties and methods
+
+  get isLoggedIn(): boolean {
+    return this.apiService.authGoogleServiceService.isLoggedIn();
+  }
+
+  logout(): void {
+    this.apiService.authGoogleServiceService.logoutGoogle().subscribe({
+      next: () => {
+        console.log('Đăng xuất thành công');
+      },
+      error: (err) => {
+        console.error('Lỗi khi đăng xuất:', err);
+        // Ngay cả khi API lỗi, vẫn thực hiện đăng xuất local
+        this.apiService.authGoogleServiceService.logoutLocal();
+      },
+    });
   }
 }

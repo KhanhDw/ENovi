@@ -10,6 +10,7 @@ lệnh khởi tạo component:::
 
 lệnh khởi tạo component tại đường dẫn hiện tại::: 
 --> ng generate component <name>  --skip-import --skip-tests
+--> ng generate component <name>  --skip-tests
 
 hoặc rút gọn câu lệnh:    ng g c <name> --path=src/app --skipTests
 
@@ -26,6 +27,9 @@ trong angular thì thì file style.css là css chính: ==> npx tailwindcss -i ./
 
 lệnh tạo interface::
 --> ng generate interface <name>
+
+lệnh tạo service::
+--> ng generate service <name-service>
 
 
 lệnh kiểm tra phiên bản của một thư viện:

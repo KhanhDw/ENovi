@@ -39,11 +39,15 @@ import { PaymentsComponent } from './features/user/payments/payments.component';
 import { ForgotPasswordComponent } from './features/forgot-password/forgot-password.component';
 import { CourseNewComponent } from './features/user/courses-of-instructor/course-new/course-new.component';
 import { CategoriesComponent } from './features/admin/categories/categories.component';
+import { AuthCallbackComponent } from './components/auth-callback/auth-callback.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
+
+  { path: 'auth/callback', component: AuthCallbackComponent },
+
   { path: 'register', component: RegisterComponent },
   { path: 'search', component: SearchComponent },
   { path: 'cart', component: ShoppingCartComponent },

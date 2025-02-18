@@ -1,4 +1,4 @@
-import { Component, HostListener, Directive } from '@angular/core';
+import { Component, HostListener, Directive, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
@@ -7,12 +7,7 @@ import { Router, NavigationEnd } from '@angular/router';
   styleUrl: './app.component.css',
   standalone: false,
 })
-export class AppComponent {
-  title = 'ENovi';
-
-  hiddenHeader: boolean = true;
-  hiddenFooter: boolean = true;
-
+export class AppComponent implements OnInit {
   constructor(private router: Router) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -103,6 +98,13 @@ export class AppComponent {
       }
     });
   }
+
+  ngOnInit() {}
+
+  title = 'ENovi';
+
+  hiddenHeader: boolean = true;
+  hiddenFooter: boolean = true;
 
   // Chặn chuột phải
   @HostListener('contextmenu', ['$event'])

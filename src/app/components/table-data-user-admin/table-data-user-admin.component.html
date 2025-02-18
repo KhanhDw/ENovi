@@ -6,47 +6,48 @@
           <th
             class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
           >
-            Tên Sản Phẩm
+            STT
           </th>
           <th
             class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
           >
-            Giá
+            Gmail
           </th>
           <th
             class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
           >
-            Số Lượng
+            Tên người dùng
           </th>
           <th
             class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
           >
-            Trạng Thái
+            Quyền hạn
+          </th>
+          <th
+            class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
+          >
+            Ngày tạo
           </th>
         </tr>
       </thead>
       <tbody class="bg-white">
-        <tr *ngFor="let item of data">
+        <tr *ngFor="let item of data; let i = index">
           <td class="px-5 py-5 text-sm border-b border-gray-200">
-            <p class="text-gray-900 whitespace-no-wrap">{{ item.name }}</p>
+            <p class="text-gray-900 whitespace-no-wrap">{{ i + 1 }}</p>
           </td>
           <td class="px-5 py-5 text-sm border-b border-gray-200">
-            <p class="text-gray-900 whitespace-no-wrap">${{ item.price }}</p>
+            <p class="text-gray-900 whitespace-no-wrap">{{ item.email }}</p>
           </td>
           <td class="px-5 py-5 text-sm border-b border-gray-200">
-            <p class="text-gray-900 whitespace-no-wrap">{{ item.quantity }}</p>
+            <p class="text-gray-900 whitespace-no-wrap">{{ item.username }}</p>
           </td>
           <td class="px-5 py-5 text-sm border-b border-gray-200">
-            <span
-              class="relative inline-block px-3 py-1 font-semibold leading-tight"
-              [class]="getStatusClass(item.status)"
-            >
-              <span
-                aria-hidden
-                class="absolute inset-0 rounded-full opacity-50"
-              ></span>
-              <span class="relative">{{ item.status }}</span>
-            </span>
+            <p class="text-gray-900 whitespace-no-wrap">{{ item.role }}</p>
+          </td>
+          <td class="px-5 py-5 text-sm border-b border-gray-200">
+            <p class="text-gray-900 whitespace-no-wrap">
+              {{ item.createdAt | date : "dd/MM/yyyy . HH:mm" }}
+            </p>
           </td>
         </tr>
       </tbody>

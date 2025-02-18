@@ -1,4 +1,12 @@
-import { Component, ElementRef, ViewChild, HostListener } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  HostListener,
+  OnInit,
+} from '@angular/core';
+
+import { ApiService } from './../../../services/api.service';
 
 import {
   ChartComponent,
@@ -37,13 +45,20 @@ interface Product {
   status: 'In Stock' | 'Out of Stock';
 }
 
+interface user {
+  username: string;
+  email: string;
+  role: string;
+  createdAt: Date;
+}
+
 @Component({
   selector: 'app-admin-user',
   templateUrl: './admin-user.component.html',
   styleUrl: './admin-user.component.css',
   standalone: false,
 })
-export class AdminUserComponent {
+export class AdminUserComponent implements OnInit {
   selectedFilter: string = '';
   kindInforUser = [
     { name: 'Thông tin chung' },
@@ -51,8 +66,11 @@ export class AdminUserComponent {
     { name: 'Quản lý giảng viên' },
   ];
   tableReciveData = this.kindInforUser[0];
-
   @ViewChild('chartContainer') chartContainer!: ElementRef;
+
+  constructor(private dataService: ApiService) {
+    this.updateChartOptions(); // Cập nhật lại `chartOptions`
+  }
 
   toggleFullScreen() {
     const elem = this.chartContainer.nativeElement;
@@ -71,386 +89,11 @@ export class AdminUserComponent {
 
   title = 'my-angular-app';
 
-  products0: Product[] = [
-    {
-      name: 'Laptop sony tivi 2023111',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-    {
-      name: 'Laptop sony tivi 2023',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-    {
-      name: 'Laptop sony tivi 2023',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-    {
-      name: 'Laptop sony tivi 2023',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-    {
-      name: 'Laptop sony tivi 2023',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-    {
-      name: 'Laptop sony tivi 2023',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-    {
-      name: 'Laptop sony tivi 2023',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-    {
-      name: 'Laptop sony tivi 2023',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-    {
-      name: 'Laptop sony tivi 2023',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-    {
-      name: 'Laptop sony tivi 2023',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-  ];
-  products1: Product[] = [
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-  ];
-  products2: Product[] = [
-    {
-      name: 'Laptop sony tivi 2023',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-    {
-      name: 'Laptop sony tivi 2023',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-    {
-      name: 'Laptop sony tivi 2023',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-    {
-      name: 'Laptop sony tivi 2023',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-    {
-      name: 'Laptop sony tivi 2023',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-    {
-      name: 'Laptop sony tivi 2023',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-    {
-      name: 'Laptop sony tivi 2023',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-    {
-      name: 'Laptop sony tivi 2023',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-    {
-      name: 'Laptop sony tivi 2023',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-    {
-      name: 'Laptop sony tivi 2023',
-      price: 1200,
-      quantity: 50,
-      status: 'In Stock',
-    },
-    {
-      name: 'Chuột Logitech MX Master 3',
-      price: 100,
-      quantity: 20,
-      status: 'In Stock',
-    },
-    {
-      name: 'Bàn phím cơ Keychron K2',
-      price: 150,
-      quantity: 0,
-      status: 'Out of Stock',
-    },
-  ];
+  products0: user[] = [];
+  products1: user[] = [];
+  products2: user[] = [];
 
-  products: Product[] = this.products0;
+  products: user[] = this.products0;
 
   toggleDataTable(index: number) {
     switch (index) {
@@ -474,10 +117,6 @@ export class AdminUserComponent {
 
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions1!: Partial<ChartOptions>;
-
-  constructor() {
-    this.updateChartOptions(); // Cập nhật lại `chartOptions`
-  }
 
   onChangeTypeChart(event: Event) {
     const target = event.target as HTMLSelectElement;
@@ -552,5 +191,17 @@ export class AdminUserComponent {
         horizontalAlign: 'left',
       },
     };
+  }
+
+  // kết nối backend
+
+  data: any;
+
+  ngOnInit(): void {
+    this.dataService.getUsers().subscribe((response) => {
+      this.data = response;
+      console.log(this.data);
+      this.products = response;
+    });
   }
 }

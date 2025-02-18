@@ -1,6 +1,7 @@
 import { CategoriesComponent } from './features/admin/categories/categories.component';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http'; // Import module này
 
 import { QuillModule } from 'ngx-quill';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -59,6 +60,7 @@ import { ListCoursesAdminComponent } from './components/list-courses-admin/list-
 import { AdminCourseDetailComponent } from './features/admin/admin-courses/admin-course-detail/admin-course-detail.component';
 import { ForgotPasswordComponent } from './features/forgot-password/forgot-password.component';
 import { CourseNewComponent } from './features/user/courses-of-instructor/course-new/course-new.component';
+import { AuthCallbackComponent } from './components/auth-callback/auth-callback.component';
 
 @NgModule({
   declarations: [
@@ -120,6 +122,7 @@ import { CourseNewComponent } from './features/user/courses-of-instructor/course
     CourseItemShoppingCartComponent,
     TableDataUserAdminComponent,
     ListCoursesAdminComponent,
+    AuthCallbackComponent,
   ],
   imports: [
     BrowserModule,
@@ -128,6 +131,7 @@ import { CourseNewComponent } from './features/user/courses-of-instructor/course
     QuillModule.forRoot(),
     ReactiveFormsModule,
     NgApexchartsModule,
+    HttpClientModule,
   ],
   providers: [provideClientHydration()],
   bootstrap: [AppComponent],

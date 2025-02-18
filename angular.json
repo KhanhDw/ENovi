@@ -26,9 +26,7 @@
             "outputPath": "dist/enovi",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -36,18 +34,14 @@
                 "input": "public"
               }
             ],
-            "allowedCommonJsDependencies": [
-              "quill-delta"
-            ],
+            "allowedCommonJsDependencies": ["quill-delta"],
             "styles": [
               "src/styles.css",
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "node_modules/quill/dist/quill.core.css",
               "node_modules/quill/dist/quill.snow.css"
             ],
-            "scripts": [
-              "node_modules/apexcharts/dist/apexcharts.min.js"
-            ],
+            "scripts": ["node_modules/apexcharts/dist/apexcharts.min.js"],
             "server": "src/main.server.ts",
             "prerender": true,
             "ssr": {
@@ -87,6 +81,11 @@
             "development": {
               "buildTarget": "ENovi:build:development"
             }
+          },
+          "options": {
+            "ssl": true,
+            "sslKey": "../ENoviBackend/cert/private_key.pem",
+            "sslCert": "../ENoviBackend/cert/cert.pem"
           },
           "defaultConfiguration": "development"
         },
