@@ -17,7 +17,8 @@ export class AppComponent implements OnInit {
           event.url === '/register' ||
           event.url === '/lecture' ||
           event.url === '/user' ||
-          event.url === '/fogot-password' ||
+          event.url === '/forgot-password' ||
+          event.url.includes('/reset-password') ||
           event.url === '/admin' ||
           event.url === '/admin/courses' ||
           event.url === '/admin/user' ||
@@ -57,7 +58,8 @@ export class AppComponent implements OnInit {
           event.url === '/login' ||
           event.url === '/payment' ||
           event.url === '/register' ||
-          event.url === '/fogot-password' ||
+          event.url === '/reset-password' ||
+          event.url.includes('/reset-password') ||
           event.url === '/lecture' ||
           event.url === '/user' ||
           event.url === '/admin' ||

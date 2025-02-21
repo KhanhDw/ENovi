@@ -60,7 +60,8 @@ import { ListCoursesAdminComponent } from './components/list-courses-admin/list-
 import { AdminCourseDetailComponent } from './features/admin/admin-courses/admin-course-detail/admin-course-detail.component';
 import { ForgotPasswordComponent } from './features/forgot-password/forgot-password.component';
 import { CourseNewComponent } from './features/user/courses-of-instructor/course-new/course-new.component';
-import { AuthCallbackComponent } from './components/auth-callback/auth-callback.component';
+import { AuthCallbackComponent } from './components/System/auth-callback/auth-callback.component';
+import { ResetPasswordComponent } from './features/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -123,6 +124,7 @@ import { AuthCallbackComponent } from './components/auth-callback/auth-callback.
     TableDataUserAdminComponent,
     ListCoursesAdminComponent,
     AuthCallbackComponent,
+    ResetPasswordComponent,
   ],
   imports: [
     BrowserModule,

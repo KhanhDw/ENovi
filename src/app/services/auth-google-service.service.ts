@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Observable, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -37,7 +37,7 @@ export class AuthGoogleServiceService {
   // Đăng xuất
   logoutGoogle(): Observable<any> {
     // Gọi API logout từ backend (nếu cần)
-    return this.http.get(`${this.apiUrl}/auth/logout`).pipe(
+    return this.http.get(`${this.apiUrl}/logout`).pipe(
       tap(() => {
         // Xóa tất cả thông tin liên quan đến đăng nhập
         localStorage.removeItem('auth_token');
@@ -46,6 +46,10 @@ export class AuthGoogleServiceService {
 
         // Chuyển hướng về trang đăng nhập
         this.router.navigate(['/home']);
+      }),
+      catchError((error) => {
+        console.error('Logout failed:', error);
+        return throwError(() => error); // Ném lại lỗi
       })
     );
   }

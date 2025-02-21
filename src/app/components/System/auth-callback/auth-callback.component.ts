@@ -20,10 +20,9 @@ export class AuthCallbackComponent implements OnInit {
       const token = params['token'];
       const message = params['message'];
       if (token) {
-        console.log('token F: ' + token);
-        console.log('message F: ' + message);
-
         localStorage.setItem('auth_token', token);
+
+        console.log('token font end: ' + localStorage.getItem('auth_token'));
 
         if (message) {
           localStorage.setItem('login_method', message);
