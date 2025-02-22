@@ -1,6 +1,7 @@
 import { Component, HostListener, ElementRef } from '@angular/core';
 import { Route } from '@angular/router';
 import { ApiService } from '@app/services/api.service';
+import { WindowRef } from '@app/services/window/window-ref.service';
 
 // Định nghĩa kiểu dữ liệu cho subitem
 interface Subitem {
@@ -48,7 +49,7 @@ export class HeaderComponent {
     { name: 'Ngôn ngữ', url: '' },
   ];
 
-  constructor(private elementRef: ElementRef, private apiService: ApiService) {}
+  constructor(private elementRef: ElementRef, private apiService: ApiService,private winRef: WindowRef) {}
 
   toggleDropdown() {
     this.isOpen = !this.isOpen;
@@ -232,6 +233,14 @@ export class HeaderComponent {
   isShowCol3: boolean = false;
 
   ngOnInit() {
+
+    const win = this.winRef.nativeWindow;
+    if (win) {
+      console.log('Chiều rộng màn hình:', win.innerWidth);
+    }else{
+      console.log('Không thể lấy window');
+    }
+
     // Khởi tạo selectedSubfields với subfields của field đầu tiên (nếu có)
     if (this.fields.length > 0) {
       this.selectedSubfields = this.fields[0].subfields;
@@ -276,7 +285,10 @@ export class HeaderComponent {
   // other properties and methods
 
   get isLoggedIn(): boolean {
-    return this.apiService.authGoogleServiceService.isLoggedIn();
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      return !!localStorage.getItem('token'); // Ví dụ
+    }
+    return false; // Giá trị mặc định khi không có localStorage
   }
 
   logout(): void {

@@ -16,6 +16,7 @@ export class ForgotPasswordComponent {
   showPassword: boolean = false;
   PassordType: string = 'password';
   btnSubmitPost: boolean = false;
+  email: string | null = null;
 
   constructor(
     private apiService: ApiService,
@@ -35,17 +36,23 @@ export class ForgotPasswordComponent {
   }
 
   onSubmit() {
+    this.email = this.formForgotPassword.email;
+
     this.apiService.forgotPasswordServiceService
       .SubmitFormPostForgotPassword(this.formForgotPassword)
       .subscribe({
         next: (res) => {
-          this.response = res;
-          console.log('Phản hồi từ server:', res);
-          // Reset form sau khi gửi thành công
-          this.formForgotPassword = { email: '' };
-          setTimeout(() => {
-            this.ngZone.run(() => this.router.navigate(['/login']));
-          }, 2000);
+          if (res.success) {
+            this.response = res;
+            console.log('Phản hồi từ server:', res);
+            // Reset form sau khi gửi thành công
+            this.formForgotPassword = { email: '' };
+            setTimeout(() => {
+              this.ngZone.run(() => this.router.navigate(['/login']));
+            }, 2000);
+          } else {
+            this.response = { message: res.message };
+          }
         },
         error: (err) => {
           console.error('Lỗi khi gửi dữ liệu:', err);

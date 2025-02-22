@@ -198,10 +198,10 @@ export class AdminUserComponent implements OnInit {
   data: any;
 
   ngOnInit(): void {
-    this.dataService.getUsers().subscribe((response) => {
-      this.data = response;
-      console.log(this.data);
-      this.products = response;
-    });
+    // this.dataService.getUsers().subscribe((response) => {
+    //   this.data = response;
+    //   console.log(this.data);
+    //   this.products = response;
+    // });
   }
 }

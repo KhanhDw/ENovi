@@ -14,6 +14,8 @@ export class ResetPasswordComponent implements OnInit {
   email: string | null = null;
   response: any;
 
+showNotification: boolean = false;
+
   showPassword: boolean = false;
 
   PassordType: string = 'password';
@@ -30,6 +32,7 @@ export class ResetPasswordComponent implements OnInit {
     this.resetToken = this.route.snapshot.queryParamMap.get('token');
     this.email = this.route.snapshot.queryParamMap.get('email');
     this.formResetPassword.email = this.email ?? '';
+    this.showNotification = false;
   }
 
   toggleshowPassword() {
@@ -44,6 +47,8 @@ export class ResetPasswordComponent implements OnInit {
     ) {
       this.response = { message: 'Mật khẩu không khớp' };
       return;
+    }else if (this.formResetPassword.password === '' || this.formResetPassword.confirmPassword === '') {
+      return;
     }
 
     if (!this.resetToken) {
@@ -51,10 +56,12 @@ export class ResetPasswordComponent implements OnInit {
       return;
     }
 
+    this.showNotification = true;
+
     this.apiService.resetPasswordService
       .submitResetPassword(
         this.resetToken,
-        this.formResetPassword.password,
+        this.formResetPassword.confirmPassword,
         this.email!
       )
       .subscribe({

@@ -5,18 +5,26 @@
   >
     <!-- left -->
     <div
-      class="p-4 py-6 text-white bg-blue-500 md:w-80 md:flex-shrink-0 md:flex md:flex-col md:items-center md:justify-evenly"
+      id="left"
+      class="p-4 py-6 text-white md:w-80 md:flex-shrink-0 md:flex md:flex-col md:items-center md:justify-evenly"
     >
       <div class="my-3 text-4xl font-bold tracking-wider text-center">
         <a href="#">ENovi</a>
       </div>
-      <p class="mt-6 font-normal text-center text-gray-300 md:mt-0">
-        Nâng cấp kỹ năng của ban thông qua các khoá học trên nền tảng của chúng
-        tôi!
-      </p>
+      <div class="mt-6 font-normal text-center rounded-md md:mt-0">
+        <div class="z-[20] relative text-white w-full h-full">
+          <p>
+            Nâng cấp kỹ năng của bạn thông qua các khoá học trên nền tảng của
+            chúng tôi!
+          </p>
+          <div
+            class="absolute top-0 left-0 -z-[3] flex w-full h-full bg-opacity-100 bg-slate-500 blur-lg"
+          ></div>
+        </div>
+      </div>
       <p class="flex flex-col items-center justify-center mt-10 text-center">
         <span>Bạn chưa có tài khoản?</span>
-        <a href="#" class="underline">Đăng ký nào!</a>
+        <a href="#" class="font-semibold hover:text-violet-400">Đăng ký nào!</a>
       </p>
       <a
         href="#"
@@ -28,7 +36,7 @@
     </div>
     <!-- right -->
     <div class="p-5 bg-white md:flex-1">
-      <h3 class="my-4 text-2xl font-semibold text-gray-700">Account Login</h3>
+      <h3 class="my-4 text-2xl font-bold text-gray-700 uppercase">Đăng nhập</h3>
       <form action="#" class="flex flex-col space-y-5">
         <div class="flex flex-col space-y-1">
           <label for="email" class="text-sm font-semibold text-gray-500"
@@ -90,13 +98,13 @@
               type="button"
               class="flex items-center justify-center p-2 space-x-2 transition-colors duration-300 border border-gray-800 rounded-full group hover:bg-blue-600 hover:text-white hover:shadow-slate-800 focus:outline-none"
             >
-              <span>
+              <span class="cursor-pointer">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
                   height="16"
                   fill="currentColor"
-                  class="bi bi-google"
+                  class="cursor-pointer bi bi-google"
                   viewBox="0 0 16 16"
                 >
                   <path

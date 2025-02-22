@@ -1,11 +1,12 @@
-import { AuthGoogleServiceService } from './auth-google-service.service';
-import { ForgotPasswordServiceService } from './forgot-password-service.service';
-import { UserServiceService } from './user-service.service';
-import { ResetPasswordService } from './reset-password.service';
+import { AuthGoogleServiceService } from './authGoogle/auth-google-service.service';
+import { ForgotPasswordServiceService } from './fogot_password/forgot-password-service.service';
+import { UserServiceService } from './user/user-service.service';
+import { ResetPasswordService } from './reset_password/reset-password.service';
+import { LoginServiceService } from './login/login-service.service';
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 //
 @Injectable({
   providedIn: 'root',
@@ -18,19 +19,13 @@ export class ApiService {
     public authGoogleServiceService: AuthGoogleServiceService,
     public forgotPasswordServiceService: ForgotPasswordServiceService,
     public userServiceService: UserServiceService,
-    public resetPasswordService: ResetPasswordService
+    public resetPasswordService: ResetPasswordService,
+    public loginServiceService: LoginServiceService
   ) {
+    this.loginServiceService.setApiUrl(`${this.API_URL}/login`);
     this.authGoogleServiceService.setApiUrl(`${this.API_URL}/auth`);
     this.forgotPasswordServiceService.setApiUrl(`${this.API_URL}/fopass`);
     this.resetPasswordService.setApiUrl(`${this.API_URL}/repass`);
     this.userServiceService.setApiUrl(`${this.API_URL}/user`);
-  }
-
-  getUsers(): Observable<any> {
-    return this.http.get(`${this.API_URL}/users/ge`, {
-      headers: { Accept: 'application/json' },
-      // Option để bỏ qua lỗi SSL (chỉ dùng trong môi trường phát triển)
-      withCredentials: true,
-    });
   }
 }
