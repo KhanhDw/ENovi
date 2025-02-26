@@ -1,5 +1,16 @@
-import { Component, HostListener, Directive, OnInit } from '@angular/core';
+import { catchError } from 'rxjs/operators';
+import {
+  Component,
+  HostListener,
+  Directive,
+  OnInit,
+  NgZone,
+  ChangeDetectorRef,
+  AfterViewInit,
+} from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
+import { CookieStorageService } from '@app/services/cookie_storage/cookie-storage.service';
+import { ApiService } from '@app/services/api.service';
 
 @Component({
   selector: 'app-root',
@@ -7,8 +18,14 @@ import { Router, NavigationEnd } from '@angular/router';
   styleUrl: './app.component.css',
   standalone: false,
 })
-export class AppComponent implements OnInit {
-  constructor(private router: Router) {
+export class AppComponent implements OnInit, AfterViewInit {
+  constructor(
+    private router: Router,
+    private cookieService: CookieStorageService,
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone,
+    private apiService: ApiService
+  ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         // Kiểm tra nếu route hiện tại là 'login' hoặc 'register'
@@ -32,6 +49,7 @@ export class AppComponent implements OnInit {
           event.url === '/user/security' ||
           event.url === '/user/instructor' ||
           event.url === '/user/instructor/revenue' ||
+          event.url === '/user/instructor/register' ||
           event.url === '/user/instructor/ratting' ||
           event.url === '/user/instructor/courses-instructor' ||
           event.url === '/user/instructor/courses-instructor/update' ||
@@ -76,6 +94,7 @@ export class AppComponent implements OnInit {
           event.url === '/user/profile' ||
           event.url === '/user/security' ||
           event.url === '/user/instructor' ||
+          event.url === '/user/instructor/register' ||
           event.url === '/user/instructor/revenue' ||
           event.url === '/user/instructor/ratting' ||
           event.url === '/user/instructor/courses-instructor/update' ||
@@ -101,7 +120,65 @@ export class AppComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngAfterViewInit(): void {
+    this.cdr.detectChanges(); // Cập nhật lại vòng kiểm tra
+    const allCookies = this.cookieService.getAllCookieNames();
+    console.log('Cookies lúc khởi chạy:', allCookies);
+
+    this.ngZone.runOutsideAngular(() => {
+      setInterval(() => {
+        this.ngZone.run(() => {
+          this.updateInforUser();
+        });
+      }, 500);
+    });
+  }
+
+  updateInforUser(): void {
+    const userString = this.cookieService.getCookie('user');
+    if (userString) {
+    }
+  }
+
+  ngOnInit(): void {
+
+    if (
+      this.cookieService.getCookie('categories') === undefined ||
+      this.cookieService.getCookie('categories') === null
+    ){
+      this.getCaterogyAPI();}
+  }
+
+  getCaterogyAPI() {
+    this.apiService.categoriesServiceService.GetCategoryAPI().subscribe({
+      next: (res) => {
+        if (res?.success) {
+
+          console.log('categories:', res.categories);
+          console.log('categoriesV1:', res.categoriesV1);
+          console.log('categoriesV2:', res.categoriesV2);
+
+          this.cookieService.setCookie(
+            'categories',
+            res.categories ? JSON.stringify(res.categories) : '[]'
+          );
+          this.cookieService.setCookie(
+            'categoriesV1',
+            res.categoriesV1 ? JSON.stringify(res.categoriesV1) : '[]'
+          );
+          this.cookieService.setCookie(
+            'categoriesV2',
+            res.categoriesV2 ? JSON.stringify(res.categoriesV2) : '[]'
+          );
+        } else {
+          console.log('Lỗi khi server trả dữ liệu về:');
+        }
+      },
+      error: (err) => {
+        console.error('Lỗi khi gửi yêu cầu:', err);
+      },
+    });
+  }
 
   title = 'ENovi';
 

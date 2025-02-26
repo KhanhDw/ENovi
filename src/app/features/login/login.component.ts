@@ -1,6 +1,9 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '@app/services/api.service';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { User } from '@app/interface/user';
+import { CookieStorageService } from '@app/services/cookie_storage/cookie-storage.service';
 
 @Component({
   selector: 'app-login',
@@ -9,32 +12,67 @@ import { ApiService } from '@app/services/api.service';
   standalone: false,
 })
 export class LoginComponent {
-  response: { message: string } | null = null;
+  @ViewChild('resetForm') resetForm!: NgForm;
+  showNotification: boolean = false;
+  response: { message: string } = { message: '' };
+
+  email: string = '';
+  password: string = '';
+  rememeber: boolean = false;
+
+  formLogin = {
+    email: '',
+    password: '',
+    rememeberPassword: false,
+  };
 
   constructor(
     private apiService: ApiService,
     private ngZone: NgZone,
-    private router: Router
-  ) {} //import và inject đúng service
+    private router: Router,
+    private cookieService: CookieStorageService
+  ) {}
+
+
 
   loginWithGoogle() {
     this.apiService.authGoogleServiceService.authGoogle();
   }
 
-  loginWithENovi(email: string, password: string) {
-    this.apiService.loginServiceService.loginAPI(email, password).subscribe({
-      next: (res) => {
-        if (res.success) {
-          setTimeout(() => {
-            this.ngZone.run(() => this.router.navigate(['/home']));
-          }, 500);
-        } else {
-          this.response = { message: res.message };
-        }
-      },
-      error: (err) => {
-        this.response = { message: err.error.message || 'Có lỗi xảy ra!' };
-      },
-    });
+  loginWithENovi() {
+    this.email = this.formLogin.email;
+    this.password = this.formLogin.password;
+    this.rememeber = this.formLogin.rememeberPassword;
+
+    if (this.resetForm.invalid) {
+      this.response = { message: 'Vui lòng điền đầy đủ thông tin.' };
+      this.showNotification = true;
+      return;
+    }
+
+    this.apiService.loginServiceService
+      .loginAPI(this.email, this.password)
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.cookieService.setCookie('user', JSON.stringify(res.user[0]), 1);
+            this.response = { message: res.message };
+            this.showNotification = true;
+
+            if (this.cookieService.getCookie('user')) {
+              setTimeout(() => {
+                this.ngZone.run(() => this.router.navigate(['/home']).then(()=>{window.location.reload();}));
+              }, 1000);
+            }
+          } else {
+            this.response = { message: res.message };
+            this.showNotification = true;
+          }
+        },
+        error: (err) => {
+          this.response = { message: err.error.message || 'Có lỗi xảy ra!' };
+        },
+      });
+    this.showNotification = false;
   }
 }

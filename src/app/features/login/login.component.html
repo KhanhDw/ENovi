@@ -24,7 +24,7 @@
       </div>
       <p class="flex flex-col items-center justify-center mt-10 text-center">
         <span>Bạn chưa có tài khoản?</span>
-        <a href="#" class="font-semibold hover:text-violet-400">Đăng ký nào!</a>
+        <a [routerLink]="['/register']" class="font-semibold hover:text-violet-400">Đăng ký nào!</a>
       </p>
       <a
         href="#"
@@ -37,13 +37,20 @@
     <!-- right -->
     <div class="p-5 bg-white md:flex-1">
       <h3 class="my-4 text-2xl font-bold text-gray-700 uppercase">Đăng nhập</h3>
-      <form action="#" class="flex flex-col space-y-5">
+      <form
+        #resetForm="ngForm"
+        (ngSubmit)="loginWithENovi()"
+        class="flex flex-col space-y-5"
+      >
         <div class="flex flex-col space-y-1">
           <label for="email" class="text-sm font-semibold text-gray-500"
             >Email</label
           >
           <input
+            [(ngModel)]="formLogin.email"
+            name="email"
             type="email"
+            placeholder="Nhập email của bạn"
             id="email"
             autofocus
             class="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-blue-200"
@@ -56,16 +63,40 @@
             >
           </div>
           <input
+            required=""
+            [(ngModel)]="formLogin.password"
+            placeholder="Nhập mật khẩu"
             type="password"
             id="password"
+            name="password"
             class="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-blue-200"
           />
+        </div>
+        <div class="flex items-center justify-center">
+         <!-- Notification -->
+        <div
+        *ngIf="showNotification"
+        class="p-2 text-sm rounded"
+        [ngClass]="{
+          'text-red-500 bg-red-100':
+            response.message.includes('không') ||
+            response.message.includes('Sai') ||
+            response.message.includes('lỗi'),
+          'text-green-500 bg-green-100':
+            response.message.includes('thành công'),
+          'text-gray-500 bg-gray-100': response.message.includes('Vui lòng')
+        }"
+      >
+        {{ response.message }}
+      </div>
         </div>
         <div class="flex items-center justify-between space-x-2">
           <div class="flex items-center space-x-2">
             <input
+            [(ngModel)]="formLogin.rememeberPassword"
               type="checkbox"
               id="remember"
+              name="rememberPassword"
               class="w-4 h-4 transition duration-300 rounded focus:ring-2 focus:ring-offset-0 focus:outline-none focus:ring-blue-200"
             />
             <label for="remember" class="text-sm font-semibold text-gray-500"
@@ -94,7 +125,7 @@
           </span>
           <div class="flex items-center justify-center gap-4">
             <button
-              (click)="loginWithGoogle()"
+            (click)="loginWithGoogle()"
               type="button"
               class="flex items-center justify-center p-2 space-x-2 transition-colors duration-300 border border-gray-800 rounded-full group hover:bg-blue-600 hover:text-white hover:shadow-slate-800 focus:outline-none"
             >

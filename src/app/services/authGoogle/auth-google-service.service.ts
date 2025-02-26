@@ -3,6 +3,24 @@ import { HttpClient } from '@angular/common/http';
 import { tap, catchError } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
+import { CookieStorageService } from '@app/services/cookie_storage/cookie-storage.service';
+
+
+
+interface AuthResponse {
+  success: boolean;
+  message: string;
+  token: string;
+  user: {
+    id: string;
+    googleId: string;
+    name: string;
+    email: string;
+    picture: string;
+  };
+  isNewUser: boolean;
+}
+
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +31,8 @@ export class AuthGoogleServiceService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cookieService: CookieStorageService
   ) {}
 
   setApiUrl(apiUrl: string) {
@@ -24,14 +43,24 @@ export class AuthGoogleServiceService {
     window.location.href = `${this.apiUrl}/google`;
   }
 
-  // Kiểm tra người dùng đã đăng nhập chưa
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem('auth_token');
+  GetDataGoogleCallback(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/google/data`, {
+      withCredentials: true // Để gửi cookie/session nếu cần
+    });
   }
 
-  // Lấy token từ localStorage
-  getAuthToken(): string | null {
-    return localStorage.getItem('auth_token');
+  saveAuthData(response: AuthResponse) {
+    this.cookieService.setCookie('token', response.token);
+    this.cookieService.setCookie('user', JSON.stringify(response.user));
+  }
+
+  isLoggedIn(): boolean {
+    return !! this.cookieService.getCookie('token');
+  }
+
+  getUser() {
+    const user =  this.cookieService.getCookie('user');
+    return user ? JSON.parse(user) : null;
   }
 
   // Đăng xuất
@@ -39,10 +68,8 @@ export class AuthGoogleServiceService {
     // Gọi API logout từ backend (nếu cần)
     return this.http.get(`${this.apiUrl}/logout`).pipe(
       tap(() => {
-        // Xóa tất cả thông tin liên quan đến đăng nhập
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('login_method');
-        localStorage.removeItem('user_info'); // nếu có lưu thông tin user
+        // Xóa tất cả cookie chứa thông tin liên quan đến đăng nhập
+       
 
         // Chuyển hướng về trang đăng nhập
         this.router.navigate(['/home']);
@@ -56,9 +83,7 @@ export class AuthGoogleServiceService {
 
   // Đăng xuất local - sử dụng khi không cần gọi API backend
   logoutLocal(): void {
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('login_method');
-    localStorage.removeItem('user_info'); // nếu có lưu thông tin user
+    // Xóa tất cả cookie chứa thông tin liên quan đến đăng nhập
 
     // Chuyển hướng về trang đăng nhập
     this.router.navigate(['/home']);

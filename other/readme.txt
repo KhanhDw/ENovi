@@ -45,3 +45,13 @@ npm i apexcharts@latest  ng-apexcharts@latest  ngx-quill@latest  quill@latest
 
 -- chạy ssr trong angular.json
 "prerender": false,  
+
+
+
+
+git trên vsc 
+-> Mở Settings (Ctrl + ,)
+  -> "git.enabled": false
+  -> "git.autoRefresh": false
+
++> điều này làm giảm tiến trình tăng tốc độ sử lý của vsc

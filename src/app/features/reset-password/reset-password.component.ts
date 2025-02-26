@@ -1,6 +1,7 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '@app/services/api.service';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-reset-password',
@@ -10,15 +11,23 @@ import { ApiService } from '@app/services/api.service';
 })
 export class ResetPasswordComponent implements OnInit {
   resetToken: string | null = null;
-  formResetPassword = { password: '', confirmPassword: '', email: '' };
+  @ViewChild('resetForm') resetForm!: NgForm;
   email: string | null = null;
-  response: any;
+  response: { message: string } = { message: '' };
 
-showNotification: boolean = false;
+  formResetPassword = {
+    password: '',
+    confirmPassword: '',
+    newsletter: false,
+    email: '',
+  };
 
+  PasswordType: string = 'password';
   showPassword: boolean = false;
+  showNotification: boolean = false;
 
-  PassordType: string = 'password';
+  countdown: number = 6;
+  private countdownInterval: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -37,47 +46,86 @@ showNotification: boolean = false;
 
   toggleshowPassword() {
     this.showPassword = !this.showPassword;
-    if (!this.showPassword) this.PassordType = 'password';
-    else this.PassordType = 'text';
+    this.PasswordType = this.showPassword ? 'text' : 'password';
   }
 
   onSubmitResetPassword() {
+    // Kiểm tra form hợp lệ
+    if (this.resetForm.invalid) {
+      this.response = { message: 'Vui lòng điền đầy đủ thông tin.' };
+      this.showNotification = true;
+      this.markAllControlsAsTouched(); // Gọi hàm tự định nghĩa
+      return;
+    }
+
+    // Kiểm tra mật khẩu khớp nhau
     if (
       this.formResetPassword.password !== this.formResetPassword.confirmPassword
     ) {
-      this.response = { message: 'Mật khẩu không khớp' };
-      return;
-    }else if (this.formResetPassword.password === '' || this.formResetPassword.confirmPassword === '') {
+      this.response = { message: 'Mật khẩu không khớp.' };
+      this.showNotification = true;
+      this.markAllControlsAsTouched(); // Đánh dấu để hiển thị lỗi nếu cần
       return;
     }
 
+    // Kiểm tra token
     if (!this.resetToken) {
-      this.response = { message: 'Token không hợp lệ' };
+      this.response = { message: 'Token không hợp lệ.' };
+      this.showNotification = true;
       return;
     }
 
+    // Hiển thị thông báo đang xử lý
+    this.response = { message: 'Đang xử lý thay đổi mật khẩu...' };
     this.showNotification = true;
 
+    // Gọi API reset password
     this.apiService.resetPasswordService
       .submitResetPassword(
         this.resetToken,
-        this.formResetPassword.confirmPassword,
+        this.formResetPassword.password,
         this.email!
       )
       .subscribe({
         next: (res) => {
+          this.response = { message: res.message };
+          this.showNotification = true;
           if (res.success) {
-            this.response = { message: res.message };
-            setTimeout(() => {
-              this.ngZone.run(() => this.router.navigate(['/login']));
-            }, 2000);
-          } else {
-            this.response = { message: res.message };
+            this.startCountdown();
           }
         },
         error: (err) => {
-          this.response = { message: err.error.message || 'Có lỗi xảy ra!' };
+          this.response = {
+            message: err.error?.message || 'Có lỗi xảy ra, vui lòng thử lại!',
+          };
+          this.showNotification = true;
         },
       });
+  }
+
+  // Hàm tự định nghĩa để đánh dấu tất cả controls là touched
+  private markAllControlsAsTouched() {
+    Object.keys(this.resetForm.controls).forEach((controlName) => {
+      this.resetForm.controls[controlName].markAsTouched();
+    });
+  }
+
+  startCountdown() {
+    this.countdown = 6; // Bắt đầu từ 6 giây
+    this.countdownInterval = setInterval(() => {
+      this.ngZone.run(() => {
+        this.countdown--;
+        if (this.countdown <= 0) {
+          clearInterval(this.countdownInterval);
+          this.router.navigate(['/login']);
+        }
+      });
+    }, 1000);
+  }
+
+  ngOnDestroy() {
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '@app/services/api.service';
+import { CookieStorageService } from '@app/services/cookie_storage/cookie-storage.service';
 
 @Component({
   selector: 'app-auth-callback',
@@ -12,30 +13,45 @@ export class AuthCallbackComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private cookieService: CookieStorageService
   ) {}
+
+  loading = true;
+  error: string | null = null;
+
+
+
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-      const token = params['token'];
-      const message = params['message'];
-      if (token) {
-        localStorage.setItem('auth_token', token);
-
-        console.log('token font end: ' + localStorage.getItem('auth_token'));
-
-        if (message) {
-          localStorage.setItem('login_method', message);
+        const error = params['error'];
+        if (error) {
+            this.router.navigate(['/login'], { queryParams: { error } });
+            return;
         }
 
-        // Chuyển hướng đến trang chính
-        this.router.navigate(['/home']);
-      } else {
-        // Xử lý lỗi
-        this.router.navigate(['/login'], {
-          queryParams: { error: 'auth_failed' },
-        });
-      }
+        // Gọi API để lấy dữ liệu
+        this.apiService.authGoogleServiceService.GetDataGoogleCallback()
+            .subscribe({
+                next: (response: any) => {
+                    if (response.success && response.token) {
+                        this.cookieService.setCookie('token', response.token, 1);
+                        this.cookieService.setCookie('user', JSON.stringify(response.user),1);
+
+                        this.router.navigate(['/home']);
+                    } else {
+                        this.router.navigate(['/login'], {
+                            queryParams: { error: response.message || 'auth_failed' },
+                        });
+                    }
+                },
+                error: (err) => {
+                    this.router.navigate(['/login'], {
+                        queryParams: { error: 'server_error' },
+                    });
+                }
+            });
     });
-  }
+}
 }

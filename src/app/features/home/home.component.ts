@@ -1,28 +1,52 @@
 import { link } from 'node:fs';
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, AfterViewInit } from '@angular/core';
+import { CookieStorageService } from '@app/services/cookie_storage/cookie-storage.service';
 
 @Component({
-    selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrl: './home.component.css',
-    standalone: false
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.css',
+  standalone: false,
 })
-export class HomeComponent {
+export class HomeComponent implements AfterViewInit {
   // ==============================
   // banner Carousel
   // ==============================
   currentIndex: number = 0;
   slides = [
-    { imgage: '/img/banner/banner1.jpg' },
     { imgage: '/img/banner/banner2.jpg' },
+    { imgage: '/img/banner/banner1.jpg' },
   ];
 
   time = 0;
+  reload = true;
 
-  constructor(private ngZone: NgZone) {}
+  constructor(
+    private ngZone: NgZone,
+    private cookieService: CookieStorageService
+  ) {}
 
   ngOnInit(): void {
-    this.startSlideShow();
+    // this.startSlideShow();
+  }
+
+
+  ngAfterViewInit(): void {
+    this.ngZone.runOutsideAngular(() => {
+      setInterval(() => {
+        this.ngZone.run(() => {
+          this.updateInforUser();
+        });
+      }, 500);
+    });
+  }
+
+
+  updateInforUser(): void {
+    const userString = this.cookieService.getCookie('user');
+    if (userString !== null) {
+        this.ngOnInit();
+    }
   }
 
   // Phương thức khởi động slideshow

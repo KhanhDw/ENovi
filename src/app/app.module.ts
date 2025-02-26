@@ -1,12 +1,10 @@
 import { CategoriesComponent } from './features/admin/categories/categories.component';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http'; // Import module này
-
+import { provideHttpClient, withFetch } from '@angular/common/http'; // Import module này
 import { QuillModule } from 'ngx-quill';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgApexchartsModule } from 'ng-apexcharts'; // Import đúng cách
-
 import {
   BrowserModule,
   provideClientHydration,
@@ -62,6 +60,7 @@ import { ForgotPasswordComponent } from './features/forgot-password/forgot-passw
 import { CourseNewComponent } from './features/user/courses-of-instructor/course-new/course-new.component';
 import { AuthCallbackComponent } from './components/System/auth-callback/auth-callback.component';
 import { ResetPasswordComponent } from './features/reset-password/reset-password.component';
+import { RegisterInstructorComponent } from './features/user/register-instructor/register-instructor.component';
 
 @NgModule({
   declarations: [
@@ -125,6 +124,7 @@ import { ResetPasswordComponent } from './features/reset-password/reset-password
     ListCoursesAdminComponent,
     AuthCallbackComponent,
     ResetPasswordComponent,
+    RegisterInstructorComponent,
   ],
   imports: [
     BrowserModule,
@@ -133,9 +133,8 @@ import { ResetPasswordComponent } from './features/reset-password/reset-password
     QuillModule.forRoot(),
     ReactiveFormsModule,
     NgApexchartsModule,
-    HttpClientModule,
   ],
-  providers: [provideClientHydration()],
+  providers: [provideClientHydration(),  provideHttpClient(withFetch())],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

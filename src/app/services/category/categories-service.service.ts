@@ -5,10 +5,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class LoginServiceService {
-  
+export class CategoriesServiceService {
+
   private apiUrl!: string;
 
   constructor(
@@ -21,7 +21,9 @@ export class LoginServiceService {
     this.apiUrl = apiUrl;
   }
 
-  loginAPI(email: string, password: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/`, { email, password });
+  GetCategoryAPI(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/`,);
   }
+
+
 }

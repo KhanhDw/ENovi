@@ -1,3 +1,4 @@
+import { RegisterInstructorComponent } from './features/user/register-instructor/register-instructor.component';
 import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './features/home/home.component';
@@ -42,11 +43,15 @@ import { CategoriesComponent } from './features/admin/categories/categories.comp
 import { AuthCallbackComponent } from './components/System/auth-callback/auth-callback.component';
 import { ResetPasswordComponent } from './features/reset-password/reset-password.component';
 
+
+
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
+
+  { path: 'auth/callback', component: AuthCallbackComponent }, // đặc biệt dùng để nhận call back từ goolge gửi về 
+  
   { path: 'login', component: LoginComponent },
-  { path: 'auth/callback', component: AuthCallbackComponent }, // đặc biệt
   { path: 'register', component: RegisterComponent },
   { path: 'search', component: SearchComponent },
   { path: 'cart', component: ShoppingCartComponent },
@@ -93,6 +98,7 @@ const routes: Routes = [
         path: 'instructor',
         children: [
           { path: '', redirectTo: 'courses-instructor', pathMatch: 'full' },
+          { path: 'register', component: RegisterInstructorComponent, },
           {
             path: 'courses-instructor',
             component: CoursesOfInstructorComponent,
@@ -154,6 +160,7 @@ const routes: Routes = [
     path: 'admin',
     component: AdminComponent,
     children: [
+      { path: '', redirectTo: 'courses', pathMatch: 'full' },
       {
         path: 'courses',
         component: AdminCoursesComponent,

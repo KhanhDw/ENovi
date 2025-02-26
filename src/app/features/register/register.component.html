@@ -219,7 +219,9 @@
       </svg>
     </div>
   </div>
+  <!-- ---------- -->
   <!-- Right Pane -->
+  <!-- ---------- -->
   <div class="flex items-center justify-center w-full bg-gray-100 lg:w-1/2">
     <div class="w-full max-w-md p-6">
       <h1 class="mb-6 text-3xl font-semibold text-center text-black">
@@ -265,40 +267,112 @@
       <div class="mt-4 text-sm text-center text-gray-600">
         <p>Hoặc đăng ký bằng Email</p>
       </div>
-      <form action="#" method="POST" class="space-y-4">
+      <form #registerForm="ngForm" class="space-y-6" (submit)="registerUser()">
         <!-- Your form elements go here -->
         <div>
           <label for="username" class="block text-sm font-medium text-gray-700"
-            >Tên đăng nhập</label
+            >Tên người dùng</label
           >
           <input
+            [(ngModel)]="formRegister.username"
             type="text"
             id="username"
             name="username"
+            placeholder="Tên người dùng"
             class="w-full p-2 mt-1 transition-colors duration-300 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
           />
+
+          <div
+            *ngIf="
+              registerForm.controls['password']?.invalid &&
+              registerForm.controls['password']?.touched
+            "
+            class="text-sm text-red-500"
+          >
+            Vui lòng nhập mật khẩu tên người dùng.
+          </div>
         </div>
         <div>
           <label for="email" class="block text-sm font-medium text-gray-700"
             >Email</label
           >
           <input
+            [(ngModel)]="formRegister.email"
             type="text"
             id="email"
             name="email"
+            placeholder="Email"
             class="w-full p-2 mt-1 transition-colors duration-300 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
           />
+          <div
+            *ngIf="
+              registerForm.controls['email']?.invalid &&
+              registerForm.controls['email']?.touched
+            "
+            class="text-sm text-red-500"
+          >
+            Email không hợp lệ
+          </div>
         </div>
         <div>
           <label for="password" class="block text-sm font-medium text-gray-700"
             >Mật khẩu</label
           >
           <input
+            [(ngModel)]="formRegister.password"
             type="password"
             id="password"
             name="password"
+            placeholder="Mật khẩu"
             class="w-full p-2 mt-1 transition-colors duration-300 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
           />
+          <div
+            *ngIf="
+              registerForm.controls['password']?.invalid &&
+              registerForm.controls['password']?.touched
+            "
+            class="text-sm text-red-500"
+          >
+            Mật khẩu bao gồm a-z, A-Z, 0-9 và 1 ký tự đặc biệt và ít nhất 6 ký
+            tự
+          </div>
+        </div>
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700"
+            >Nhập lại mật khẩu</label
+          >
+          <input
+            [(ngModel)]="formRegister.repassword"
+            type="password"
+            id="repassword"
+            name="repassword"
+            placeholder="Nhập lại mật khẩu"
+            class="w-full p-2 mt-1 transition-colors duration-300 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
+          />
+          <div
+            *ngIf="
+              registerForm.controls['repassword']?.invalid &&
+              registerForm.controls['repassword']?.touched
+            "
+            class="text-sm text-red-500"
+          >
+            Mật khẩu không khớp
+          </div>
+        </div>
+        <!-- Notification -->
+        <div
+          *ngIf="showNotification"
+          class="p-2 text-sm rounded"
+          [ngClass]="{
+            'text-red-500 bg-red-100':
+              response.message.includes('không') ||
+              response.message.includes('Lỗi'),
+            'text-green-500 bg-green-100':
+              response.message.includes('thành công'),
+            'text-gray-500 bg-gray-100': response.message.includes('Đang xử lý')
+          }"
+        >
+          {{ response.message }}
         </div>
         <div>
           <button
@@ -312,7 +386,7 @@
       <div class="mt-4 text-sm text-center text-gray-600">
         <p>
           Bạn đã có tài khoản?
-          <a href="#" class="text-black hover:underline">Đăng nhập ngay</a>
+          <a [routerLink]="['/login']" class="text-black hover:underline">Đăng nhập ngay</a>
         </p>
       </div>
     </div>

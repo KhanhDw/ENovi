@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
+
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class LoginServiceService {
-  
+export class RegisterServiceService {
+
   private apiUrl!: string;
 
   constructor(
@@ -21,7 +22,7 @@ export class LoginServiceService {
     this.apiUrl = apiUrl;
   }
 
-  loginAPI(email: string, password: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/`, { email, password });
+  registerUserAPI(username:string ,email: string, password: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/`, {username, email, password });
   }
 }
