@@ -1,4 +1,3 @@
-import { BlobOptions } from 'node:buffer';
 import { Section } from './../../interface/section';
 import {
   Component,
@@ -15,7 +14,7 @@ interface NoteItemSaved {
   valueNote: string;
   urlLecture: string;
   titleSection: string;
-  duration: string;
+  duration: number;
 }
 
 @Component({
@@ -47,7 +46,7 @@ export class LectureComponent implements AfterViewInit {
     {
       id: 1,
       title: 'tổng quan 1',
-      duration: '01:23',
+      duration:1,
       finish: true,
       isExpanded: false,
       homework: true,
@@ -55,7 +54,7 @@ export class LectureComponent implements AfterViewInit {
     {
       id: 2,
       title: 'tổng quan 2',
-      duration: '05:43',
+      duration:1,
       finish: false,
       isExpanded: false,
       homework: true,
@@ -63,7 +62,7 @@ export class LectureComponent implements AfterViewInit {
     {
       id: 3,
       title: 'tổng quan 1',
-      duration: '01:23',
+      duration:1,
       finish: true,
       isExpanded: false,
       homework: true,
@@ -71,7 +70,7 @@ export class LectureComponent implements AfterViewInit {
     {
       id: 4,
       title: 'tổng quan 2',
-      duration: '05:43',
+      duration:1,
       finish: false,
       isExpanded: false,
       homework: true,
@@ -79,7 +78,7 @@ export class LectureComponent implements AfterViewInit {
     {
       id: 5,
       title: 'tổng quan 1',
-      duration: '01:23',
+      duration:1,
       finish: true,
       isExpanded: false,
       homework: true,
@@ -87,7 +86,7 @@ export class LectureComponent implements AfterViewInit {
     {
       id: 6,
       title: 'tổng quan 2',
-      duration: '05:43',
+      duration:1,
       finish: false,
       isExpanded: false,
       homework: true,
@@ -95,7 +94,7 @@ export class LectureComponent implements AfterViewInit {
     {
       id: 7,
       title: 'tổng quan 1',
-      duration: '01:23',
+      duration:1,
       finish: true,
       isExpanded: false,
       homework: true,
@@ -103,7 +102,7 @@ export class LectureComponent implements AfterViewInit {
     {
       id: 8,
       title: 'tổng quan 2',
-      duration: '05:43',
+      duration:1,
       finish: false,
       isExpanded: false,
       homework: true,
@@ -111,7 +110,7 @@ export class LectureComponent implements AfterViewInit {
     {
       id: 9,
       title: 'tổng quan 1',
-      duration: '01:23',
+      duration:1,
       finish: true,
       isExpanded: false,
       homework: true,
@@ -183,7 +182,7 @@ export class LectureComponent implements AfterViewInit {
     {
       id: 1,
       titleLecture: 'Bài giảng mới 1',
-      duration: '1:15',
+      duration: 1,
       valueNote: 'Ghi chú bài giảng mới...',
       urlLecture: '#',
       titleSection: 'title section',
@@ -193,7 +192,7 @@ export class LectureComponent implements AfterViewInit {
   newNote: NoteItemSaved = {
     id: 4,
     titleLecture: 'Bài giảng mới',
-    duration: '1:15',
+    duration: 1,
     valueNote: 'Ghi chú bài giảng mới...',
     urlLecture: '#',
     titleSection: 'title section',

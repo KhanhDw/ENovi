@@ -5,12 +5,12 @@
   <!-- left img -->
   <div class="flex items-center justify-center w-1/4 h-5/6">
     <img
-      class="object-cover w-full h-full rounded-md"
-      src="{{ item.img }}"
+      class="object-cover w-full h-full border rounded-md"
+      src="./imgCourse/{{ item.img }}"
       alt="AnhBiaKhoaHoc"
     />
   </div>
-  <!-- infor of course -->
+  <!-- infor of course -->  
   <div class="flex items-start justify-between w-3/4 pl-4 bg-white h-5/6">
     <!-- info -->
     <div
@@ -18,29 +18,30 @@
     >
       <!-- title -->
       <h1
-        class="w-[536px] overflow-hidden text-xl font-semibold leading-none break-all text-slate-800 whitespace-nowrap text-ellipsis"
+        class="w-[536px] overflow-hidden text-xl font-semibold break-all text-slate-800 whitespace-nowrap text-ellipsis"
       >
         {{ item.title }}
       </h1>
       <!-- description -->
       <p
-        class="w-[536px] mt-2 overflow-hidden text-md leading-none break-all text-slate-800 line-clamp-2 text-ellipsis"
+        class="w-[536px] mt-4 overflow-hidden text-md text-slate-800 line-clamp-1 text-ellipsis"
       >
         {{ item.description }}
       </p>
       <!-- author -->
       <p
-        class="w-[536px] mt-1 overflow-hidden text-md leading-none break-all line-clamp-1 text-gray-600 text-ellipsis"
+        class="w-[536px] mt-1 overflow-hidden text-md break-all line-clamp-1 text-gray-600 text-ellipsis"
       >
-        {{ item.author }}
+        <span>Tác giả: </span>{{ item.author }}
       </p>
       <!-- rate -->
       <p class="w-full overflow-hidden text-gray-600 text-md">
-        {{ item.rate }}
+        <span>Đánh giá: </span>{{ item.rate }}
+        <i class="text-yellow-400 bi bi-star-fill"></i>
       </p>
       <!-- duration -->
       <p class="w-[536px] overflow-hidden text-md text-gray-600">
-        {{ item.duration }}
+        <span>Thời lượng: </span>{{ item.duration }}
       </p>
     </div>
     <!-- price -->
@@ -48,9 +49,11 @@
       class="flex flex-col items-end justify-end w-1/4 text-xl font-bold bg-white"
     >
       <!-- giá -->
-      <h6>{{ item.price }}đ</h6>
+      <div>
+        <h6 [ngClass]="{'text-blue-700 px-1':+item.price === 0}">{{ +item.price === 0 ? 'Miễn phí' : item.price + 'đ' }}</h6>
+      </div>
       <!-- danh hiệu -->
-      <div class="flex flex-col">
+      <div hidden class="flex-col">
         <button
           class="px-2 py-1 mt-2 text-xs text-center transition-all bg-green-400 border border-transparent rounded-md cursor-default text-slate-700 shado w-md"
           type="button"

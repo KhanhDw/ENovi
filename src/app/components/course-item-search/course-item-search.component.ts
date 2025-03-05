@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import {CourseSearch} from '@app/interface/course'
 
 @Component({
     selector: 'app-course-item-search',
@@ -7,14 +8,10 @@ import { Component, Input } from '@angular/core';
     standalone: false
 })
 export class CourseItemSearchComponent {
-  // Nhận dữ liệu từ component cha
-  @Input() listCourse!: {
-    img: string;
-    title: string;
-    description: string;
-    author: string;
-    duration: string;
-    rate: string;
-    price: string;
-  }[];
+  @Input() listCourse: CourseSearch[] = [];
+
+  
+
+  
+
 }

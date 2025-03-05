@@ -43,7 +43,7 @@ export class ListCoursesAdminComponent implements OnInit {
             'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
           enrollments: 1500,
           rating: 4.5,
-          duration: '6 tuần',
+          duration: 1234,
           price: 2999000,
           lecture: 891,
           revenue: 632532000,
@@ -58,7 +58,7 @@ export class ListCoursesAdminComponent implements OnInit {
             'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
           enrollments: 2300,
           rating: 4.8,
-          duration: '8 tuần',
+          duration: 1234,
           price: 2999000,
           lecture: 891,
           revenue: 632532000,
@@ -70,8 +70,8 @@ export class ListCoursesAdminComponent implements OnInit {
     }
   }
 
-  getStatusClass(status: string): string {
-    return status === 'In Stock'
+  getStatusClass(status: number): string {
+    return status === 1
       ? 'bg-green-200 text-green-900'
       : 'bg-red-200 text-red-900';
   }

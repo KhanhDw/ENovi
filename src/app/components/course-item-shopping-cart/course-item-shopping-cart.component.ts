@@ -16,7 +16,7 @@ export class CourseItemShoppingCartComponent {
     title: string;
     description: string;
     author: string;
-    duration: string;
+    duration: number;
     rate: string;
     price: string;
   }[];

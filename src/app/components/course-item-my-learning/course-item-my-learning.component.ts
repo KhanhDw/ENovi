@@ -13,7 +13,7 @@ export class CourseItemMyLearningComponent {
     title: string;
     description: string;
     author: string;
-    duration: string;
+    duration: number;
     rate: string;
     price: string;
   };

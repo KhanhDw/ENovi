@@ -62,7 +62,12 @@ export class CookieStorageService {
    * @param path Đường dẫn của cookie (mặc định '/')
    */
   removeCookie(name: string, path: string = '/'): void {
-    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=${path};`;
+    if (isPlatformBrowser(this.platformId)) {
+      // Chỉ truy cập document khi chạy trên trình duyệt
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+    } else {
+      console.warn('Cannot remove cookie on non-browser platform');
+    }
   }
 
   /**
@@ -89,5 +94,16 @@ export class CookieStorageService {
       const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
       document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
     }
+  }
+
+  // Kiểm tra cookie hết hạn
+  checkCookieExpired(cookieName: string) {
+    const cookieValue = this.cookieService.get(cookieName);
+    if (!cookieValue) {
+      // console.log('Cookie đã hết hạn hoặc không tồn tại.');
+      return true;
+    }
+    // console.log('Cookie vẫn còn hiệu lực.');
+    return false;
   }
 }

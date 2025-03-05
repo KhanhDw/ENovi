@@ -1,0 +1,15 @@
+<nav class="inline-flex items-center p-1 space-x-2 bg-white rounded">
+    <button (click)="PagePrevious()" class="p-1 text-black bg-white border rounded hover:text-white hover:bg-[#2D2F31] duration-300 transition-all hover:border-blue-600" href="#">
+        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+    </button >
+    <p class="font-bold text-gray-500 font-signika">{{currentPageParent}} / {{totalPage}}</p>
+    <button (click)="PageNext()" class="p-1 text-black bg-white border rounded hover:text-white hover:bg-[#2D2F31] duration-300 transition-all hover:border-blue-600" href="#">
+        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+        </svg>
+    </button>
+</nav>

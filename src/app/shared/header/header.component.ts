@@ -1,18 +1,20 @@
-import { catchError } from 'rxjs/operators';
 import {
   Component,
   HostListener,
   ElementRef,
   OnInit,
   AfterViewInit,
+  ViewChild,
   NgZone,
 } from '@angular/core';
-import { Route } from '@angular/router';
+import { Route, Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from '@app/services/api.service';
 import { WindowRef } from '@app/services/window/window-ref.service';
 import { CookieStorageService } from '@app/services/cookie_storage/cookie-storage.service';
 import { Observable } from 'rxjs';
 import { User } from '@app/interface/user';
+import { NgForm } from '@angular/forms';
+import { ShareHeaderSearchService } from '@app/services/search/header_search/share-header-search.service';
 
 // Định nghĩa kiểu dữ liệu cho subitem
 interface Subitem {
@@ -47,10 +49,29 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   signupURL: string = '/register';
   loginURL: string = '/login';
 
+  private isLoggedOut = false; // Biến kiểm tra đã logout hay chưa
+  private checkSessionInterval: any;
+
   nameUser: string = '';
   emailUser: string = '';
   picture: string = '';
   role: string = '';
+
+  @ViewChild('searchForm') searchForm!: NgForm;
+
+  searchFormMode = {
+    SearchContext: '',
+  };
+
+  // search params
+  titleSearch: string = '';
+  ratingSearch: any;
+  languageSearch: any;
+  durationSearch: any;
+  levelSearch: any;
+  priceSearch: any;
+  // result seach of params
+  courseResultSearch: any;
 
   // dropdown
   isOpen: boolean = false;
@@ -68,7 +89,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private apiService: ApiService,
     private winRef: WindowRef,
     private cookieService: CookieStorageService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private router: Router,
+    private route: ActivatedRoute,
+    private shareHeaderSearchService: ShareHeaderSearchService
   ) {}
 
   get isLoggedIn(): boolean {
@@ -261,26 +285,34 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   isShowCol3: boolean = false;
 
   ngOnInit() {
-    const categoriesCookie = this.cookieService.getCookie("categories");
-    const categoriesCookieV1 = this.cookieService.getCookie("categoriesV1");
-    const categoriesCookieV2 = this.cookieService.getCookie("categoriesV2");
-    const fieldsLevel1  = categoriesCookie ? JSON.parse(categoriesCookie) : [];
-    const fieldsLevel2  = categoriesCookieV1 ? JSON.parse(categoriesCookieV1) : [];
-    const fieldsLevel3  = categoriesCookieV2 ? JSON.parse(categoriesCookieV2) : [];
+    const categoriesCookie = this.cookieService.getCookie('categories');
+    const categoriesCookieV1 = this.cookieService.getCookie('categoriesV1');
+    const categoriesCookieV2 = this.cookieService.getCookie('categoriesV2');
+    const fieldsLevel1 = categoriesCookie ? JSON.parse(categoriesCookie) : [];
+    const fieldsLevel2 = categoriesCookieV1
+      ? JSON.parse(categoriesCookieV1)
+      : [];
+    const fieldsLevel3 = categoriesCookieV2
+      ? JSON.parse(categoriesCookieV2)
+      : [];
 
-    const structuredFields = fieldsLevel1.map((field1: { id: any; }) => ({
+    const structuredFields = fieldsLevel1.map((field1: { id: any }) => ({
       ...field1,
       subfields: fieldsLevel2
-        .filter((field2: { categories_id: any; }) => field2.categories_id === field1.id)
-        .map((field2: { id: any; }) => ({ 
+        .filter(
+          (field2: { categories_id: any }) => field2.categories_id === field1.id
+        )
+        .map((field2: { id: any }) => ({
           ...field2,
           subitems: fieldsLevel3
-            .filter((field3: { categoriesV1_id: any; }) => field3.categoriesV1_id === field2.id)
-            .map((field3: { name: any; }) => field3.name)
-        }))
+            .filter(
+              (field3: { categoriesV1_id: any }) =>
+                field3.categoriesV1_id === field2.id
+            )
+            .map((field3: { name: any }) => field3.name),
+        })),
     }));
 
-    
     this.fields = structuredFields;
 
     if (this.fields.length > 0) {
@@ -288,6 +320,33 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     this.updateInforUser();
+
+    this.getQueryParam();
+  }
+
+  getQueryParam() {
+    // Lấy giá trị title từ query params (nếu có) khi component khởi tạo
+    this.route.queryParams.subscribe((params) => {
+      const title = params['title'];
+      const rating = params['rating'];
+      const language = params['language'];
+      const duration = params['duration'];
+      const level = params['level'];
+      const price = params['price'];
+      const page = params['page'];
+
+      if (title || rating || language || duration || level || price) {
+        this.fetchResults(
+          title,
+          rating,
+          language,
+          duration,
+          level,
+          price,
+          page
+        );
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -402,5 +461,77 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   RemoveInfoUserLogout(): void {
     this.cookieService.clearAllCookies();
     console.log(this.cookieService.getAllCookieNames());
+  }
+
+  submitSeach() {
+    const searchcontext = this.searchFormMode.SearchContext.trim();
+    if (searchcontext != '') {
+      if (searchcontext.trim()) {
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: {
+            title: searchcontext,
+            page: this.shareHeaderSearchService.currentSearchTermPage,
+          },
+          queryParamsHandling: 'merge', // Giữ nguyên các query params khác nếu có
+        });
+      }
+      // Điều hướng với query params mới
+      this.router.navigate(['/search'], {
+        queryParams: { title: searchcontext },
+      });
+      this.fetchResults(searchcontext, 0, -1, 0, '', 0, 1);
+    }
+  }
+
+  fetchResults(
+    titleSearch: string,
+    ratingSearch: number,
+    languageSearch: number,
+    durationSearch: number,
+    levelSearch: string,
+    priceSearch: number,
+    page: number
+  ) {
+    if (titleSearch !== '') {
+      this.apiService.searchServiceService
+        .searchCoursesByTitle(
+          titleSearch,
+          ratingSearch,
+          languageSearch,
+          durationSearch,
+          levelSearch,
+          priceSearch,
+          page
+        )
+        .subscribe({
+          next: (data) => {
+            if (data.success) {
+              // console.log(data.success);
+              // console.log(data.courses);
+              // console.log(data.total);
+              // console.log(data.currentPage);
+
+              this.shareHeaderSearchService.updateSearchTerm(
+                titleSearch,
+                ratingSearch,
+                languageSearch,
+                durationSearch,
+                levelSearch,
+                priceSearch,
+                data.courses,
+                data.currentPage,
+                data.total
+              );
+            }
+          },
+          error: (error) => {
+            // console.error('Lỗi HTTP 0 self signal chứng chỉ bảo mật:', error);
+            console.log(
+              'Lỗi HTTP 0 self signal chứng chỉ https header component:'
+            );
+          },
+        });
+    }
   }
 }

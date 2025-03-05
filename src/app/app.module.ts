@@ -61,6 +61,7 @@ import { CourseNewComponent } from './features/user/courses-of-instructor/course
 import { AuthCallbackComponent } from './components/System/auth-callback/auth-callback.component';
 import { ResetPasswordComponent } from './features/reset-password/reset-password.component';
 import { RegisterInstructorComponent } from './features/user/register-instructor/register-instructor.component';
+import { PaginationComponent } from './components/pagination/pagination.component';
 
 @NgModule({
   declarations: [
@@ -125,6 +126,7 @@ import { RegisterInstructorComponent } from './features/user/register-instructor
     AuthCallbackComponent,
     ResetPasswordComponent,
     RegisterInstructorComponent,
+    PaginationComponent,
   ],
   imports: [
     BrowserModule,

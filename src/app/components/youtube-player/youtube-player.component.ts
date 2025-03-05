@@ -5,7 +5,10 @@ import {
   ViewChild,
   NgZone,
   Input,
+  Renderer2,
 } from '@angular/core';
+
+import { WindowRef } from './../../services/window/window-ref.service';
 
 @Component({
   selector: 'app-youtube-player',
@@ -14,7 +17,12 @@ import {
   standalone: false,
 })
 export class YoutubePlayerComponent implements OnInit {
-  constructor(private zone: NgZone) {} // Thêm `NgZone` vào constructor
+  constructor(
+    private zone: NgZone,
+    private renderer: Renderer2,
+    private elementRef: ElementRef,
+    private windowRef: WindowRef
+  ) {} // Thêm `NgZone` vào constructor
 
   @Input() titleCourse: string = '';
 
@@ -33,9 +41,12 @@ export class YoutubePlayerComponent implements OnInit {
     if (typeof this.YT !== 'undefined') {
       this.loadPlayer();
     } else {
-      (window as any).onYouTubeIframeAPIReady = () => {
-        this.loadPlayer();
-      };
+      if (this.windowRef.nativeWindow) {
+        (window as any).onYouTubeIframeAPIReady = () => {
+          this.loadPlayer();
+        };
+        console.log("hello");
+      }
     }
 
     // luôn hiển thị banner khi từ nới khác đến
@@ -44,7 +55,8 @@ export class YoutubePlayerComponent implements OnInit {
 
   @ViewChild('player', { static: false }) playerElement!: ElementRef;
 
-  ngAfterViewInit(): void {
+  ngAfterViewInit() {
+    if (this.windowRef.nativeWindow){
     // Chỉ truy cập phần tử DOM sau khi view đã khởi tạo
     if ((window as any).YT && (window as any).YT.Player) {
       this.loadPlayer();
@@ -52,8 +64,12 @@ export class YoutubePlayerComponent implements OnInit {
       (window as any).onYouTubeIframeAPIReady = () => {
         this.loadPlayer();
       };
-    }
+    }}
   }
+
+  //-----------------------------------
+
+  //-----------------------------------
 
   loadPlayer() {
     this.player = new (window as any).YT.Player(
@@ -73,8 +89,10 @@ export class YoutubePlayerComponent implements OnInit {
           iv_load_policy: 3,
         },
         events: {
-          onReady: (event: any) => this.onPlayerReady(event),
-          onPlayerStateChange: (event: any) => this.onPlayerStateChange(event),
+          onReady: (event: any) => {
+            this.onPlayerReady(event);
+          },
+          onStateChange: (event: any) => this.onPlayerStateChange(event),
         },
       }
     );
@@ -123,12 +141,10 @@ export class YoutubePlayerComponent implements OnInit {
     setInterval(() => {
       if (this.player && this.player.getCurrentTime) {
         this.zone.run(() => {
-          // this.currentTime = Math.floor(this.player.getCurrentTime()); // Thông báo Angular
           this.currentTime = this.player.getCurrentTime(); // Thông báo Angular
-          // console.log(this.currentTime + 'fdsfsdfsdfs');
         });
       }
-    }, 1000); // Cập nhật mỗi giây
+    }, 1000);
   }
 
   formatTime(seconds: number): string {
@@ -152,5 +168,14 @@ export class YoutubePlayerComponent implements OnInit {
 
   toggleNote() {
     this.showNote = !this.showNote;
+  }
+
+  // =====================
+  // giải phóng tài nguyên
+  // =====================
+  ngOnDestroy() {
+    if (this.player) {
+      this.player.destroy(); // Quan trọng:  Giải phóng tài nguyên khi component bị hủy
+    }
   }
 }

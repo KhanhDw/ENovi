@@ -31,7 +31,7 @@ export class AdminCourseDetailComponent {
       'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
     enrollments: 1500,
     rating: 4.5,
-    duration: '6 tuần',
+    duration: 123,
     price: 2999000,
     lecture: 891,
     revenue: 632532000,

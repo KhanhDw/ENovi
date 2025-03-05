@@ -6,6 +6,7 @@ import {
   OnInit,
   NgZone,
   ChangeDetectorRef,
+  ElementRef,
   AfterViewInit,
 } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
@@ -24,7 +25,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     private cookieService: CookieStorageService,
     private cdr: ChangeDetectorRef,
     private ngZone: NgZone,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private elementRef: ElementRef
   ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -129,6 +131,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       setInterval(() => {
         this.ngZone.run(() => {
           this.updateInforUser();
+         
         });
       }, 500);
     });
@@ -141,19 +144,18 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-
     if (
       this.cookieService.getCookie('categories') === undefined ||
       this.cookieService.getCookie('categories') === null
-    ){
-      this.getCaterogyAPI();}
+    ) {
+      this.getCaterogyAPI();
+    }
   }
 
   getCaterogyAPI() {
     this.apiService.categoriesServiceService.GetCategoryAPI().subscribe({
       next: (res) => {
         if (res?.success) {
-
           console.log('categories:', res.categories);
           console.log('categoriesV1:', res.categoriesV1);
           console.log('categoriesV2:', res.categoriesV2);
@@ -175,7 +177,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         }
       },
       error: (err) => {
-        console.error('Lỗi khi gửi yêu cầu:', err);
+        // console.error('Lỗi khi gửi yêu cầu:', err);
       },
     });
   }
@@ -191,18 +193,29 @@ export class AppComponent implements OnInit, AfterViewInit {
     event.preventDefault();
   }
 
-  // Chặn các phím tắt mở DevTools
-  @HostListener('document:keydown', ['$event'])
-  onKeyDown(event: KeyboardEvent) {
-    // Chặn các phím tắt mở DevTools
-    if (
-      event.keyCode === 123 || // F12
-      (event.ctrlKey && event.shiftKey && event.keyCode === 73) || // Ctrl + Shift + I
-      (event.ctrlKey && event.shiftKey && event.keyCode === 74) || // Ctrl + Shift + J
-      (event.ctrlKey && event.keyCode === 85) // Ctrl + U
-    ) {
-      // event.preventDefault();
-      // alert('DevTools is blocked!');
-    }
-  }
+  // chặn người dùng mở devtool - thành công
+  // @HostListener('document:keydown', ['$event'])
+  // handleKeyboardEvent(event: KeyboardEvent): boolean {
+  //   // Chặn F12
+  //   if (event.key === 'F12') {
+  //     event.preventDefault();
+  //     return false;
+  //   }
+
+  //   // Chặn Ctrl+Shift+I (Inspect Element) hoặc Ctrl+Shift+J (Console)
+  //   if (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) {
+  //     event.preventDefault();
+  //     return false;
+  //   }
+
+  //   // Chặn Ctrl+U (View Source) - tùy chọn
+  //   if (event.ctrlKey && event.key === 'U') {
+  //     event.preventDefault();
+  //     return false;
+  //   }
+
+  //   return true;
+  // }
+
+ 
 }

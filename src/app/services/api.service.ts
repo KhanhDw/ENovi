@@ -10,6 +10,7 @@ import { CategoriesServiceService } from './category/categories-service.service'
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { from, Observable } from 'rxjs';
+import { SearchServiceService } from './search/search-service.service';
 //
 @Injectable({
   providedIn: 'root',
@@ -25,7 +26,8 @@ export class ApiService {
     public resetPasswordService: ResetPasswordService,
     public loginServiceService: LoginServiceService,
     public registerServiceService: RegisterServiceService,
-    public categoriesServiceService: CategoriesServiceService
+    public categoriesServiceService: CategoriesServiceService,
+    public searchServiceService: SearchServiceService,
   ) {
     this.loginServiceService.setApiUrl(`${this.API_URL}/login`);
     this.authGoogleServiceService.setApiUrl(`${this.API_URL}/auth`);
@@ -34,5 +36,6 @@ export class ApiService {
     this.userServiceService.setApiUrl(`${this.API_URL}/user`);
     this.registerServiceService.setApiUrl(`${this.API_URL}/register`);
     this.categoriesServiceService.setApiUrl(`${this.API_URL}/categories`);
+    this.searchServiceService.setApiUrl(`${this.API_URL}/search`);
   }
 }
