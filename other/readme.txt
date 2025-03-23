@@ -55,3 +55,29 @@ git trên vsc
   -> "git.autoRefresh": false
 
 +> điều này làm giảm tiến trình tăng tốc độ sử lý của vsc
+
+
+this.router
+.navigate(['/course', id, encodeURIComponent(title)])
+.then(() => {
+  window.location.reload(); // đến trang tiếp theo và reload
+});
+
+
+// cập nhật danh sách UI ngay lập tức, sịn xò với dữ liệu array lớn
+-- trong file.component.html
+*ngFor="let item of updateCourse.section; trackBy: trackByFn"
+
+-- trong file.component.ts
+trackByFn(index: number, item: any): number {
+  return item.id; // Dùng `id` làm khóa nhận diện
+}
+
+
+chưa thể tối ưu hiệu suất cho web. và còn một số lỗi liên quan như:
+  Sử dụng quá nhiều ZoneAwarePromise,
+  Nhiều module được giữ trong bộ nhớ,
+  Các sự kiện chưa được dọn dẹp,
+  Module liên quan đến UI, animation, và DOM,
+  một số pending activities không được giải phóng
+điều này gây ra lỗi JavaScript heap out of memory,

@@ -42,6 +42,7 @@ import { CourseNewComponent } from './features/user/courses-of-instructor/course
 import { CategoriesComponent } from './features/admin/categories/categories.component';
 import { AuthCallbackComponent } from './components/System/auth-callback/auth-callback.component';
 import { ResetPasswordComponent } from './features/reset-password/reset-password.component';
+//service prevent reload page
 
 
 
@@ -58,11 +59,10 @@ const routes: Routes = [
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'my-learning', component: MyLearningComponent },
-  { path: 'course', component: CourseComponent },
+  { path: 'course/:id/:title', component: CourseComponent },
   { path: 'payment', component: PaymentComponent },
   {
-    path: 'course',
-    children: [{ path: 'lecture', component: LectureComponent }],
+    path: 'course/:title/lecture', component: LectureComponent
   },
 
   // =====
@@ -106,7 +106,7 @@ const routes: Routes = [
           {
             path: 'courses-instructor',
             children: [
-              { path: 'update', component: CourseUpdateComponent },
+              { path: 'update/:title', component: CourseUpdateComponent  },
               { path: 'new', component: CourseNewComponent },
             ],
           },

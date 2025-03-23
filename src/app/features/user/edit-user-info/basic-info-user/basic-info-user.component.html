@@ -1,55 +1,62 @@
-<form>
-  <div class="grid grid-cols-1 gap-6 mb-6 md:grid-cols-2">
+<form class="w-full min-h-screen mb-10">
+  <div class="flex w-[1372px] items-start justify-center gap-6 mb-6 flex-wrap">
     <!-- left -->
-    <div class="flex flex-col">
+    <div class="flex flex-col justify-center w-full gap-3">
       <div>
-        <label class="block mb-2 text-gray-700">Tên</label>
+        <label class="block mb-2 font-bold text-gray-700">Tên hiển thị</label>
         <input
           type="text"
           class="w-full p-2 border border-gray-300 rounded"
-          value="Ngô"
+          [value]="getUserId().name"
         />
       </div>
-      <div>
-        <label class="block mb-2 text-gray-700">Họ</label>
-        <input
-          type="text"
-          class="w-full p-2 border border-gray-300 rounded"
-          value="Khánh"
-        />
-      </div>
-      <div>
-        <label class="block mb-2 text-gray-700">Lĩnh vực</label>
+
+      <div hidden>
+        <label class="block mb-2 font-bold text-gray-700">Lĩnh vực</label>
         <input
           type="text"
           class="w-full p-2 border border-gray-300 rounded"
           value="Instructor at Udemy"
         />
       </div>
-      <div>
-        <label class="block mb-2 text-gray-700">Tiểu sử</label>
+      <div *ngIf="showTieuSuGiangVien !== 'student'">
+        <label class="block mb-2 font-bold text-gray-700"
+          >Website cá nhân</label
+        >
+        <input
+          type="text"
+          class="w-full p-2 border border-gray-300 rounded"
+          placeholder="Url"
+          [value]="getUserId().website"
+        />
+      </div>
+      <div *ngIf="showTieuSuGiangVien !== 'student'">
+        <label class="block mb-2 font-bold text-gray-700"
+          >Tiểu sử giảng viên</label
+        >
 
         <quill-editor
           placeholder="Viết tiểu sư của bạn"
           theme="snow"
           [modules]="modules"
           class="w-full p-2 border border-gray-300 rounded"
+          [(ngModel)]="biography"
+          [ngModelOptions]="{standalone: true}"
         ></quill-editor>
 
         <div class="flex items-center gap-2">
           <p class="mt-2 text-sm text-gray-500">
-            Để giúp người học tìm hiểu thêm về bạn, tiểu sử của bạn phải phản
-            ánh Uy tín, Sự đồng cảm, Niềm đam mê và Tính cách của bạn. Tiểu sử
-            của bạn phải có ít nhất 50 từ, liên kết và không được phép sử dụng
-            mã phiếu giảm giá.
+            Tiểu sử cần ít nhất 50 từ, phản ánh kinh nghiệm và kiến thức của
+            bạn, để học sinh có cái nhìn tổng quan và lượt chọn khóa học của
+            bạn. Không dùng mã giảm giá trong phần này.
           </p>
         </div>
       </div>
     </div>
     <!-- right -->
-    <div class="flex flex-col">
+    <!-- <div hidden class="flex-col w-full gap-2">
       <div>
-        <label class="block mb-2 text-gray-700">Website</label>
+        <label class="block mb-2 text-gray-700">Website cá nhân</label>
         <input
           type="text"
           class="w-full p-2 border border-gray-300 rounded"
@@ -57,7 +64,7 @@
         />
       </div>
 
-      <div>
+      <div hidden>
         <label class="block mb-2 text-gray-700">X</label>
         <div class="flex">
           <input
@@ -73,7 +80,7 @@
         </div>
       </div>
 
-      <div>
+      <div hidden>
         <label class="block mb-2 text-gray-700">Facebook</label>
         <div class="flex">
           <input
@@ -89,7 +96,7 @@
         </div>
       </div>
 
-      <div>
+      <div hidden>
         <label class="block mb-2 text-gray-700">LinkedIn</label>
         <div class="flex">
           <input
@@ -105,7 +112,7 @@
         </div>
       </div>
 
-      <div>
+      <div hidden>
         <label class="block mb-2 text-gray-700">Youtube</label>
         <div class="flex">
           <input
@@ -121,7 +128,7 @@
         </div>
       </div>
 
-      <div>
+      <div hidden>
         <label class="block mb-2 text-gray-700">Language</label>
         <select class="w-full p-2 border border-gray-300 rounded">
           <option>Tiếng Việt</option>
@@ -134,9 +141,14 @@
           <option>Tiếng Ấn Độ</option>
         </select>
       </div>
-    </div>
+    </div> -->
   </div>
-  <button type="submit" class="px-4 py-2 text-white bg-purple-500 rounded">
-    Lưu
-  </button>
+  <div class="flex items-center justify-end w-full">
+    <button
+      type="submit"
+      class="flex items-end px-12 py-2 font-bold text-white bg-purple-500 rounded w-fit"
+    >
+      Lưu
+    </button>
+  </div>
 </form>

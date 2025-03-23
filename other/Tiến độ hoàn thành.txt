@@ -96,3 +96,55 @@ doanh thu
   Báo cáo tài chính có thể được tạo tự động mỗi tuần/tháng dưới dạng file Excel hoặc PDF.
 
 
+cần sửa lại 
+đăng nhập - đăng ký - đăng xuất
+
+làm tiếp
+  thêm/sửa/xóa - khóa học
+  
+
+
+cập nhật thông tin từ server cho chi tiết khóa học
+	khóa học
+		tên khóa học
+		giá khóa học
+		phần trăm giảm giá
+		tác giả
+		mô tả
+		trình độ khóa học
+		ngày tạo
+		ngày cập nhật
+		đánh giá
+		thời lượng tổng
+		ngôn ngữ
+		
+	chi tiết khóa học
+		học được gì 
+		tổng quan về khóa học 
+		yêu cầu khóa h
+		
+	category
+		tên chủ đề khóa học
+	
+	section
+		tên section
+		
+	lecture
+		tên bài học
+		thời lượng
+
+	user
+		hồ sơ giảng viên
+		đánh giá 
+		số khóa học
+		kinh nghiệm làm việc
+		lượt đánh giá
+	
+	comment
+		id 
+		nameUser
+		imgUser
+		context comment
+		createCommentAt
+		
+		

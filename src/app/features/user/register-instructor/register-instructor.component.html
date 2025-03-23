@@ -1,77 +1,168 @@
-<div class="flex h-screen ">
-    <div class="font-[sans-serif] bg-white max-w-4xl flex items-center mx-auto md:h-screen p-4">
-        <div class="grid md:grid-cols-3 items-center shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] rounded-xl overflow-hidden">
-          <div class="flex flex-col justify-center min-h-full px-4 py-4 space-y-8 max-md:order-1 md:space-y-16 max-md:mt-16 bg-gradient-to-r from-gray-900 to-gray-700 lg:px-8">
-            <div>
-              <h4 class="text-lg text-white">Create Your Account</h4>
-              <p class="text-[13px] text-gray-300 mt-3 leading-relaxed">Welcome to our registration page! Get started by creating your account.</p>
-            </div>
-            <div>
-              <h4 class="text-lg text-white">Simple & Secure Registration</h4>
-              <p class="text-[13px] text-gray-300 mt-3 leading-relaxed">Our registration process is designed to be straightforward and secure. We prioritize your privacy and data security.</p>
-            </div>
-          </div>
-  
-          <form class="w-full px-6 py-6 mx-auto md:col-span-2 sm:px-16 max-md:max-w-xl">
-            <div class="mb-6">
-              <h3 class="text-xl font-bold text-gray-800">Create an account</h3>
-            </div>
-  
-            <div class="space-y-6">
-              <div>
-                <label class="block mb-2 text-sm text-gray-600">Name</label>
-                <div class="relative flex items-center">
-                  <input name="name" type="text" required class="text-gray-800 bg-white border border-gray-300 w-full text-sm pl-4 pr-8 py-2.5 rounded-md outline-blue-500" placeholder="Enter name" />
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" class="absolute w-4 h-4 right-4" viewBox="0 0 24 24">
-                    <circle cx="10" cy="7" r="6" data-original="#000000"></circle>
-                    <path d="M14 15H6a5 5 0 0 0-5 5 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 5 5 0 0 0-5-5zm8-4h-2.59l.3-.29a1 1 0 0 0-1.42-1.42l-2 2a1 1 0 0 0 0 1.42l2 2a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42l-.3-.29H22a1 1 0 0 0 0-2z" data-original="#000000"></path>
-                  </svg>
-                </div>
-              </div>
-  
-              <div>
-                <label class="block mb-2 text-sm text-gray-600">Email Id</label>
-                <div class="relative flex items-center">
-                  <input name="email" type="email" required class="text-gray-800 bg-white border border-gray-300 w-full text-sm pl-4 pr-8 py-2.5 rounded-md outline-blue-500" placeholder="Enter email" />
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" class="absolute w-4 h-4 right-4" viewBox="0 0 682.667 682.667">
-                    <defs>
-                      <clipPath id="a" clipPathUnits="userSpaceOnUse">
-                        <path d="M0 512h512V0H0Z" data-original="#000000"></path>
-                      </clipPath>
-                    </defs>
-                    <g clip-path="url(#a)" transform="matrix(1.33 0 0 -1.33 0 682.667)">
-                      <path fill="none" stroke-miterlimit="10" stroke-width="40" d="M452 444H60c-22.091 0-40-17.909-40-40v-39.446l212.127-157.782c14.17-10.54 33.576-10.54 47.746 0L492 364.554V404c0 22.091-17.909 40-40 40Z" data-original="#000000"></path>
-                      <path d="M472 274.9V107.999c0-11.027-8.972-20-20-20H60c-11.028 0-20 8.973-20 20V274.9L0 304.652V107.999c0-33.084 26.916-60 60-60h392c33.084 0 60 26.916 60 60v196.653Z" data-original="#000000"></path>
-                    </g>
-                  </svg>
-                </div>
-              </div>
-  
-              <div>
-                <label class="block mb-2 text-sm text-gray-600">Password</label>
-                <div class="relative flex items-center">
-                  <input name="password" type="password" required class="text-gray-800 bg-white border border-gray-300 w-full text-sm pl-4 pr-8 py-2.5 rounded-md outline-blue-500" placeholder="Enter password" />
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" class="absolute w-4 h-4 cursor-pointer right-4" viewBox="0 0 128 128">
-                    <path d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z" data-original="#000000"></path>
-                  </svg>
-                </div>
-              </div>
-  
-              <div class="flex items-center">
-                <input id="remember-me" name="remember-me" type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded shrink-0 focus:ring-blue-500" />
-                <label for="remember-me" class="block ml-3 text-sm text-gray-600">
-                  I accept the <a href="javascript:void(0);" class="ml-1 font-semibold text-blue-600 hover:underline">Terms and Conditions</a>
-                </label>
-              </div>
-            </div>
-  
-            <div class="mt-8">
-              <button type="button" class="w-full py-2.5 px-4 tracking-wider text-sm rounded-md text-white bg-gray-700 hover:bg-gray-800 focus:outline-none">
-                Create an account
-              </button>
-            </div>
-            <p class="mt-6 text-sm text-center text-gray-600">Already have an account? <a href="javascript:void(0);" class="ml-1 font-semibold text-blue-600 hover:underline">Login here</a></p>
-          </form>
+<div class="flex h-screen">
+  <div
+    class="font-[sans-serif] bg-white max-w-4xl flex items-center mx-auto md:h-screen p-4"
+  >
+    <div
+      class="grid md:grid-cols-3 items-center shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] rounded-xl overflow-hidden"
+    >
+      <div
+        class="flex flex-col justify-center min-h-full px-4 py-4 space-y-8 max-md:order-1 md:space-y-16 max-md:mt-16 bg-gradient-to-r from-gray-900 to-gray-700 lg:px-8"
+      >
+        <div>
+          <h4 class="text-lg text-white">Đăng ký giảng viên</h4>
+          <p class="text-[13px] text-gray-300 mt-3 leading-relaxed">
+            Nâng cấp tài khoản lên cấp độ giảng viên và chia sẽ những kiến thức
+            tuyệt với của bạn đến mọi người
+          </p>
+        </div>
+        <div>
+          <h4 class="text-lg text-white">
+            Công việc đơn giản và tạo ra thu nhập
+          </h4>
+          <p class="text-[13px] text-gray-300 mt-3 leading-relaxed">
+            Những khóa học của bạn sẽ đến tay mọi người và lợi nhuận sẽ đến tay
+            bạn!
+          </p>
         </div>
       </div>
+
+      <form #registerInstructorFrom="ngForm" (ngSubmit)="onSubmit()"
+        class="w-full px-6 py-6 mx-auto md:col-span-2 sm:px-16 max-md:max-w-xl"
+      >
+        <div class="mb-6">
+          <h3 class="text-2xl font-bold text-gray-800 uppercase">
+            Đăng ký trở thành giảng viên
+          </h3>
+        </div>
+
+        <div class="space-y-1">
+          <h1 class="text-xl font-semibold">Điều khoản</h1>
+          <div
+            class="flex flex-wrap w-full h-56 p-1 overflow-y-auto border rounded-md border-slate-600"
+          >
+            <section class="mb-4">
+              <h2 class="text-xl font-semibold">Điều 1: Định nghĩa</h2>
+              <ul class="pl-5 list-disc">
+                <li>
+                  <strong>Website:</strong> Nền tảng học trực tuyến do [Tên Công
+                  Ty/Tổ Chức] vận hành và quản lý.
+                </li>
+                <li>
+                  <strong>Giảng viên:</strong> Cá nhân/tổ chức đăng ký tài khoản
+                  giảng viên trên Website.
+                </li>
+                <li>
+                  <strong>Học viên:</strong> Cá nhân đăng ký khóa học trên
+                  Website.
+                </li>
+                <li>
+                  <strong>Doanh thu khóa học:</strong> Tổng số tiền học viên
+                  thanh toán.
+                </li>
+              </ul>
+            </section>
+
+            <section class="mb-4">
+              <h2 class="text-xl font-semibold">
+                Điều 2: Quyền và Nghĩa vụ của Giảng viên
+              </h2>
+              <p class="font-medium">1. Giảng viên có quyền:</p>
+              <ul class="pl-5 list-disc">
+                <li>Đăng tải và quản lý khóa học.</li>
+                <li>Nhận 90% doanh thu từ mỗi khóa học bán được.</li>
+                <li>Quản lý nội dung và tương tác với học viên.</li>
+              </ul>
+              <p class="mt-2 font-medium">2. Giảng viên có nghĩa vụ:</p>
+              <ul class="pl-5 list-disc">
+                <li>Đảm bảo nội dung tuân thủ pháp luật.</li>
+                <li>Cập nhật nội dung khóa học khi cần thiết.</li>
+                <li>Không bán khóa học trên Website cho bên thứ ba.</li>
+              </ul>
+            </section>
+
+            <section class="mb-4">
+              <h2 class="text-xl font-semibold">
+                Điều 3: Quyền và Nghĩa vụ của Website
+              </h2>
+              <p class="font-medium">1. Website có quyền:</p>
+              <ul class="pl-5 list-disc">
+                <li>Thu 10% doanh thu từ mỗi khóa học bán được.</li>
+                <li>Kiểm duyệt và từ chối các khóa học không phù hợp.</li>
+                <li>Đình chỉ tài khoản giảng viên nếu vi phạm chính sách.</li>
+              </ul>
+              <p class="mt-2 font-medium">2. Website có nghĩa vụ:</p>
+              <ul class="pl-5 list-disc">
+                <li>Cung cấp nền tảng ổn định.</li>
+                <li>Hỗ trợ giảng viên trong việc quảng bá khóa học.</li>
+                <li>Thanh toán doanh thu cho giảng viên theo định kỳ.</li>
+              </ul>
+            </section>
+
+            <section class="mb-4">
+              <h2 class="text-xl font-semibold">
+                Điều 4: Phương thức thanh toán
+              </h2>
+              <ul class="pl-5 list-disc">
+                <li>Học viên thanh toán học phí qua Website.</li>
+                <li>
+                  Website thu 10% và thanh toán 90% còn lại cho giảng viên.
+                </li>
+                <li>Thanh toán cho giảng viên theo chu kỳ định sẵn.</li>
+              </ul>
+            </section>
+
+            <section class="mb-4">
+              <h2 class="text-xl font-semibold">Điều 5: Chấm dứt hợp đồng</h2>
+              <ul class="pl-5 list-disc">
+                <li>
+                  Giảng viên có thể chấm dứt hợp đồng bằng cách gửi yêu cầu
+                  trước 30 ngày.
+                </li>
+                <li>
+                  Website có quyền chấm dứt hợp đồng nếu giảng viên vi phạm.
+                </li>
+              </ul>
+            </section>
+
+            <section class="mb-4">
+              <h2 class="text-xl font-semibold">Điều 6: Điều khoản chung</h2>
+              <ul class="pl-5 list-disc">
+                <li>
+                  Hợp đồng có hiệu lực khi giảng viên đăng ký và được Website
+                  chấp thuận.
+                </li>
+                <li>Các điều khoản có thể thay đổi và sẽ được thông báo.</li>
+                <li>
+                  Mọi tranh chấp sẽ được giải quyết theo pháp luật hiện hành.
+                </li>
+              </ul>
+            </section>
+          </div>
+
+          <div class="flex items-center">
+            <input
+            [(ngModel)]="aceptTerms" required
+              id="checkTerms"
+              name="checkTerms"
+              type="checkbox"
+              class="w-4 h-4 text-blue-600 border-gray-300 rounded shrink-0 focus:ring-blue-500"
+            />
+            <label for="remember-me" class="block ml-3 text-sm text-gray-600">
+              Tôi đồng ý với những điều khoản bên trên
+            </label>
+          </div>
+        </div>
+
+        <div class="mt-8">
+          <button
+            type="submit" [disabled]="!aceptTerms"
+            [ngClass]="{'cursor-not-allowed': !aceptTerms}"
+            class="w-full py-2.5 px-4 tracking-wider text-sm rounded-md text-white bg-gray-700 hover:bg-gray-800 focus:outline-none"
+          >
+            Đăng ký giảng viên
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

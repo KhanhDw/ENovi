@@ -17,6 +17,7 @@ export class ShareHeaderSearchService {
   private searchTermSourceLevel = new BehaviorSubject<any>('');
   private searchTermSourcePage = new BehaviorSubject<any>('');
   private searchTermSourceTotalItem = new BehaviorSubject<any>('');
+  private searchTermSourceSort = new BehaviorSubject<any>('');
 
   currentSearchResultService = this.searchResultService.asObservable();
 
@@ -28,6 +29,7 @@ export class ShareHeaderSearchService {
   currentSearchTermLevel = this.searchTermSourceLevel.asObservable();
   currentSearchTermPage = this.searchTermSourcePage.asObservable();
   currentSearchTermTotalItem = this.searchTermSourceTotalItem.asObservable();
+  currentSearchTermSort = this.searchTermSourceSort.asObservable();
 
   updateSearchTerm(
     Title: any,
@@ -38,7 +40,8 @@ export class ShareHeaderSearchService {
     Level: any,
     resultSearch: any,
     page: any,
-    totalItem: number
+    totalItem: number,
+    sort: string
   ) {
     this.searchTermSourceTitle.next(Title);
     this.searchTermSourceRating.next(Rating);
@@ -48,8 +51,22 @@ export class ShareHeaderSearchService {
     this.searchTermSourceLevel.next(Level);
     this.searchTermSourcePage.next(page);
     this.searchTermSourceTotalItem.next(totalItem);
+    this.searchTermSourceSort.next(sort);
 
     this.searchResultService.next(resultSearch);
     // console.log('resultSearch:' + resultSearch);
+  }
+
+  clearSearchData() {
+    this.searchTermSourceTitle.next('');
+    this.searchTermSourceRating.next('');
+    this.searchTermSourcePrice.next('');
+    this.searchTermSourceDuration.next('');
+    this.searchTermSourceLanguage.next('');
+    this.searchTermSourceLevel.next('');
+    this.searchTermSourcePage.next('');
+    this.searchTermSourceTotalItem.next('');
+    this.searchTermSourceSort.next('');
+    this.searchResultService.next('');
   }
 }

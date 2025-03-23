@@ -7,7 +7,7 @@
         Quản lý người dùng
       </h1>
 
-      <nav class="flex flex-wrap gap-2">
+      <nav hidden class="flex-wrap gap-2 ">
         <button
           (click)="toggleDataTable(1)"
           class="px-4 py-2 text-gray-700 transition-colors bg-white border border-gray-200 rounded-md hover:bg-gray-100"
@@ -38,10 +38,10 @@
       <div
         class="flex items-center justify-between w-full px-5 py-4 border-b border-gray-600 h-[80px]"
       >
-        <h2 class="w-full text-2xl font-medium text-gray-800">bảng dữ liệu</h2>
+        <h2 class="w-full text-2xl font-bold text-gray-800 uppercase">Dữ liệu người dùng</h2>
         <!-- center -->
         <div class="flex items-center justify-between w-full gap-2 sm:flex-row">
-          <div class="flex flex-col">
+          <div hidden class="flex-col ">
             <select
               [(ngModel)]="selectedFilter"
               class="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none focus:shadow-sm focus:shadow-black"
@@ -63,10 +63,11 @@
             <div class="w-full max-w-sm min-w-[300px]">
               <div class="relative">
                 <input
-                  class="w-full py-2 pl-3 text-sm transition duration-300 bg-transparent border rounded-md shadow-sm placeholder:text-slate-400 text-slate-700 border-slate-200 pr-28 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 focus:shadow"
+                [(ngModel)]="searchKey"
+                  class="max-w-full py-2 pl-3 w-[500px] text-sm transition duration-300 bg-transparent border rounded-md shadow-sm placeholder:text-slate-400 text-slate-700 border-slate-200 pr-28 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 focus:shadow"
                   placeholder="Nhập nội dung cần tìm..."
                 />
-                <button
+                <button (click)="btnSearch()"
                   class="absolute top-1 right-1 flex items-center rounded bg-slate-800 py-1 px-2.5 border border-transparent text-center text-sm text-white transition-all shadow-sm hover:shadow focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                   type="button"
                 >
@@ -98,7 +99,7 @@
           >
             <i class="cursor-pointer bi bi-arrows-fullscreen"></i>
           </button>
-          <button
+          <button hidden
             type="button"
             class="px-3 py-2 text-white bg-green-600 border-green-800 rounded-lg shadow-md shadow-green-400"
           >
@@ -112,7 +113,7 @@
         class="px-2 my-4 mb-4 overflow-y-auto text-lg font-medium text-gray-800 h-[690px] bg-white"
       >
         <app-table-data-user-admin
-          [data]="products"
+          [data]="usersSubject.asObservable()"
         ></app-table-data-user-admin>
       </div>
       <!-- Table content would go here -->
@@ -121,7 +122,7 @@
     <div class="flex flex-col h-full gap-4">
       <div class="flex items-center justify-between">
         <h1 class="flex items-center px-5 text-2xl font-bold uppercase">
-          Biểu đồ người dùng đăng ký qua các tháng năm 2025
+          Biểu đồ người dùng đăng ký qua các tháng năm {{getCurrentYear()}} 
         </h1>
         <div class="flex items-center">
           <button
@@ -132,10 +133,10 @@
             <i class="cursor-pointer bi bi-arrows-fullscreen"></i>
           </button>
           <!-- over view : revenue : number of student : rate of courses -->
-          <div class="flex items-center justify-between w-full">
+          <div  class="items-center justify-between w-full ">
             <div class="flex">
               <!-- select and option for choose chart type -->
-              <select
+              <select 
                 (change)="onChangeTypeChart($event)"
                 class="w-[180px] py-2 border rounded-md focus:outline-none shadow-sm shadow-gray-400"
               >

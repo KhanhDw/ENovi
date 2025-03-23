@@ -1,1 +1,64 @@
-<p>course-new works!</p>
+<div class="flex flex-col w-full h-screen px-5 overflow-y-auto">
+  <!-- header -->
+  <div class="flex items-center justify-between w-full">
+    <!-- title -->
+    <h1 class="text-2xl font-bold uppercase font-signika">Tạo khóa học mới</h1>
+
+    <!-- button submit -->
+    <div class="flex gap-3">
+      <button
+        (click)="huyTaoKhoaHoc()"
+        type="button"
+        class="px-3 py-2 my-3 font-semibold border rounded-md bg-zinc-200"
+      >
+        Hủy bỏ
+      </button>
+      <button
+        (click)="submitCreateCourse()"
+        type="button"
+        class="px-3 py-2 my-3 border rounded-md bg-[#231D1D] text-white font-semibold"
+      >
+        Tạo khóa học
+      </button>
+    </div>
+  </div>
+
+  <!--  body top -->
+  <div class="flex w-full gap-10 mt-5 mb-8">
+    <!-- title and tag -->
+    <div class="flex flex-col w-full">
+      <div class="flex justify-between gap-4">
+        <!-- item input title course -->
+        <div class="flex flex-col w-full mb-5">
+          <label for="titleCourse" class="px-2 text-xl font-bold font-signika"
+            >Tên khóa học</label
+          >
+          <input
+            placeholder="Vui lòng nhập tên cho khóa học"
+            type="text"
+            name="titleCourse"
+            id="titleCourse"
+            [(ngModel)]="titleNgMode"
+            class="px-2 py-2 font-semibold text-blue-600 border-b-4 border-slate-900 focus:outline-blue-600 focus:outline-4"
+          />
+        </div>
+        <!-- item input Price course -->
+        <div class="flex flex-col w-1/3 mb-5">
+          <label for="titleCourse" class="px-2 text-xl font-bold font-signika"
+            >Giá</label
+          >
+          <input
+            placeholder="1.000"
+            type="text"
+            name="priceCourse"
+            id="priceCourse"
+            [(ngModel)]="priceNgMode"
+            (input)="formatCurrency($event)"
+            (blur)="saveRawPrice()"
+            class="px-2 py-2 font-bold text-green-600 border-2 rounded-md border-slate-900 focus:outline-blue-600 focus:outline-4"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

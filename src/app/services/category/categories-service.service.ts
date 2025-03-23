@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,30 @@ export class CategoriesServiceService {
   GetCategoryAPI(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/`,);
   }
+  GetCategoryAPIV1(id:number): Observable<any> {
+    let params = new HttpParams();
 
+    if(id) params = params.set('id', id);
+
+    return this.http.get<any>(`${this.apiUrl}/v1`,{params});
+  }
+  GetCategoryAPIV2(id:number): Observable<any> {
+    let params = new HttpParams();
+
+    if(id) params = params.set('idv1', id);
+
+    return this.http.get<any>(`${this.apiUrl}/v2`,{params});
+  }
+
+  
+
+  GetCourseCategories(courseId: number): Observable<any> {
+    let params = new HttpParams();
+
+    if (courseId) params = params.set('courseId', courseId.toString());
+
+    return this.http.get<any>(`${this.apiUrl}/course-categories`, { params });
+  }
+  
 
 }

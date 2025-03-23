@@ -1,18 +1,28 @@
-<div class="flex items-center justify-center min-h-screen bg-gray-100">
-  <div class="p-6 bg-white rounded-lg shadow-lg w-96">
+<div class="flex items-start justify-center min-h-screen bg-transparent">
+  <div class="p-6 bg-white border rounded-lg shadow-sm w-96 shadow-black">
     <h2 class="mb-4 text-2xl font-bold text-center">Cập nhật ảnh đại diện</h2>
-    <div class="flex flex-col items-center mb-4">
+    <div class="flex flex-col items-center justify-center mb-4">
+      <div *ngIf="errorMessage" class="mb-4 text-red-500">
+        {{ errorMessage }}
+      </div>
       <img
         id="avatar"
-        src="https://via.placeholder.com/150"
+        [src]="previewUrl ? previewUrl : urlBackend_img_banner_course + loadImgData"
         alt="Ảnh đại diện"
         class="w-32 h-32 mb-4 border-2 border-gray-300 rounded-full"
       />
-      <input type="file" id="fileInput" accept="image/*" class="mb-4" />
+      <input
+        type="file"
+        id="fileInput"
+        accept="image/*"
+        class="mb-4"
+        (change)="onFileSelected($event)"
+      />
     </div>
     <button
       id="updateButton"
       class="w-full py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+      (click)="updateUserPicture()"
     >
       Cập nhật
     </button>

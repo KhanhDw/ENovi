@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-
+import { CourseMyLearning } from './../../interface/course';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 @Component({
     selector: 'app-course-item-my-learning',
     templateUrl: './course-item-my-learning.component.html',
@@ -7,14 +7,12 @@ import { Component, Input } from '@angular/core';
     standalone: false
 })
 export class CourseItemMyLearningComponent {
-  @Input() itemCourse!: {
-    id: string;
-    img: string;
-    title: string;
-    description: string;
-    author: string;
-    duration: number;
-    rate: string;
-    price: string;
-  };
+  @Input() itemCourse!: CourseMyLearning;
+  @Input() urlBackend_img_banner_course!: string;
+  @Output() deleteCourse = new EventEmitter<number>();
+  hovering: boolean = false;
+
+  onDeleteCourse() {
+    this.deleteCourse.emit(this.itemCourse.id);
+  }
 }

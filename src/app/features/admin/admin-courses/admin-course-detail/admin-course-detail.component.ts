@@ -27,16 +27,18 @@ export class AdminCourseDetailComponent {
   CourseDetailRecive: CourseAdmin = {
     id: 1,
     title: 'Lập trình JavaScript cơ bản',
-    thumbnail:
+    img:
       'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
     enrollments: 1500,
     rating: 4.5,
-    duration: 123,
     price: 2999000,
     lecture: 891,
     revenue: 632532000,
     commission: 6325320,
-    category: 'Marketing',
-    instructor: 'Nguyễn Văn Giang',
+    instructorName: 'Nguyễn Văn Giang',
+    level: 'Nhập môn',
+    instructorId: 33,
+    status: 'hoạt động',
+    createdAt: new Date('2023-01-01T00:00:00'),
   };
 }

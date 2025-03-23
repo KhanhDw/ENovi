@@ -55,7 +55,7 @@ export class LoginComponent {
       .subscribe({
         next: (res) => {
           if (res.success) {
-            this.cookieService.setCookie('user', JSON.stringify(res.user[0]), 1);
+            this.cookieService.setCookie('user', JSON.stringify(res.user[0]), 1); // line 95 at file:authRoutes in backend  to edit value response.user
             this.response = { message: res.message };
             this.showNotification = true;
 

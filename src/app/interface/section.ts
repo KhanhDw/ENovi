@@ -6,3 +6,11 @@ export interface Section {
   isExpanded: boolean;
   homework: boolean;
 }
+
+export interface SectionUpdateCourse {
+  // courseId: number;
+  section_id: number;
+  sectionOrder: number;
+  section_name: string;
+}
+

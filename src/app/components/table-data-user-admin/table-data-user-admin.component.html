@@ -4,50 +4,60 @@
       <thead>
         <tr>
           <th
-            class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
+            class="px-5 py-3 text-xs font-semibold tracking-wider text-center text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
           >
             STT
           </th>
           <th
-            class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
+            class="px-5 py-3 text-xs font-semibold tracking-wider text-center text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
           >
             Gmail
           </th>
           <th
-            class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
+            class="px-5 py-3 text-xs font-semibold tracking-wider text-center text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
           >
             Tên người dùng
           </th>
           <th
-            class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
+            class="px-5 py-3 text-xs font-semibold tracking-wider text-center text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
           >
             Quyền hạn
           </th>
           <th
-            class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
+            class="px-5 py-3 text-xs font-semibold tracking-wider text-center text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
           >
             Ngày tạo
+          </th>
+          <th
+            class="px-5 py-3 text-xs font-semibold tracking-wider text-center text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
+          >
+            Hành động
           </th>
         </tr>
       </thead>
       <tbody class="bg-white">
-        <tr *ngFor="let item of data; let i = index">
-          <td class="px-5 py-5 text-sm border-b border-gray-200">
+        <tr *ngFor="let item of data | async; let i = index">
+          <td class="px-5 py-5 text-sm text-center border-b border-gray-200">
             <p class="text-gray-900 whitespace-no-wrap">{{ i + 1 }}</p>
           </td>
-          <td class="px-5 py-5 text-sm border-b border-gray-200">
+          <td class="px-5 py-5 text-sm text-center border-b border-gray-200">
             <p class="text-gray-900 whitespace-no-wrap">{{ item.email }}</p>
           </td>
-          <td class="px-5 py-5 text-sm border-b border-gray-200">
+          <td class="px-5 py-5 text-sm text-center border-b border-gray-200">
             <p class="text-gray-900 whitespace-no-wrap">{{ item.username }}</p>
           </td>
-          <td class="px-5 py-5 text-sm border-b border-gray-200">
+          <td class="px-5 py-5 text-sm text-center border-b border-gray-200">
             <p class="text-gray-900 whitespace-no-wrap">{{ item.role }}</p>
           </td>
-          <td class="px-5 py-5 text-sm border-b border-gray-200">
+          <td class="px-5 py-5 text-sm text-center border-b border-gray-200">
             <p class="text-gray-900 whitespace-no-wrap">
               {{ item.createdAt | date : "dd/MM/yyyy . HH:mm" }}
             </p>
+          </td>
+          <td class="flex items-center justify-center px-5 py-5 text-sm text-center border-b border-gray-200">
+           <button (click)="deleteUserAdmin(item.id)" class="px-2 py-1 rounded-md hover:bg-slate-300">
+            <i class="cursor-pointer bi bi-trash"></i>
+           </button>
           </td>
         </tr>
       </tbody>

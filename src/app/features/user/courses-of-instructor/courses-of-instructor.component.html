@@ -10,13 +10,13 @@
     >
       <div class="flex flex-col gap-4 md:flex-row md:items-center">
         <!-- Search -->
-        <div class="relative">
+        <div class="relative group">
           <input
             type="text"
             [(ngModel)]="searchText"
             (input)="onSearch($event)"
             placeholder="Nhập tên khóa học"
-            class="w-full md:w-[300px] pl-10 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="w-full shadow-sm shadow-black md:w-[300px] pl-10 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
           />
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -32,25 +32,38 @@
               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
             />
           </svg>
+          <div
+            class="absolute left-3/4 -translate-x-1/2 w-[430px] opacity-0 border border-blue-600 group-hover:opacity-100 rounded-md px-3 py-2 top-full mt-2 bg-slate-800 text-white shadow-lg transition-all duration-200 transform scale-95 group-hover:scale-100"
+          >
+            <p>Xóa tìm kiếm sẽ quay trở lại danh sách khóa học ban đầu</p>
+          </div>
+          <button
+            *ngIf="searchText"
+            (click)="emptySearch()"
+            type="button"
+            class="absolute top-[10px] right-[10px] cursor-pointer hover:text-red-700"
+          >
+            <i class="cursor-pointer bi bi-x-lg"></i>
+          </button>
         </div>
 
         <!-- Sort Dropdown -->
         <select
           [(ngModel)]="sortBy"
-          (change)="onSortChange($event)"
-          class="w-[180px] py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          (ngModelChange)="onSortChange($event)"
+          class="w-[250px] shadow-sm shadow-black py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          <option value="newest">Mới nhất</option>
-          <option value="oldest">Cũ nhất</option>
-          <option value="rating">Đánh giá cao nhất</option>
+          <option *ngFor="let item of sortList" [value]="item.value">
+            {{ item.name }}
+          </option>
         </select>
 
-        <!-- View Toggle / tạm ẩn vì chưa xử lý chức năng này-->
+        <!-- View Toggle / tạm ẩn vì chưa thể xử lý chức năng này-->
         <div class="hidden gap-1 border rounded-md">
           <button
             (click)="changeView('grid')"
             [class.bg-gray-100]="viewMode === 'grid'"
-            class="p-2 border border-gray-300 hover:bg-white bg-zinc-50"
+            class="p-2 border border-gray-300 shadow-sm shadow-black hover:bg-white bg-zinc-50"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -70,7 +83,7 @@
           <button
             (click)="changeView('list')"
             [class.bg-gray-100]="viewMode === 'list'"
-            class="p-2 border border-gray-300 hover:bg-white bg-zinc-50"
+            class="p-2 border border-gray-300 shadow-sm shadow-black hover:bg-white bg-zinc-50"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -90,8 +103,8 @@
         </div>
       </div>
 
-      <button
-        class="px-4 py-2 text-white bg-red-500 rounded-md shadow-sm hover:bg-red-600 shadow-slate-500"
+      <button (click)="taoKhoaHoc()"
+        class="px-4 py-2 font-bold text-white bg-red-800 rounded-md shadow-sm shadow-black hover:bg-red-600"
       >
         Tạo khóa học mới
       </button>
@@ -101,15 +114,18 @@
     <div class="grid gap-3 pb-5">
       <div
         *ngFor="let course of courses"
-        class="flex overflow-hidden transition-shadow border border-gray-500 rounded-lg hover:shadow-lg bg-zinc-50"
+        class="flex h-40 overflow-hidden transition-shadow border border-gray-500 rounded-lg shadow-sm shadow-black hover:shadow-blue-700 hover:bg-white bg-zinc-50"
       >
         <!-- ảnh bìa khóa học -->
-        <div class="w-48 h-32 bg-gray-100">
-          <img
-            [src]="course.thumbnail"
+        <div class="flex w-48 h-full bg-gray-100">
+          <img *ngIf="course.img"
+            [src]="urlBackend_img_banner_course + course.img"
             [alt]="course.title"
-            class="object-cover w-full h-full"
+            class="object-fill w-full h-full"
           />
+          <h1 *ngIf="!course.img" class="w-full h-full text-xl font-bold">
+            Please update Image!!
+          </h1>
         </div>
         <!-- body -->
         <div class="flex-1 px-3 py-2 border">
@@ -118,15 +134,22 @@
             <div class="flex flex-col items-start justify-between w-2/4 h-full">
               <!-- tên khóa học -->
               <h2
-                class="mb-2 overflow-y-hidden text-xl font-semibold line-clamp-2"
+                class="mb-2 overflow-y-hidden text-xl font-semibold line-clamp-3"
               >
-                <a href="#">{{ course.title }}</a>
+                <a
+                  (click)="goToCourseDetail(course.id, course.title)"
+                  class="hover:text-slate-600"
+                  >{{ course.title }}</a
+                >
               </h2>
               <!-- Giá -->
               <div class="flex items-start justify-start gap-2">
                 <span class="text-xl font-semibold text-slate-500"
                   >Giá:
-                  <span class="font-bold text-slate-600">2,999,000</span>đ</span
+                  <span class="font-bold text-slate-600">{{
+                    course.price | number : "1.0-0"
+                  }}</span
+                  >đ</span
                 >
               </div>
             </div>
@@ -137,7 +160,7 @@
                   Học viên tháng này:
                 </div>
                 <div class="flex items-center text-lg font-semibold">
-                  {{ course.enrollments }}
+                  {{ course.enrollmentsPerMonth }}
                 </div>
               </div>
               <div class="flex items-center justify-center gap-2">
@@ -148,13 +171,35 @@
                   {{ course.enrollments }}
                 </div>
               </div>
+              <div class="flex items-center justify-center gap-2">
+                <div class="flex items-center text-gray-600 text-md">
+                  Ngày tạo:
+                </div>
+                <div class="flex items-center text-lg font-semibold">
+                  {{
+                    course.createdAt
+                      | date : "HH:mm dd/MM/yyyy" : "Asia/Ho_Chi_Minh"
+                  }}
+                </div>
+              </div>
+              <div class="flex items-center justify-center gap-2">
+                <div class="flex items-center text-gray-600 text-md">
+                  Ngày cập nhật:
+                </div>
+                <div class="flex items-center text-lg font-semibold">
+                  {{
+                    course.updatedAt
+                      | date : "HH:mm dd/MM/yyyy" : "Asia/Ho_Chi_Minh"
+                  }}
+                </div>
+              </div>
             </div>
             <!-- Đánh giá và button xóa và cập nhật khóa học -->
             <div class="flex flex-col items-end justify-between w-1/4 h-full">
               <div class="flex flex-col items-end justify-start w-full">
                 <div class="text-2xl font-semibold">
                   <span class="text-sm font-bold">Đánh giá: </span>
-                  {{ course.rating.toFixed(2) }}
+                  {{ course.rating }}
                 </div>
                 <div class="flex items-center gap-1 px-1 border bg-slate-700">
                   <svg
@@ -173,12 +218,14 @@
               </div>
               <div class="flex gap-5">
                 <button
+                  (click)="postDeleteCourseInstructorId(course.id)"
                   type="button"
                   class="px-3 py-1 text-gray-600 transition-all duration-300 bg-red-300 rounded-md hover:bg-red-500"
                 >
                   Xóa
                 </button>
                 <button
+                  (click)="goUpdateCourse(course.id, course.title)"
                   type="button"
                   class="px-3 py-1 font-semibold text-white transition-all duration-300 rounded-md bg-slate-700 hover:bg-slate-900 hover:text-yellow-400"
                 >

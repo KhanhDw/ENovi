@@ -1,93 +1,35 @@
-import { Component, QueryList, ViewChildren } from '@angular/core';
+import { ApiService } from '@app/services/api.service';
+import { Component, QueryList, ViewChildren, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CourseItemShoppingCartComponent } from '../../components/course-item-shopping-cart/course-item-shopping-cart.component';
+import { cart } from '@app/interface/cart';
+import { CourseSearch } from '@app/interface/course';
+import { CookieStorageService } from '@app/services/cookie_storage/cookie-storage.service';
 
 @Component({
-    selector: 'app-shopping-cart',
-    templateUrl: './shopping-cart.component.html',
-    styleUrl: './shopping-cart.component.css',
-    standalone: false
+  selector: 'app-shopping-cart',
+  templateUrl: './shopping-cart.component.html',
+  styleUrl: './shopping-cart.component.css',
+  standalone: false,
 })
-export class ShoppingCartComponent {
+export class ShoppingCartComponent implements OnInit {
+  
   // ===========
   // construstor
   // ===========
+  constructor(
+    private apiService: ApiService,
+    private CookieStorageService: CookieStorageService,
+    private cdr: ChangeDetectorRef // Inject ChangeDetectorRef
+  ) {}
+  ngOnInit(): void {
+    this.ShowListCourseInCart();
+  }
   ShoppingCartComponent() {}
 
   // =========================
   // list course - right body
   // =========================
-  listCourse = [
-    {
-      id: '1',
-      img: 'https://cdn-media.sforum.vn/storage/app/media/Van%20Pham/7/hinh-nen-desktop-35.jpg',
-      title: 'this is title',
-      description: 'this is description',
-      author: 'this is author',
-      duration: 1,
-      rate: 'this is ratings',
-      price: '10,000,000',
-    },
-    {
-      id: '2',
-      img: 'https://cdn-media.sforum.vn/storage/app/media/Van%20Pham/7/hinh-nen-desktop-35.jpg',
-      title: 'this is title',
-      description: 'this is description',
-      author: 'this is author',
-      duration: 1,
-      rate: 'this is ratings',
-      price: '10,000,000',
-    },
-    {
-      id: '3',
-      img: 'https://cdn-media.sforum.vn/storage/app/media/Van%20Pham/7/hinh-nen-desktop-35.jpg',
-      title: 'this is title',
-      description: 'this is description',
-      author: 'this is author',
-      duration: 1,
-      rate: 'this is ratings',
-      price: '10,000,000',
-    },
-    {
-      id: '4',
-      img: 'https://cdn-media.sforum.vn/storage/app/media/Van%20Pham/7/hinh-nen-desktop-35.jpg',
-      title: 'this is title',
-      description: 'this is description',
-      author: 'this is author',
-      duration: 1,
-      rate: 'this is ratings',
-      price: '10,000,000',
-    },
-    {
-      id: '5',
-      img: 'https://cdn-media.sforum.vn/storage/app/media/Van%20Pham/7/hinh-nen-desktop-35.jpg',
-      title: 'this is title',
-      description: 'this is description',
-      author: 'this is author',
-      duration: 1,
-      rate: 'this is ratings',
-      price: '10,000,000',
-    },
-    {
-      id: '6',
-      img: 'https://cdn-media.sforum.vn/storage/app/media/Van%20Pham/7/hinh-nen-desktop-35.jpg',
-      title: 'this is title',
-      description: 'this is description',
-      author: 'this is author',
-      duration: 1,
-      rate: 'this is ratings',
-      price: '10,000,000',
-    },
-    {
-      id: '7',
-      img: 'https://cdn-media.sforum.vn/storage/app/media/Van%20Pham/7/hinh-nen-desktop-35.jpg',
-      title: 'this is title',
-      description: 'this is description',
-      author: 'this is author',
-      duration: 1,
-      rate: 'this is ratings',
-      price: '10,000,000',
-    },
-  ];
+  listCourse: CourseSearch[] = [];
 
   lengthListCourse = this.listCourse.length;
 
@@ -102,31 +44,51 @@ export class ShoppingCartComponent {
   @ViewChildren(CourseItemShoppingCartComponent)
   courseItemShoppingCartComponents!: QueryList<CourseItemShoppingCartComponent>;
 
+  // Add this method to handle the updateListChange event
+  onUpdateListChange() {
+    this.checkedCount = 0;
+  }
+
+  getInstructorId(): number {
+    const instructorId = this.CookieStorageService.getCookie('user');
+    if (!instructorId) {
+      console.log('instructorId is null');
+      return -1;
+    }
+    const id = JSON.parse(instructorId).id;
+    return id;
+  }
+
   selectAll() {
-    this.isSelectAll = !this.isSelectAll; // Đổi trạng thái của nút "Chọn tất cả"
+    this.isSelectAll = !this.isSelectAll; // Toggle "Select All" state
     this.courseItemShoppingCartComponents.forEach(
       (item) => (item.isSelected = this.isSelectAll)
     );
 
     if (this.isSelectAll) {
       this.checkedCount = this.listCourse.length;
+      this.listCourse.forEach(course => this.selectedItems.set(course.id.toString(), true));
     } else {
       this.checkedCount = 0;
+      this.selectedItems.clear();
     }
   }
 
   onCheckboxChange(event: { value: string; checked: boolean }) {
     const { value, checked } = event;
     console.log(value, checked);
-    // Thêm hoặc cập nhật dữ liệu trong Map
-    this.selectedItems.set(value, checked);
-    // In ra Map để kiểm tra
-    console.log(this.selectedItems);
-    // Nếu bạn muốn xóa một phần tử khỏi Map khi checkbox bỏ chọn
-    if (!checked) {
+
+    if (checked) {
+      this.selectedItems.set(value, true);
+    } else {
       this.selectedItems.delete(value);
     }
+
     this.checkedCount = this.selectedItems.size;
+    this.isSelectAll = this.checkedCount === this.listCourse.length;
+
+    // Log the total price of selected items
+    console.log('Total Selected Price:', this.getTotalSelectedPrice());
   }
 
   // =====
@@ -137,5 +99,40 @@ export class ShoppingCartComponent {
   isShowModalF() {
     this.isShowModal = !this.isShowModal;
     console.log(this.isShowModal);
+  }
+
+  ShowListCourseInCart() {
+    // console.log('objectobjectobject11');
+    const idInstructor = this.getInstructorId();
+
+    if (!idInstructor) return;
+
+    this.apiService.cartService.getCartListCourseUser(idInstructor).subscribe({
+      next: (res) => {
+        if (res.success) {
+          console.log('ShowListCourseInCart11');
+          this.listCourse = res.listCourse;
+          this.checkedCount = 0;
+          this.selectedItems.clear();
+          this.cdr.detectChanges(); // Trigger change detection
+        }
+      },
+      error: (err) => {
+        console.warn('shoping cart request');
+      },
+    });
+  }
+
+  // ==================
+  // Calculate total price for selected items
+  // ==================
+  getTotalSelectedPrice(): number {
+    let totalSelectedPrice = 0;
+    this.listCourse.forEach(course => {
+      if (this.selectedItems.has(course.id.toString())) {
+        totalSelectedPrice += course.price;
+      }
+    });
+    return totalSelectedPrice;
   }
 }

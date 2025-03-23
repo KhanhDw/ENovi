@@ -11,6 +11,7 @@ import { ShareHeaderSearchService } from '@app/services/search/header_search/sha
 import { Route, Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from '@app/services/api.service';
 import { take } from 'rxjs/operators';
+import {CourseSearch} from '@app/interface/course'
 
 @Component({
   selector: 'app-search',
@@ -21,6 +22,7 @@ import { take } from 'rxjs/operators';
 export class SearchComponent implements OnInit {
   @ViewChild('FilterSearchForm') filterSearchForm!: NgForm;
   numberofResult: number = 0;
+  languageList:any[] = []
   filterElement = {
     rating: -1,
     language: -1,
@@ -28,6 +30,7 @@ export class SearchComponent implements OnInit {
     duration: -1,
     price: -1,
     page: 1,
+    sort: 'Mới nhất',
   };
 
   SearchContext: string = '';
@@ -61,7 +64,20 @@ export class SearchComponent implements OnInit {
 
   isOpenDropdownSortBy: boolean = false;
 
-  sortby = [{ name: 'Tăng dần' }, { name: 'Giảm dần' }, { name: 'Mới nhất' }];
+  sortby = [
+    { name: 'Mới nhất' },
+    { name: 'Giá tăng dần' },
+    { name: 'Giá giảm dần' },
+  ];
+  private _nameSort: string = this.sortby[0].name;
+
+  get nameSort(): string {
+    return this._nameSort;
+  }
+
+  set nameSort(value: string) {
+    this.filterElement.sort = this._nameSort = value;
+  }
 
   toggleSortBy() {
     this.isOpenDropdownSortBy = !this.isOpenDropdownSortBy;
@@ -81,13 +97,10 @@ export class SearchComponent implements OnInit {
     }
   }
 
-
   // ====================
   // lọc theo cài đặt
   // ====================
   isHoveredLocTheoCaiDat = false;
-
-
 
   // ====================
   // ratings
@@ -164,26 +177,7 @@ export class SearchComponent implements OnInit {
   }
 
   //list course - right body
-  listCourse = [
-    {
-      img: 'https://cdn-media.sforum.vn/storage/app/media/Van%20Pham/7/hinh-nen-desktop-35.jpg',
-      title: 'this is title',
-      description: 'this is description',
-      author: 'this is author',
-      duration: 0,
-      rate: 'this is ratings',
-      price: 100,
-    },
-    {
-      img: 'https://cdn-media.sforum.vn/storage/app/media/Van%20Pham/7/hinh-nen-desktop-35.jpg',
-      title: 'this is title',
-      description: 'this is description',
-      author: 'this is author',
-      duration: 0,
-      rate: 'this is ratings',
-      price: 10,
-    },
-  ];
+  listCourse: CourseSearch[] = [];
 
   updateDataSearch() {
     this.shareHeaderSearchService.currentSearchTermTitle.subscribe((title) => {
@@ -197,6 +191,12 @@ export class SearchComponent implements OnInit {
     this.updateDataSearch();
     this.getQueryParam();
     this.FilterSearchFormSubmit(1);
+    this.getListLanguage();
+    try {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (error) {
+      console.error('Lỗi window is not defined:');
+    }
   }
 
   getQueryParam() {
@@ -213,6 +213,7 @@ export class SearchComponent implements OnInit {
 
   //------submit form search
   FilterSearchFormSubmit(pageSearch?: number) {
+    // this.onPageChange(1); // Reset to page 1 when the form is submitted
     let titleRecive: string = '';
     this.shareHeaderSearchService.currentSearchTermTitle.subscribe((title) => {
       if (title !== null || title !== undefined) {
@@ -240,6 +241,11 @@ export class SearchComponent implements OnInit {
         this.onPageChange(page);
       }
     });
+    this.shareHeaderSearchService.currentSearchTermSort.subscribe((sort) => {
+      if (sort !== null || sort !== undefined) {
+        // this.filterElement.sort = sort;
+      }
+    });
 
     if (titleRecive != undefined && titleRecive != '') {
       if (titleRecive?.trim()) {
@@ -251,6 +257,7 @@ export class SearchComponent implements OnInit {
           level: this.filterElement.level,
           price: this.filterElement.price,
           page: pageSearch ?? this.filterElement.page,
+          sort: this.filterElement.sort,
         };
 
         // Xóa các query params có giá trị null, undefined hoặc chuỗi rỗng
@@ -268,10 +275,6 @@ export class SearchComponent implements OnInit {
           queryParamsHandling: 'merge', // Giữ nguyên các query params khác nếu có
         });
 
-        console.log(
-          'this.filterElement.language: ' + this.filterElement.language
-        );
-
         this.fetchResults(
           titleRecive,
           this.filterElement.rating,
@@ -279,7 +282,8 @@ export class SearchComponent implements OnInit {
           this.filterElement.duration,
           this.filterElement.level,
           this.filterElement.price,
-          queryParams.page
+          queryParams.page,
+          this.filterElement.sort
         );
       }
     }
@@ -292,8 +296,12 @@ export class SearchComponent implements OnInit {
     durationSearch: number,
     levelSearch: string,
     priceSearch: number,
-    pageSearch: number
+    pageSearch: number,
+    sortBySearch: string
   ) {
+    // Scroll to the top of the page
+    
+
     this.apiService.searchServiceService
       .searchCoursesByTitle(
         titleSearch,
@@ -302,7 +310,8 @@ export class SearchComponent implements OnInit {
         durationSearch,
         levelSearch,
         priceSearch,
-        pageSearch
+        pageSearch,
+        sortBySearch
       )
       .subscribe({
         next: (data) => {
@@ -323,7 +332,8 @@ export class SearchComponent implements OnInit {
               priceSearch,
               data.courses,
               data.currentPage,
-              data.total
+              data.total,
+              sortBySearch
             );
           }
         },
@@ -356,4 +366,23 @@ export class SearchComponent implements OnInit {
       this.FilterSearchFormSubmit(this.filterElement.page);
     }
   }
+
+  getListLanguage(){
+    this.apiService.listLanguageServiceService.getLanguages().subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.languageList = res.listLanguages;
+          console.log(this.languageList);
+        }
+      },
+      error: (err) => {
+        console.log('lỗi lấy languages: ' + err);
+      },
+    });
+  }
+
+
+  // add new code this here
+  
+
 }

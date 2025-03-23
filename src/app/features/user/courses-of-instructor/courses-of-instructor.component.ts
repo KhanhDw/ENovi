@@ -1,6 +1,11 @@
-import { Course } from './../../../interface/course';
-import { Component } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { ApiService } from '@app/services/api.service';
+import { CourseInstructor } from './../../../interface/course';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { CookieStorageService } from '@app/services/cookie_storage/cookie-storage.service';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Subject, combineLatest } from 'rxjs';
+import { SharedDataService } from '@app/services/share/shared-data.service';
 
 @Component({
   selector: 'app-courses-of-instructor',
@@ -8,79 +13,146 @@ import { Router, NavigationEnd } from '@angular/router';
   styleUrl: './courses-of-instructor.component.css',
   standalone: false,
 })
-export class CoursesOfInstructorComponent {
-  courses: Course[] = [
-    {
-      id: 1,
-      title:
-        'New Hire Onboarding New Hire Onboarding New Hire Onboarding v New Hire Onboarding New Hire Onboarding New Hire Onboarding New ',
-      thumbnail:
-        'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B8D3F060E-0D4E-4C7C-9D42-A4E9F49E7936%7D-jNng7IdvT77IUHB8f6nJ3Q3M6Xucnc.png',
-      enrollments: 31,
-      rating: 4.5,
-      duration: 123,
-    },
-    {
-      id: 2,
-      title: 'Sales Onboarding',
-      thumbnail:
-        'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B8D3F060E-0D4E-4C7C-9D42-A4E9F49E7936%7D-jNng7IdvT77IUHB8f6nJ3Q3M6Xucnc.png',
-      enrollments: 14,
-      rating: 4.86,
-      duration: 1234,
-    },
-    {
-      id: 3,
-      title: 'L&D Industry Research',
-      thumbnail:
-        'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B8D3F060E-0D4E-4C7C-9D42-A4E9F49E7936%7D-jNng7IdvT77IUHB8f6nJ3Q3M6Xucnc.png',
-      enrollments: 23,
-      rating: 4.0,
-      duration: 1234,
-    },
-    {
-      id: 4,
-      title: 'B2B Skills to Succeed',
-      thumbnail:
-        'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B8D3F060E-0D4E-4C7C-9D42-A4E9F49E7936%7D-jNng7IdvT77IUHB8f6nJ3Q3M6Xucnc.png',
-      enrollments: 7,
-      rating: 5.0,
-      duration: 1234,
-    },
-    {
-      id: 5,
-      title: 'B2B Skills to Succeed',
-      thumbnail:
-        'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B8D3F060E-0D4E-4C7C-9D42-A4E9F49E7936%7D-jNng7IdvT77IUHB8f6nJ3Q3M6Xucnc.png',
-      enrollments: 7,
-      rating: 5.0,
-      duration: 600,
-    },
+export class CoursesOfInstructorComponent implements OnInit, AfterViewInit {
+  urlBackend_img_banner_course:string = '';
+  searchText: string = '';
+  viewMode: string = 'grid';
+  sortBy: string = 'newest';
+  emailInstructor: string = '';
+  courses: CourseInstructor[] = [];
+  private sortSubject = new Subject<string>();
+  private searchSubject = new Subject<string>();
+
+  sortList = [
+    { name: 'Khóa học tạo gần đây', value: 'newest' },
+    { name: 'Khóa học tạo trước đây', value: 'oldest' },
+    { name: 'Đánh giá cao nhất', value: 'rating_top' },
+    { name: 'Đánh giá thấp nhất', value: 'rating_bottom' },
+    { name: 'Khóa học Cập nhật gần nhất', value: 'update_near' },
+    { name: 'Khóa học Cập nhật xa nhất', value: 'update_far' },
   ];
 
-  searchText: string = '';
-  sortBy: string = 'newest';
-  viewMode: string = 'grid';
+  constructor(
+    private cookieStorageService: CookieStorageService,
+    private apiService: ApiService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private sharedDataService: SharedDataService
+  ) {
+    this.urlBackend_img_banner_course = this.apiService.API_URL+'/uploads/img/bannerCourses/';
+    
+  }
+
+  ngOnInit(): void {
+    this.setupSearchAndSort();
+    this.fetchCourses(this.searchText, this.sortBy);
+  }
+  ngAfterViewInit(): void {}
 
   onSearch(event: any) {
     this.searchText = event.target.value;
-    // Implement search logic here
+    this.searchSubject.next(this.searchText);
+    if (this.searchText === '') {
+      this.fetchCourses(this.searchText, this.sortBy);
+    }
+  }
+  emptySearch() {
+    this.searchText = '';
+    this.fetchCourses(this.searchText, this.sortBy);
   }
 
-  onSortChange(event: any) {
-    this.sortBy = event.target.value;
-    // Implement sort logic here
+  onSortChange(sortValue: string): void {
+    this.sortBy = sortValue;
+    this.sortSubject.next(this.sortBy);
   }
 
   changeView(mode: string) {
     this.viewMode = mode;
   }
 
+  // Setup search and sort logic
+  private setupSearchAndSort(): void {
+    // Search handler with debounce
+    this.searchSubject
+      .pipe(debounceTime(500), distinctUntilChanged())
+      .subscribe((searchText) => {
+        this.fetchCourses(searchText, this.sortBy);
+      });
+
+    // Sort handler (immediate trigger)
+    this.sortSubject.pipe(distinctUntilChanged()).subscribe((sortBy) => {
+      this.fetchCourses(this.searchText, sortBy);
+    });
+
+    // Initialize sortSubject with default value
+    this.sortSubject.next(this.sortBy);
+  }
+
+  getInstructorId(): number {
+    const instructorId = this.cookieStorageService.getCookie('user');
+    if (!instructorId) {
+      console.log('instructorId is null');
+      return -1;
+    }
+    const id = JSON.parse(instructorId).id;
+    return id;
+  }
+
+  // Centralized fetch method
+  private fetchCourses(searchText: string, sortBy: string): void {
+    let id = this.getInstructorId().toString();
+    this.apiService.courseInstructorService
+      .getSearchCourseInstructor(searchText, id, sortBy)
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.courses = res.course;
+          }
+        },
+        error: (err) => {
+          console.warn('Lỗi lấy dữ liệu khóa học:');
+        },
+      });
+  }
+
+  goToCourseDetail(id: number, title: string) {
+    this.router.navigate(['/course', id, encodeURIComponent(title ?? '')]);
+  }
+
+  postDeleteCourseInstructorId(id: number) {
+    console.log(id);
+    this.apiService.courseInstructorService
+      .DeleteCourseInstructor(id.toString())
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            console.log('thanh cong xpa');
+            window.location.reload();
+          }
+        },
+        error: (err) => {
+          console.log('Thất bại: ' + err);
+        },
+      });
+  }
+
+  goUpdateCourse(idCourse: number, title: string) {
+    let intructorId = this.getInstructorId().toString();
+    this.sharedDataService.setIdCourse(idCourse.toString());
+    this.router.navigate(['update', encodeURIComponent(title?title:'')], {
+      relativeTo: this.route,
+    });
+  }
+
+  // Generate star array for rating
   getStarArray(rating: number): number[] {
-    duration: 1;
     return Array(5)
       .fill(0)
       .map((_, i) => (i < Math.floor(rating) ? 1 : 0));
-    duration: 1;
+  }
+
+
+  taoKhoaHoc() {
+    this.router.navigate(['/user/instructor/courses-instructor/new']);
   }
 }

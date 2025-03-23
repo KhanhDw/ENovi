@@ -12,13 +12,13 @@ export class FooterComponent {
     { title: 'Giới thiệu', link: '/about' },
     { title: 'Điều khoản', link: '/terms' },
     { title: 'Chính sách và quyền riêng tư', link: '/privacy' },
-    {
-      title: 'Tuyên bố về khả năng tiếp cận',
-      link: '/accessibility-statement',
-    },
+    // {
+    //   title: 'Tuyên bố về khả năng tiếp cận',
+    //   link: '/accessibility-statement',
+    // },
   ];
   menuItem1 = [
-    { title: 'Bài viết', link: '/blog' },
+    // { title: 'Bài viết', link: '/blog' },
     { title: 'Sơ đồ trang web', link: '/sitemap' },
     { title: 'Trợ giúp và hỗ trợ', link: '/support' },
     { title: 'Trở thành giảng viên trên ENovi', link: '/lecturer' },

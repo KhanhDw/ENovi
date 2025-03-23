@@ -4,14 +4,14 @@
 >
   <img
     class="relative object-cover object-center w-full h-48"
-    src="{{ itemCourse.img }}"
+    [src]="urlBackend_img_banner_course+ itemCourse.img"
     alt="Product Image"
   />
   <div class="p-4">
-    <h2 class="mb-2 text-lg font-medium text-gray-900 dark:text-white">
+    <h2 class="mb-2 text-lg font-medium text-gray-900 dark:text-white line-clamp-2">
       {{ itemCourse.title }}
     </h2>
-    <div class="flex items-center">
+    <div hidden class="items-center">
       <p class="mr-2 font-semibold text-gray-900 text-md dark:text-gray-300">
         Tiến trình: <span>10%</span>
       </p>
@@ -24,8 +24,16 @@
   </div>
   <button
     type="button"
-    class="absolute top-0 right-0 p-2 text-white hover:bg-white hover:text-black focus:outline-none"
+    id="deleteCourse"
+    class="absolute top-0 right-0 p-2 text-white hover:bg-white hover:text-black focus:outline-none hover:font-bold hover:shadow-sm"
+    (mouseenter)="hovering = true"
+    (mouseleave)="hovering = false"
+    (click)="onDeleteCourse()"
   >
-    <i class="cursor-pointer bi bi-three-dots-vertical"></i>
+    <i
+      *ngIf="!hovering"
+      class="cursor-pointer bi bi-three-dots-vertical"
+    ></i>
+    <span *ngIf="hovering" class="cursor-pointer"><i class="cursor-pointer bi bi-trash"></i></span>
   </button>
 </div>

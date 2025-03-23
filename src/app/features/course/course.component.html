@@ -1,4 +1,5 @@
 <div
+  *ngIf="courseDetailAPI"
   class="w-full h-full"
   [ngClass]="{ 'overflow-hidden': showModal, fixed: showModal, '': !showModal }"
   [ngClass]="{
@@ -23,22 +24,26 @@
     >
       <div class="flex flex-col items-start justify-center h-full pl-10">
         <h1 class="font-bold">
-          Lập trình C++ căn bản đến nâng cao 2024 Bootcamp (Vietnamese)
+          {{ courseDetailAPI.title }}
+          <!-- Lập trình C++ căn bản đến nâng cao 2024 Bootcamp (Vietnamese) -->
         </h1>
         <div class="flex">
           <button
+            hidden
             type="button"
             class="px-2 py-0.5 mr-2 text-sm bg-green-700 rounded-md pointer-events-none font-signika"
           >
             Bán chạy nhất
           </button>
           <div class="flex items-center gap-2">
-            <h1 class="font-semibold text-yellow-400 font-signika">4.6</h1>
+            <h1 class="font-semibold text-yellow-400 font-signika">
+              {{ +courseDetailAPI.rating | number : "1.1-1" }} 
+            </h1>
             <div class="flex items-center gap-1 text-yellow-400">
               <i class="bi bi-star-fill"></i>
             </div>
             <h1 class="text-blue-400">(1,232 lượt đánh giá)</h1>
-            <h1 class="font-semibold">2,345 học viên</h1>
+            <h1 class="font-semibold">{{ totalEnroll }} học viên</h1>
           </div>
         </div>
       </div>
@@ -52,18 +57,19 @@
         <div class="flex flex-col w-4/6 pr-4" #infor_top>
           <!-- title -->
           <h1 class="w-full mt-8 text-4xl font-bold font-signika">
-            Lập trình C++ căn bản đến nâng cao 2024 Bootcamp (Vietnamese)
+            {{ courseDetailAPI.title }}
+            <!-- Lập trình C++ căn bản đến nâng cao 2024 Bootcamp (Vietnamese) -->
           </h1>
           <!-- description -->
-          <p class="w-full mt-6 text-lg font-medium font-signika">
-            Học lập trình C++ từ căn bản đến nâng cao với khóa học Bootcamp
-            2024. Học viên sẽ được hướng dẫn từ cơ bản đến nâng cao, từ lý
-            thuyết đến thực hành, từ cách viết code đến cách giải quyết vấn đề.
-          </p>
+          <p
+            class="w-full mt-6 text-lg font-medium font-signika"
+            [innerHTML]="courseDetailAPI.overview"
+          ></p>
           <!-- rate and tag -->
           <div class="flex items-center mt-6">
             <!-- tag -->
             <button
+              hidden
               type="button"
               class="px-3 py-1 bg-green-500 rounded-md pointer-events-none font-signika"
             >
@@ -73,39 +79,38 @@
             <div class="flex ml-5">
               <div class="flex items-center gap-2">
                 <!-- list star -->
-                <h1 class="font-semibold text-yellow-400 font-signika">4.6</h1>
+                <h1 class="font-semibold text-yellow-400 font-signika">
+                  {{ +courseDetailAPI.rating | number : "1.1-1" }}
+                </h1>
                 <div class="flex items-center gap-1 text-yellow-400">
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-half"></i>
+                  <i *ngFor="let star of stars" [class]="star" class="text-xl"></i>
                 </div>
                 <h1 class="text-blue-400">(1,232 lượt đánh giá)</h1>
-                <h1 class="font-semibold">2,345 học viên</h1>
+                <h1 class="font-semibold">{{ totalEnroll }} học viên</h1>
               </div>
             </div>
           </div>
           <!-- author -->
           <div class="flex items-center mt-5">
             <h1 class="flex items-center mr-2">Tác giả:</h1>
-            <a href="#" class="flex items-center font-semibold text-green-300"
-              >Gia Khánh (FullStack, Lead)</a
-            >
+            <a href="#" class="flex items-center font-semibold text-green-300">
+              {{ courseDetailAPI.instructorName }}
+              <!-- Gia Khánh (FullStack, Lead) -->
+            </a>
           </div>
           <!-- day update -->
           <div class="flex flex-wrap items-center mt-5 gap-7">
             <!-- day -->
             <div class="flex">
               <h1 class="mr-2">Lần cập nhật cuối cùng:</h1>
-              <p>12/12/2025</p>
+              <p>{{ courseDetailAPI.updatedAt | date : "dd-MM-yyyy" }}</p>
             </div>
             <!-- language -->
             <div class="flex">
               <h1 class="mr-2">
                 <i class="mr-2 bi bi-globe-americas"></i>Ngôn ngữ:
               </h1>
-              <p>Tiếng Việt</p>
+              <p>{{ Showlanguage }}</p>
             </div>
             <!-- subtitle -->
             <div class="flex flex-wrap gap-1">
@@ -121,13 +126,12 @@
                 />
               </svg>
               <h1>Phụ đề:</h1>
-              <p>Tiếng Anh,</p>
-              <div class="flex gap-1" *ngIf="isShowSubtitle">
-                <p>Tiếng Anh,</p>
-                <p>Tiếng Anh,</p>
+              <p>{{ courseDetailAPI.languageName }}</p>
+              <div hidden class="gap-1" *ngIf="isShowSubtitle">
                 <p>Tiếng Anh,</p>
               </div>
               <button
+                hidden
                 (click)="toggleShowSubtitle()"
                 type="button"
                 class="text-orange-300 underline"
@@ -170,17 +174,25 @@
           >
             <!-- price -->
             <div class="flex items-center justify-between px-2">
-              <p class="text-3xl font-bold text-black font-signika">299,000đ</p>
+              <p class="text-3xl font-bold text-black font-signika">
+                {{
+                  courseDetailAPI.price *
+                    (1 - courseDetailAPI.percent_discount / 100)
+                    | number : "1.0-0"
+                }}đ
+              </p>
               <p class="text-xl font-semibold text-gray-500 line-through">
-                1,699,000đ
+                {{ courseDetailAPI.price | number : "1.0-0" }}đ
               </p>
               <p class="p-1 text-xl font-bold text-blue-600">
-                <i class="bi bi-arrow-down"></i>40%
+                <i class="bi bi-arrow-down"></i
+                >{{ courseDetailAPI.percent_discount }}%
               </p>
             </div>
             <!-- time sale off -->
             <div
-              class="flex items-center justify-start gap-2 px-2 mt-3 text-lg font-semibold text-red-700 font-signika"
+              hidden
+              class="items-center justify-start gap-2 px-2 mt-3 text-lg font-semibold text-red-700 font-signika"
             >
               <i class="bi bi-alarm"></i>
               <p>8 giờ nữa sẽ kết thúc</p>
@@ -188,19 +200,30 @@
             <!-- button add to cart -->
             <div class="flex flex-col items-center gap-4 px-2 mt-3">
               <button
+                (click)="addCourseToCart(courseDetailAPI.id)"
                 type="button"
-                class="w-full py-4 font-bold text-white rounded-md bg-slate-800 hover:bg-slate-900"
+                [ngClass]="
+                  courseExitCart
+                    ? 'bg-green-600 hover:bg-green-400'
+                    : 'bg-slate-800 hover:bg-slate-900'
+                "
+                class="w-full py-4 font-bold text-white rounded-md"
               >
-                Thêm vào giỏ hàng
+                {{
+                  courseExitCart ? "Đã thêm vào giỏ hàng" : "Thêm vào giỏ hàng"
+                }}
               </button>
               <button
+                (click)="addCourseToMyLearning(courseDetailAPI.id)"
                 type="button"
+                [ngClass]="courseInMyLearning ? 'bg-green-600 hover:bg-green-400' : ''"
                 class="w-full py-4 font-bold text-black border-2 rounded-md border-slate-600 bg-slate-100 hover:bg-slate-200"
+                [disabled]="courseInMyLearning"
               >
-                Mua ngay
+                {{ courseInMyLearning ? "Đã mua khóa học" : "Mua ngay" }}
               </button>
               <p class="text-sm font-signika">
-                Hoàn tiền trong 20 ngày, Nếu không mang đến kết quả
+                <!-- Hoàn tiền trong 20 ngày, Nếu không mang đến kết quả -->
               </p>
             </div>
             <!-- button add to cart -->
@@ -208,9 +231,10 @@
               <h1 class="my-3 text-xl font-bold">Khoá học bao gồm</h1>
               <ul class="flex flex-col gap-2 text-slate-700 font-signika">
                 <li class="flex gap-2">
-                  <i class="bi bi-play-btn"></i>61 giờ học theo video
+                  <i class="bi bi-play-btn"></i> {{ sumLesson }} bài giảng chất
+                  lượng
                 </li>
-                <li class="flex gap-2">
+                <li hidden class="gap-2">
                   <i class="bi bi-cloud-arrow-down"></i>194 tài nguyên được cho
                   phép tải
                 </li>
@@ -219,9 +243,6 @@
                 </li>
                 <li class="flex gap-2">
                   <i class="bi bi-infinity"></i>Truy cập trọn đời
-                </li>
-                <li class="flex gap-2">
-                  <i class="bi bi-patch-check"></i>Cấp chứng chỉ khi hoàn thành
                 </li>
               </ul>
             </div>
@@ -236,12 +257,11 @@
         <div class="flex flex-col p-3 border-2 border-slate-400">
           <h1 class="text-2xl font-bold">Bạn sẽ học được</h1>
           <div class="grid grid-cols-2">
-            <div class="flex items-start gap-2 mt-3">
+            <p class="font-medium" [innerHTML]="whatToLearn"></p>
+
+            <!-- <div class="flex items-start gap-2 mt-3">
               <i class="text-green-500 bi bi-check2"></i>
-              <p class="font-medium">
-                Học lập trình C++ từ căn bản đến nâng cao Học lập trình C++ từ
-                căn bản đến nâng cao
-              </p>
+             
             </div>
             <div class="flex items-start gap-2 mt-3">
               <i class="text-green-500 bi bi-check2"></i>
@@ -277,31 +297,51 @@
             <div class="flex items-start gap-2 mt-3">
               <i class="text-green-500 bi bi-check2"></i>
               <p class="font-medium">Học cách làm việc nhóm</p>
+            </div> -->
+          </div>
+        </div>
+        <div class="flex items-center justify-between w-full px-2">
+          <!-- related topic -->
+          <div class="flex flex-col items-start w-1/3 mt-5">
+            <h1 class="mb-2 text-2xl font-bold">Trình độ yêu cầu</h1>
+            <div class="flex">
+              <a
+                href="#"
+                class="px-3 mr-3 font-bold text-blue-600 border-2 border-blue-600 rounded-md"
+              >
+                {{
+                  courseDetailAPI.level === "beginner"
+                    ? "Nhập môn"
+                    : courseDetailAPI.level === "advanced"
+                    ? "Chuyên gia"
+                    : courseDetailAPI.level
+                }}
+              </a>
+            </div>
+          </div>
+          <!-- related topic -->
+          <div
+            *ngIf="courseCategories.length !== 0"
+            class="flex flex-col items-start justify-start w-2/3 mt-5"
+          >
+            <h1 class="mb-2 text-2xl font-bold">Các chủ đề liên quan</h1>
+            <div class="flex">
+              <a
+                *ngFor="let category of courseCategories"
+                href="#"
+                class="px-3 mr-3 font-bold text-blue-600 border-2 border-blue-600 rounded-md"
+                >{{ category.categoryName }}</a
+              >
             </div>
           </div>
         </div>
-        <!-- related topic -->
-        <div class="flex flex-col items-start mt-5">
-          <h1 class="mb-2 text-2xl font-bold">Các chủ đề liên quan</h1>
-          <div class="flex">
-            <a
-              href="#"
-              class="px-3 mr-3 font-bold text-blue-600 border-2 border-blue-600 rounded-md"
-              >C++</a
-            >
-            <a
-              href="#"
-              class="px-3 mr-3 font-bold text-blue-600 border-2 border-blue-600 rounded-md"
-              >Lập trình</a
-            >
-          </div>
-        </div>
+
         <!-- course content  -->
         <div class="flex flex-col items-start w-full h-auto mt-10">
           <!-- title -->
           <div class="flex items-center justify-between w-full">
             <h1 class="mb-2 text-2xl font-bold">Nội dung khoá học</h1>
-            <div class="flex gap-2">
+            <div hidden class="gap-2">
               <p>100 phần</p>
               -
               <p>500 bài giảng</p>
@@ -310,66 +350,62 @@
             </div>
           </div>
           <!-- content -->
-          <div class="flex flex-col w-full" *ngFor="let item of sectionsArray">
+          <div
+            class="flex flex-col w-full"
+            *ngFor="let item of section; let i = index"
+            (click)="handleSectionClick(item.id, i)"
+          >
             <!-- section -->
             <div class="flex flex-col w-full">
               <button
-                (click)="toggleSection(item[0])"
+                (click)="toggleSection(item)"
                 type="button"
                 class="flex justify-between w-full px-4 py-2 border bg-zinc-200 border-slate-400"
               >
                 <!-- title section -->
-                <h1 class="font-bold cursor-pointer text-md">
+                <h1
+                  class="w-5/6 font-bold cursor-pointer text-md text-start text-wrap"
+                >
                   <i
                     class="cursor-pointer bi"
-                    [ngClass]="
-                      getSectionState(item[0])
-                        ? 'bi-caret-up'
-                        : 'bi-caret-down-fill'
-                    "
+                    [ngClass]="item.show ? 'bi-caret-up' : 'bi-caret-down-fill'"
                   ></i>
-                  Giới thiệu và làm quen
+                  {{ item.title }}
                 </h1>
-                <div class="flex gap-2 font-medium cursor-pointer">
-                  <p>6 bài giảng</p>
-                  <span>-</span>
-                  <p>1 giờ 23 phút</p>
+                <div
+                  class="flex items-center justify-end w-full gap-2 font-medium cursor-pointer"
+                >
+                  <p>{{ item.lessonCount }} bài giảng</p>
+                  <span hidden>-</span>
+                  <p hidden>1 giờ 23 phút</p>
                 </div>
               </button>
               <!-- content section -->
               <div
-                [ngClass]="getSectionState(item[0]) ? 'flex' : 'hidden'"
+                [ngClass]="item.show ? 'flex' : 'hidden'"
                 class="flex-col w-full px-4 border border-slate-400 bg-zinc-100"
               >
-                <div class="flex items-center w-full">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="#000"
-                  >
-                    <path
-                      d="m380-300 280-180-280-180v360ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z"
-                    />
-                  </svg>
-                  <p class="ml-4 text-md">Giới thiệu về khoá học</p>
-                  <p class="my-2 ml-auto">12:30</p>
-                </div>
-                <div class="flex items-center w-full">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="#000"
-                  >
-                    <path
-                      d="m380-300 280-180-280-180v360ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z"
-                    />
-                  </svg>
-                  <p class="ml-4 text-md">Giới thiệu về khoá học</p>
-                  <p class="my-2 ml-auto">12:30</p>
+                <div
+                  *ngFor="let item of listLecture"
+                  class="flex items-center w-full py-2"
+                >
+                  <div class="flex w-5/6">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24px"
+                      viewBox="0 -960 960 960"
+                      width="24px"
+                      fill="#000"
+                    >
+                      <path
+                        d="m380-300 280-180-280-180v360ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z"
+                      />
+                    </svg>
+                    <p class="w-full ml-4 overflow-x-hidden truncate text-md">
+                      {{ item.title }}
+                    </p>
+                  </div>
+                  <p hidden class="w-full my-2 ml-auto text-end">12:30</p>
                 </div>
               </div>
             </div>
@@ -378,43 +414,19 @@
         <!-- Requirement -->
         <div class="flex flex-col w-full mt-10">
           <h1 class="mb-2 text-2xl font-bold">Yêu cầu</h1>
-          <ul
+          <h1
             class="flex flex-col w-full px-3 text-justify text-slate-800 font-signika"
-            *ngFor="let item of requirements"
-          >
-            <li class="flex items-center mt-1">
-              <i class="text-green-900 bi bi-circle-fill"></i>
-              <p class="ml-2">{{ item.content }}</p>
-            </li>
-          </ul>
+            [innerHTML]="courseDetailAPI.requirements"
+          ></h1>
         </div>
         <!-- description -->
         <div class="flex flex-col w-full mt-10">
           <h1 class="mb-2 text-2xl font-bold">Mô tả khoá học</h1>
           <p
+            [innerHTML]="courseDetailAPI.description"
             [ngClass]="showMoreDescription ? 'h-auto' : 'h-32 gradient-bg'"
             class="flex w-full overflow-y-hidden text-justify text-slate-800 font-signika"
-          >
-            Welcome to the Complete Web Development Bootcamp, the only course
-            you need to learn to code and become a full-stack web developer.
-            With 150,000+ ratings and a 4.8 average, my Web Development course
-            is one of the HIGHEST RATED courses in the history of Udemy! At 62+
-            hours, this Web Development course is without a doubt the most
-            comprehensive web development course available online. Even if you
-            have zero programming experience, this course will take you from
-            beginner to mastery. Here's why: The course is taught by the lead
-            instructor at the App Brewery, London's leading in-person
-            programming bootcamp. The course has been updated to be 2024 ready
-            and you'll be learning the latest tools and technologies used at
-            large companies such as Apple, Google and Netflix. This course
-            doesn't cut any corners, there are beautiful animated explanation
-            videos and tens of real-world projects which you will get to build.
-            The curriculum was developed over a period of four years, with
-            comprehensive student testing and feedback. We've taught over a
-            million students how to code and many have gone on to change their
-            lives by becoming professional developers or starting their own tech
-            startup.
-          </p>
+          ></p>
 
           <button
             (click)="toggleShowMoreDescription()"
@@ -428,29 +440,30 @@
         <div class="flex flex-col w-full mt-10">
           <div>
             <h1 class="mb-2 text-2xl font-bold">Giảng viên hướng dẫn</h1>
-            <div class="flex items-start">
+            <div class="flex items-center">
               <img
-                src="https://www.w3schools.com/howto/img_avatar.png"
-                alt="instructor"
+                [src]="urlBackend_img_avatar + (avatarUrl$ | async)"
+                alt="instructor avatar"
                 class="w-20 h-20 rounded-full"
+                (error)="handleImageError($event)"
               />
               <div class="flex flex-col">
                 <h1 class="flex ml-5 text-2xl font-bold text-blue-700">
-                  Gia Khánh
+                  {{ instructorName }}
                   <p
-                    class="flex items-center px-0.5 font-medium border-2 text-sm ml-2 border-slate-600 rounded-md"
+                    class="hidden items-center px-0.5 font-medium border-2 text-sm ml-2 border-slate-600 rounded-md"
                   >
                     FullStack, Lead
                   </p>
                 </h1>
                 <div class="flex items-start">
                   <div class="flex flex-col pl-5">
-                    <p class="flex items-center py-0.5 font-medium">
+                    <p class="hidden items-center py-0.5 font-medium">
                       <span>Đánh giá giảng viên:</span>
                       <span class="ml-2">4.7</span>
                       <i class="ml-2 bi bi-star-fill"></i>
                     </p>
-                    <p class="flex items-center py-0.5 font-medium">
+                    <p class="hidden items-center py-0.5 font-medium">
                       <span>Lượt đánh giá: </span>
                       <span class="ml-2">12,343</span>
                       <svg
@@ -466,8 +479,6 @@
                         />
                       </svg>
                     </p>
-                  </div>
-                  <div class="flex flex-col pl-5">
                     <p class="flex items-center py-0.5 font-medium">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -481,9 +492,9 @@
                           d="m380-300 280-180-280-180v360ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"
                         />
                       </svg>
-                      <span>12 Khoá học</span>
+                      <span>{{ totalCourse }} Khoá học</span>
                     </p>
-                    <p class="flex items-center py-0.5 font-medium">
+                    <p hidden class=" items-center py-0.5 font-medium">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         height="24px"
@@ -496,647 +507,676 @@
                           d="M160-200v-440 440-15 15Zm0 80q-33 0-56.5-23.5T80-200v-440q0-33 23.5-56.5T160-720h160v-80q0-33 23.5-56.5T400-880h160q33 0 56.5 23.5T640-800v80h160q33 0 56.5 23.5T880-640v171q-18-13-38-22.5T800-508v-132H160v440h283q3 21 9 41t15 39H160Zm240-600h160v-80H400v80ZM720-40q-83 0-141.5-58.5T520-240q0-83 58.5-141.5T720-440q83 0 141.5 58.5T920-240q0 83-58.5 141.5T720-40Zm20-208v-112h-40v128l86 86 28-28-74-74Z"
                         />
                       </svg>
-                      <span>12 năm kinh nghiệm</span>
+                      <span >12 năm kinh nghiệm</span>
                     </p>
                   </div>
                 </div>
               </div>
             </div>
+            <div class="w-full mt-4">
+              <p
+                [ngClass]="showMoreInstructor ? 'h-auto' : 'h-32 gradient-bg'"
+                class="text-justify text-slate-800 font-signika"
+              >
+                {{ instructorBio }}
+              </p>
+              <button
+                (click)="toggleShowMoreInstructor()"
+                type="button"
+                class="relative flex self-start px-5 py-3 mt-2 font-bold text-blue-800 transition duration-300 rounded-md hover:text-white hover:bg-slate-900 font-signika"
+              >
+                {{ showMoreInstructor ? "Thu gọn" : "Xem thêm" }}
+              </button>
+            </div>
           </div>
-          <div class="w-full mt-4">
-            <p
-              [ngClass]="showMoreInstructor ? 'h-auto' : 'h-32 gradient-bg'"
-              class="text-justify text-slate-800 font-signika"
-            >
-              I'm Angela, I'm a developer with a passion for teaching. I'm the
-              lead instructor at the London App Brewery, London's leading
-              Programming Bootcamp. I've helped hundreds of thousands of
-              students learn to code and change their lives by becoming a
-              developer. I've been invited by companies such as Twitter,
-              Facebook and Google to teach their employees. My first foray into
-              programming was when I was just 12 years old, wanting to build my
-              own Space Invader game. Since then, I've made hundred of websites,
-              apps and games. But most importantly, I realised that my greatest
-              passion is teaching. I spend most of my time researching how to
-              make learning to code fun and make hard concepts easy to
-              understand. I apply everything I discover into my bootcamp
-              courses. In my courses, you'll find lots of geeky humour but also
-              lots of explanations and animations to make sure everything is
-              easy to understand. I'll be there for you every step of the way.
-            </p>
+          <!-- rate -->
+          <div class="flex flex-col w-full my-10">
+            <div class="flex items-center my-5">
+              <h1 class="mr-2 text-2xl font-bold">Đánh giá khoá học:</h1>
+              <div class="flex items-center gap-2">
+                <i class="text-2xl text-yellow-600 bi bi-star-fill"></i>
+                <h1 class="text-2xl font-semibold text-black">
+                  {{ courseDetailAPI.rating }}
+                </h1>
+              </div>
+              <h1 class="ml-4 text-2xl font-semibold text-black">
+                (20,342 lượt đánh giá)
+              </h1>
+            </div>
+            <!-- list comment -->
+            <div class="grid grid-cols-2 gap-2">
+              <!-- comment -->
+              <div class="max-w-lg px-6 py-4 mx-auto border rounded-lg">
+                <div class="flex items-center mb-6">
+                  <img
+                    src="https://randomuser.me/api/portraits/men/97.jpg"
+                    alt="Avatar"
+                    class="w-12 h-12 mr-4 rounded-full"
+                  />
+                  <div>
+                    <div class="text-lg font-medium text-gray-800">
+                      John Doe
+                    </div>
+                    <div class="text-gray-500">2 hours ago</div>
+                  </div>
+                </div>
+                <p class="mb-6 text-lg leading-relaxed">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                  sit amet lorem nulla. Donec consequat urna a tortor sagittis
+                  lobortis.
+                </p>
+              </div>
+              <!-- comment -->
+              <div class="max-w-lg px-6 py-4 mx-auto border rounded-lg">
+                <div class="flex items-center mb-6">
+                  <img
+                    src="https://randomuser.me/api/portraits/men/97.jpg"
+                    alt="Avatar"
+                    class="w-12 h-12 mr-4 rounded-full"
+                  />
+                  <div>
+                    <div class="text-lg font-medium text-gray-800">
+                      John Doe
+                    </div>
+                    <div class="text-gray-500">2 hours ago</div>
+                  </div>
+                </div>
+                <p class="mb-6 text-lg leading-relaxed">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                  sit amet lorem nulla. Donec consequat urna a tortor sagittis
+                  lobortis.
+                </p>
+              </div>
+              <!-- comment -->
+              <div class="max-w-lg px-6 py-4 mx-auto border rounded-lg">
+                <div class="flex items-center mb-6">
+                  <img
+                    src="https://randomuser.me/api/portraits/men/97.jpg"
+                    alt="Avatar"
+                    class="w-12 h-12 mr-4 rounded-full"
+                  />
+                  <div>
+                    <div class="text-lg font-medium text-gray-800">
+                      John Doe
+                    </div>
+                    <div class="text-gray-500">2 hours ago</div>
+                  </div>
+                </div>
+                <p class="mb-6 text-lg leading-relaxed">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                  sit amet lorem nulla. Donec consequat urna a tortor sagittis
+                  lobortis.
+                </p>
+              </div>
+              <!-- comment -->
+              <div class="max-w-lg px-6 py-4 mx-auto border rounded-lg">
+                <div class="flex items-center mb-6">
+                  <img
+                    src="https://randomuser.me/api/portraits/men/97.jpg"
+                    alt="Avatar"
+                    class="w-12 h-12 mr-4 rounded-full"
+                  />
+                  <div>
+                    <div class="text-lg font-medium text-gray-800">
+                      John Doe
+                    </div>
+                    <div class="text-gray-500">2 hours ago</div>
+                  </div>
+                </div>
+                <p class="mb-6 text-lg leading-relaxed">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                  sit amet lorem nulla. Donec consequat urna a tortor sagittis
+                  lobortis.
+                </p>
+              </div>
+            </div>
+            <!-- view detail comment -->
             <button
-              (click)="toggleShowMoreInstructor()"
+              (click)="toggleShowCommentModal()"
               type="button"
-              class="relative flex self-start px-5 py-3 mt-2 font-bold text-blue-800 transition duration-300 rounded-md hover:text-white hover:bg-slate-900 font-signika"
+              class="flex self-start px-5 py-3 mt-2 font-bold text-blue-800 transition duration-300 border-2 rounded-md border-slate-700 bg-slate-300 hover:text-white hover:bg-slate-900 font-signika"
             >
-              {{ showMoreInstructor ? "Thu gọn" : "Xem thêm" }}
+              Xem thêm
+            </button>
+          </div>
+          <!-- report -->
+          <div hidden class="items-center justify-center w-full my-10 ">
+            <button
+              type="button"
+              class="w-4/5 px-3 py-2 text-xl font-bold duration-300 bg-gray-200 border-2 border-blue-800 rounded-md hover:bg-slate-700 hover:text-red-500"
+            >
+              Báo cáo lạm dụng
             </button>
           </div>
         </div>
-        <!-- rate -->
-        <div class="flex flex-col w-full my-10">
-          <div class="flex items-center my-5">
-            <h1 class="mr-2 text-2xl font-bold">Đánh giá khoá học:</h1>
-            <div class="flex items-center gap-2">
-              <i class="text-2xl text-yellow-600 bi bi-star-fill"></i>
-              <h1 class="text-2xl font-semibold text-black">4.6</h1>
-            </div>
-            <h1 class="ml-4 text-2xl font-semibold text-black">
-              (20,342 lượt đánh giá)
-            </h1>
-          </div>
-          <!-- list comment -->
-          <div class="grid grid-cols-2 gap-2">
-            <!-- comment -->
-            <div class="max-w-lg px-6 py-4 mx-auto border rounded-lg">
-              <div class="flex items-center mb-6">
-                <img
-                  src="https://randomuser.me/api/portraits/men/97.jpg"
-                  alt="Avatar"
-                  class="w-12 h-12 mr-4 rounded-full"
-                />
-                <div>
-                  <div class="text-lg font-medium text-gray-800">John Doe</div>
-                  <div class="text-gray-500">2 hours ago</div>
-                </div>
-              </div>
-              <p class="mb-6 text-lg leading-relaxed">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit
-                amet lorem nulla. Donec consequat urna a tortor sagittis
-                lobortis.
-              </p>
-            </div>
-            <!-- comment -->
-            <div class="max-w-lg px-6 py-4 mx-auto border rounded-lg">
-              <div class="flex items-center mb-6">
-                <img
-                  src="https://randomuser.me/api/portraits/men/97.jpg"
-                  alt="Avatar"
-                  class="w-12 h-12 mr-4 rounded-full"
-                />
-                <div>
-                  <div class="text-lg font-medium text-gray-800">John Doe</div>
-                  <div class="text-gray-500">2 hours ago</div>
-                </div>
-              </div>
-              <p class="mb-6 text-lg leading-relaxed">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit
-                amet lorem nulla. Donec consequat urna a tortor sagittis
-                lobortis.
-              </p>
-            </div>
-            <!-- comment -->
-            <div class="max-w-lg px-6 py-4 mx-auto border rounded-lg">
-              <div class="flex items-center mb-6">
-                <img
-                  src="https://randomuser.me/api/portraits/men/97.jpg"
-                  alt="Avatar"
-                  class="w-12 h-12 mr-4 rounded-full"
-                />
-                <div>
-                  <div class="text-lg font-medium text-gray-800">John Doe</div>
-                  <div class="text-gray-500">2 hours ago</div>
-                </div>
-              </div>
-              <p class="mb-6 text-lg leading-relaxed">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit
-                amet lorem nulla. Donec consequat urna a tortor sagittis
-                lobortis.
-              </p>
-            </div>
-            <!-- comment -->
-            <div class="max-w-lg px-6 py-4 mx-auto border rounded-lg">
-              <div class="flex items-center mb-6">
-                <img
-                  src="https://randomuser.me/api/portraits/men/97.jpg"
-                  alt="Avatar"
-                  class="w-12 h-12 mr-4 rounded-full"
-                />
-                <div>
-                  <div class="text-lg font-medium text-gray-800">John Doe</div>
-                  <div class="text-gray-500">2 hours ago</div>
-                </div>
-              </div>
-              <p class="mb-6 text-lg leading-relaxed">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit
-                amet lorem nulla. Donec consequat urna a tortor sagittis
-                lobortis.
-              </p>
-            </div>
-          </div>
-          <!-- view detail comment -->
-          <button
-            (click)="toggleShowCommentModal()"
-            type="button"
-            class="flex self-start px-5 py-3 mt-2 font-bold text-blue-800 transition duration-300 border-2 rounded-md border-slate-700 bg-slate-300 hover:text-white hover:bg-slate-900 font-signika"
-          >
-            Xem thêm
-          </button>
-        </div>
-        <!-- report -->
-        <div class="flex items-center justify-center w-full my-10">
-          <button
-            type="button"
-            class="w-4/5 px-3 py-2 text-xl font-bold duration-300 bg-gray-200 border-2 border-blue-800 rounded-md hover:bg-slate-700 hover:text-red-500"
-          >
-            Báo cáo lạm dụng
-          </button>
-        </div>
       </div>
     </div>
-  </div>
-  <!-- modal video preview -->
-  <div
-    class="fixed inset-0 overflow-hidden"
-    [ngClass]="{
-      block: showModal,
-      'z-[52]': showModal,
-      hidden: !showModal
-    }"
-  >
-    <!-- Nội dung của modal-->
-    <div class="flex items-start justify-center w-full h-full">
-      <div class="flex items-center justify-center w-full h-full">
-        <!-- free zone -->
-        <div
-          (click)="hiddenModalPreviewVideo($event)"
-          class="w-[30%] h-full mx-auto bg-gray-700 bg-opacity-80"
-        ></div>
-        <!-- modal preview video -->
-        <div class="w-[40%] h-full mx-auto bg-gray-100 opacity-100">
+    <!-- modal video preview -->
+    <div
+      class="fixed inset-0 overflow-hidden"
+      [ngClass]="{
+        block: showModal,
+        'z-[52]': showModal,
+        hidden: !showModal
+      }"
+    >
+      <!-- Nội dung của modal-->
+      <div class="flex items-start justify-center w-full h-full">
+        <div class="flex items-center justify-center w-full h-full">
+          <!-- free zone -->
           <div
-            class="w-full h-full overflow-y-scroll bg-[#1D1E27]"
-            id="modal-content"
-          >
+            (click)="hiddenModalPreviewVideo($event)"
+            class="w-[30%] h-full mx-auto bg-gray-700 bg-opacity-80"
+          ></div>
+          <!-- modal preview video -->
+          <div class="w-[40%] h-full mx-auto bg-gray-100 opacity-100">
             <div
-              class="flex flex-col w-full h-auto px-4 py-5 text-white bg-[#1D1E27]"
+              class="w-full h-full overflow-y-scroll bg-[#1D1E27]"
+              id="modal-content"
             >
-              <div class="flex items-center justify-between w-full">
-                <h1 class="text-lg font-bold font-signika">
-                  Giới thiệu khoá học
-                </h1>
-                <button
-                  (click)="toggleShowModal()"
-                  type="button"
-                  class="flex self-end justify-end w-auto h-auto text-3xl text-white cursor-pointer hover:text-red-500"
-                >
-                  <i class="text-xl cursor-pointer bi bi-x-lg"></i>
-                </button>
-              </div>
-              <div>
-                <!-- title priview course -->
-                <div class="flex w-full h-full mt-5">
-                  <h1 class="text-2xl font-bold font-signika">
-                    Lập trình C++ căn bản đến nâng cao 2024 Bootcamp
-                    (Vietnamese)
+              <div
+                class="flex flex-col w-full h-auto px-4 py-5 text-white bg-[#1D1E27]"
+              >
+                <div class="flex items-center justify-between w-full">
+                  <h1 class="text-lg font-bold font-signika">
+                    Giới thiệu khoá học
                   </h1>
+                  <button
+                    (click)="toggleShowModal()"
+                    type="button"
+                    class="flex self-end justify-end w-auto h-auto text-3xl text-white cursor-pointer hover:text-red-500"
+                  >
+                    <i class="text-xl cursor-pointer bi bi-x-lg"></i>
+                  </button>
                 </div>
-                <!-- video preview  -->
-                <div class="flex w-full h-full mt-5">
-                  <iframe
-                    *ngIf="showModal"
-                    width="100%"
-                    height="315"
-                    src="https://www.youtube-nocookie.com/embed/Yd7vDterctQ?si=RWyMUE8XLoBWC43E?controls=0&disablekb=1"
-                    title="YouTube video player"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    allowfullscreen
-                  ></iframe>
+                <div>
+                  <!-- title priview course -->
+                  <div class="flex w-full h-full mt-5">
+                    <h1 class="text-2xl font-bold font-signika">
+                      {{ courseDetailAPI.title }}
+                    </h1>
+                  </div>
+                  <!-- video preview  -->
+                  <div class="flex w-full h-full mt-5">
+                    <iframe
+                      *ngIf="showModal"
+                      width="100%"
+                      height="315"
+                      src="https://www.youtube-nocookie.com/embed/Yd7vDterctQ?si=RWyMUE8XLoBWC43E?controls=0&disablekb=1"
+                      title="YouTube video player"
+                      frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerpolicy="strict-origin-when-cross-origin"
+                      allowfullscreen
+                    ></iframe>
+                  </div>
+                  <!-- Code thêm chức năng tại đây -->
                 </div>
-                <!-- Code thêm chức năng tại đây -->
               </div>
             </div>
           </div>
+          <!-- free zone -->
+          <div
+            (click)="hiddenModalPreviewVideo($event)"
+            class="w-[30%] h-full mx-auto bg-gray-700 bg-opacity-80"
+          ></div>
         </div>
-        <!-- free zone -->
-        <div
-          (click)="hiddenModalPreviewVideo($event)"
-          class="w-[30%] h-full mx-auto bg-gray-700 bg-opacity-80"
-        ></div>
       </div>
     </div>
-  </div>
-  <!-- end modal video preview-->
+    <!-- end modal video preview-->
 
-  <!-- modal comment -->
-  <div
-    class="fixed inset-0 overflow-hidden"
-    [ngClass]="{
-      block: showCommentModal,
-      'z-[52]': showCommentModal,
-      hidden: !showCommentModal
-    }"
-  >
-    <!-- Nội dung của modal-->
-    <div class="flex items-start justify-center w-full h-screen">
-      <div class="flex items-center justify-center w-full h-full">
-        <!-- Free zone -->
-        <div
-          (click)="hiddenModalComment($event)"
-          class="w-1/5 h-full mx-auto bg-gray-700 bg-opacity-80"
-        ></div>
-        <!-- Modal content -->
-        <div class="w-3/5 h-full mx-auto bg-gray-100 opacity-100">
-          <div class="w-full h-full overflow-y-scroll bg-[#f4f5f7]">
-            <div
-              class="flex flex-col w-full h-auto px-4 py-5 text-black bg-[#f4f5f7]"
-            >
-              <!-- title and button close modal comment -->
-              <div class="flex items-center justify-between w-full">
-                <div
-                  class="flex items-center justify-center font-bold font-signika"
-                >
-                  <p
-                    class="px-2 py-1 mr-2 text-xl text-white bg-[#1D1E27] flex gap-1 rounded-md justify-center items-center"
+    <!-- modal comment -->
+    <div
+      class="fixed inset-0 overflow-hidden"
+      [ngClass]="{
+        block: showCommentModal,
+        'z-[52]': showCommentModal,
+        hidden: !showCommentModal
+      }"
+    >
+      <!-- Nội dung của modal-->
+      <div class="flex items-start justify-center w-full h-screen">
+        <div class="flex items-center justify-center w-full h-full">
+          <!-- Free zone -->
+          <div
+            (click)="hiddenModalComment($event)"
+            class="w-1/5 h-full mx-auto bg-gray-700 bg-opacity-80"
+          ></div>
+          <!-- Modal content -->
+          <div class="w-3/5 h-full mx-auto bg-gray-100 opacity-100">
+            <div class="w-full h-full overflow-y-scroll bg-[#f4f5f7]">
+              <div
+                class="flex flex-col w-full h-auto px-4 py-5 text-black bg-[#f4f5f7]"
+              >
+                <!-- title and button close modal comment -->
+                <div class="flex items-center justify-between w-full">
+                  <div
+                    class="flex items-center justify-center font-bold font-signika"
                   >
-                    <i class="text-yellow-400 bi bi-star-fill"></i
-                    ><span>4.5</span
-                    ><span class="text-sm font-thin text-orange-400"
-                      >[2,345 <i class="bi bi-people-fill"></i>]</span
+                    <p
+                      class="px-2 py-1 mr-2 text-xl text-white bg-[#1D1E27] flex gap-1 rounded-md justify-center items-center"
                     >
-                  </p>
-                  <h1 class="text-2xl">Đánh giá và mình luận</h1>
+                      <i class="text-yellow-400 bi bi-star-fill"></i
+                      ><span>{{ courseDetailAPI.rating }}</span
+                      ><span class="pl-2 text-sm font-semibold text-orange-400"
+                        >[1,234 <i class="bi bi-people-fill"></i>]</span
+                      >
+                    </p>
+                    <h1 class="text-2xl">Đánh giá và mình luận</h1>
+                  </div>
+                  <button
+                    (click)="toggleShowCommentModal()"
+                    type="button"
+                    class="flex self-start justify-end w-auto h-auto text-3xl cursor-pointer hover:text-red-500"
+                  >
+                    <i class="text-xl cursor-pointer bi bi-x-lg"></i>
+                  </button>
                 </div>
-                <button
-                  (click)="toggleShowCommentModal()"
-                  type="button"
-                  class="flex self-start justify-end w-auto h-auto text-3xl cursor-pointer hover:text-red-500"
-                >
-                  <i class="text-xl cursor-pointer bi bi-x-lg"></i>
-                </button>
-              </div>
-              <!-- detail comment -->
-              <div class="flex items-center justify-between w-full pt-5">
-                <!-- ratings -->
-                <div class="flex flex-col self-start w-1/3 bg-gray-100">
-                  <!-- star rating -->
-                  <div class="flex flex-col w-full">
-                    <div class="flex items-center w-full mt-4">
-                      <a
-                        href="#"
-                        class="text-sm font-medium text-yellow-400 dark:text-blue-500 hover:underline"
-                        >5 <i class="bi bi-star-fill"></i
-                      ></a>
-                      <div
-                        class="w-2/4 h-3 mx-4 bg-gray-200 rounded-sm dark:bg-gray-700"
-                      >
+                <!-- detail comment -->
+                <div class="flex items-center justify-between w-full pt-5">
+                  <!-- ratings -->
+                  <div class="flex flex-col self-start w-1/3 bg-gray-100">
+                    <!-- star rating -->
+                    <div class="flex flex-col w-full">
+                      <div class="flex items-center w-full mt-4">
+                        <a
+                          href="#"
+                          class="text-sm font-medium text-slate-700 dark:text-blue-500 hover:underline"
+                          >5 <i class="bi bi-star-fill"></i
+                        ></a>
                         <div
-                          class="h-3 bg-yellow-300 rounded-sm"
-                          style="width: 70%"
-                        ></div>
+                          class="w-2/4 h-3 mx-4 bg-gray-200 rounded-sm dark:bg-gray-700"
+                        >
+                          <div
+                            class="h-3 rounded-sm bg-slate-700"
+                            style="width: 70%"
+                          ></div>
+                        </div>
+                        <span
+                          class="text-sm font-medium text-gray-900 dark:text-gray-900"
+                          >70%</span
+                        >
                       </div>
-                      <span
-                        class="text-sm font-medium text-gray-900 dark:text-gray-900"
-                        >70%</span
-                      >
+                      <div class="flex items-center w-full mt-4">
+                        <a
+                          href="#"
+                          class="text-sm font-medium text-slate-700 dark:text-blue-500 hover:underline"
+                          >4 <i class="bi bi-star-fill"></i
+                        ></a>
+                        <div
+                          class="w-2/4 h-3 mx-4 bg-gray-200 rounded-sm dark:bg-gray-700"
+                        >
+                          <div
+                            class="h-3 rounded-sm bg-slate-700"
+                            style="width: 17%"
+                          ></div>
+                        </div>
+                        <span
+                          class="text-sm font-medium text-gray-900 dark:text-gray-900"
+                          >17%</span
+                        >
+                      </div>
+                      <div class="flex items-center w-full mt-4">
+                        <a
+                          href="#"
+                          class="text-sm font-medium text-slate-700 dark:text-blue-500 hover:underline"
+                          >3 <i class="bi bi-star-fill"></i
+                        ></a>
+                        <div
+                          class="w-2/4 h-3 mx-4 bg-gray-200 rounded-sm dark:bg-gray-700"
+                        >
+                          <div
+                            class="h-3 rounded-sm bg-slate-700"
+                            style="width: 8%"
+                          ></div>
+                        </div>
+                        <span
+                          class="text-sm font-medium text-gray-900 dark:text-gray-900"
+                          >8%</span
+                        >
+                      </div>
+                      <div class="flex items-center w-full mt-4">
+                        <a
+                          href="#"
+                          class="text-sm font-medium text-slate-700 dark:text-blue-500 hover:underline"
+                          >2 <i class="bi bi-star-fill"></i
+                        ></a>
+                        <div
+                          class="w-2/4 h-3 mx-4 bg-gray-200 rounded-sm dark:bg-gray-700"
+                        >
+                          <div
+                            class="h-3 rounded-sm bg-slate-700"
+                            style="width: 4%"
+                          ></div>
+                        </div>
+                        <span
+                          class="text-sm font-medium text-gray-900 dark:text-gray-900"
+                          >4%</span
+                        >
+                      </div>
+                      <div class="flex items-center w-full mt-4">
+                        <a
+                          href="#"
+                          class="text-sm font-medium text-slate-700 dark:text-blue-500 hover:underline"
+                          >1 <i class="bi bi-star-fill"></i
+                        ></a>
+                        <div
+                          class="w-2/4 h-3 mx-4 bg-gray-200 rounded-sm dark:bg-gray-700"
+                        >
+                          <div
+                            class="h-3 rounded-sm bg-slate-700"
+                            style="width: 1%"
+                          ></div>
+                        </div>
+                        <span
+                          class="text-sm font-medium text-gray-900 dark:text-gray-900"
+                          >1%</span
+                        >
+                      </div>
                     </div>
-                    <div class="flex items-center w-full mt-4">
-                      <a
-                        href="#"
-                        class="text-sm font-medium text-yellow-400 dark:text-blue-500 hover:underline"
-                        >4 <i class="bi bi-star-fill"></i
-                      ></a>
-                      <div
-                        class="w-2/4 h-3 mx-4 bg-gray-200 rounded-sm dark:bg-gray-700"
+                    <!-- search comment -->
+                    <div
+                      class="flex rounded-md border-2 w-4/5 border-gray-500 overflow-hidden max-w-md mt-5 font-[sans-serif]"
+                    >
+                      <input
+                        disabled
+                        type="text"
+                        placeholder="(chưa hoàn thiện) Tìm kiếm bình luận"
+                        class="w-full px-2 py-1 text-sm text-gray-600 bg-white outline-none"
+                      />
+                      <button
+                        type="button"
+                        class="flex items-center justify-center cursor-pointer bg-[#d4d7db] px-3"
                       >
-                        <div
-                          class="h-3 bg-yellow-300 rounded-sm"
-                          style="width: 17%"
-                        ></div>
-                      </div>
-                      <span
-                        class="text-sm font-medium text-gray-900 dark:text-gray-900"
-                        >17%</span
-                      >
-                    </div>
-                    <div class="flex items-center w-full mt-4">
-                      <a
-                        href="#"
-                        class="text-sm font-medium text-yellow-400 dark:text-blue-500 hover:underline"
-                        >3 <i class="bi bi-star-fill"></i
-                      ></a>
-                      <div
-                        class="w-2/4 h-3 mx-4 bg-gray-200 rounded-sm dark:bg-gray-700"
-                      >
-                        <div
-                          class="h-3 bg-yellow-300 rounded-sm"
-                          style="width: 8%"
-                        ></div>
-                      </div>
-                      <span
-                        class="text-sm font-medium text-gray-900 dark:text-gray-900"
-                        >8%</span
-                      >
-                    </div>
-                    <div class="flex items-center w-full mt-4">
-                      <a
-                        href="#"
-                        class="text-sm font-medium text-yellow-400 dark:text-blue-500 hover:underline"
-                        >2 <i class="bi bi-star-fill"></i
-                      ></a>
-                      <div
-                        class="w-2/4 h-3 mx-4 bg-gray-200 rounded-sm dark:bg-gray-700"
-                      >
-                        <div
-                          class="h-3 bg-yellow-300 rounded-sm"
-                          style="width: 4%"
-                        ></div>
-                      </div>
-                      <span
-                        class="text-sm font-medium text-gray-900 dark:text-gray-900"
-                        >4%</span
-                      >
-                    </div>
-                    <div class="flex items-center w-full mt-4">
-                      <a
-                        href="#"
-                        class="text-sm font-medium text-yellow-400 dark:text-blue-500 hover:underline"
-                        >1 <i class="bi bi-star-fill"></i
-                      ></a>
-                      <div
-                        class="w-2/4 h-3 mx-4 bg-gray-200 rounded-sm dark:bg-gray-700"
-                      >
-                        <div
-                          class="h-3 bg-yellow-300 rounded-sm"
-                          style="width: 1%"
-                        ></div>
-                      </div>
-                      <span
-                        class="text-sm font-medium text-gray-900 dark:text-gray-900"
-                        >1%</span
-                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 192.904 192.904"
+                          width="16px"
+                          class="cursor-pointer fill-black"
+                        >
+                          <path
+                            d="m190.707 180.101-47.078-47.077c11.702-14.072 18.752-32.142 18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z"
+                          ></path>
+                        </svg>
+                      </button>
                     </div>
                   </div>
-                  <!-- search comment -->
+                  <!-- comment -->
                   <div
-                    class="flex rounded-md border-2 w-4/5 border-gray-500 overflow-hidden max-w-md mt-5 font-[sans-serif]"
+                    class="flex flex-col items-center w-2/3 h-auto overflow-y-scroll"
                   >
-                    <input
-                      type="text"
-                      placeholder="Tìm kiếm bình luận"
-                      class="w-full px-2 py-1 text-sm text-gray-600 bg-white outline-none"
-                    />
-                    <button
-                      type="button"
-                      class="flex items-center justify-center cursor-pointer bg-[#d4d7db] px-3"
+                    <!-- comment section -->
+                    <div
+                      class="w-full flex-col justify-start items-start gap-3.5 flex border-b-2 border-gray-500"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 192.904 192.904"
-                        width="16px"
-                        class="cursor-pointer fill-black"
+                      <div
+                        class="inline-flex items-center justify-between w-full pt-2"
                       >
-                        <path
-                          d="m190.707 180.101-47.078-47.077c11.702-14.072 18.752-32.142 18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z"
-                        ></path>
-                      </svg>
+                        <div class="justify-start items-center gap-2.5 flex">
+                          <div
+                            class="w-10 h-10 bg-stone-300 rounded-full justify-start items-start gap-2.5 flex"
+                          >
+                            <img
+                              class="object-cover rounded-full"
+                              src="https://pagedone.io/asset/uploads/1710225753.png"
+                              alt="John smith image"
+                            />
+                          </div>
+                          <div
+                            class="inline-flex flex-col items-start justify-start gap-1"
+                          >
+                            <h5
+                              class="text-sm font-semibold leading-snug text-gray-900"
+                            >
+                              John smith
+                            </h5>
+                            <h6
+                              class="text-xs font-normal leading-5 text-gray-500"
+                            >
+                              5 Day ago
+                            </h6>
+                          </div>
+                        </div>
+                        <div class="flex items-center justify-end group">
+                          <button
+                            type="button"
+                            class="relative flex items-center justify-center px-1 py-1 transition-all duration-700 ease-in-out cursor-pointer group hover:bg-gray-200"
+                          >
+                            <i
+                              class="text-gray-500 cursor-pointer bi bi-three-dots-vertical"
+                            ></i>
+                            <span
+                              class="absolute w-32 p-2 mt-2 text-sm text-white transition-opacity bg-gray-700 rounded opacity-0 right-5 group-hover:opacity-100"
+                            >
+                              <button type="button" (click)="reportComment()">
+                                Báo cáo bình luận
+                              </button>
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                      <p
+                        class="pb-3 text-sm font-normal leading-snug text-gray-800"
+                      >
+                        Mauris luctus habitasse turpis elementum vitae in. Ut
+                        habitasse orci sed aliquam bibendum. Sem in nisl
+                        vestibulum rhoncus sed diam amet nulla. Netus feugiat
+                        nunc vulputate eros pellentesque. A at augue elementum
+                        aliquet in aliquet. Vitae amet quisque massa egestas
+                        amet. Vitae id ipsum lacus tellus facilisis sit. Nunc ut
+                        pellentesque lacus massa arcu neque mi ultrices
+                        convallis.
+                      </p>
+                    </div>
+                    <!-- comment section -->
+                    <div
+                      class="w-full flex-col justify-start items-start gap-3.5 flex border-b-2 border-gray-500"
+                    >
+                      <div
+                        class="inline-flex items-center justify-between w-full pt-2"
+                      >
+                        <div class="justify-start items-center gap-2.5 flex">
+                          <div
+                            class="w-10 h-10 bg-stone-300 rounded-full justify-start items-start gap-2.5 flex"
+                          >
+                            <img
+                              class="object-cover rounded-full"
+                              src="https://pagedone.io/asset/uploads/1710225753.png"
+                              alt="John smith image"
+                            />
+                          </div>
+                          <div
+                            class="inline-flex flex-col items-start justify-start gap-1"
+                          >
+                            <h5
+                              class="text-sm font-semibold leading-snug text-gray-900"
+                            >
+                              John smith
+                            </h5>
+                            <h6
+                              class="text-xs font-normal leading-5 text-gray-500"
+                            >
+                              5 Day ago
+                            </h6>
+                          </div>
+                        </div>
+                        <div class="flex items-center justify-end group">
+                          <button
+                            type="button"
+                            class="relative flex items-center justify-center px-1 py-1 transition-all duration-700 ease-in-out cursor-pointer group hover:bg-gray-200"
+                          >
+                            <i
+                              class="text-gray-500 cursor-pointer bi bi-three-dots-vertical"
+                            ></i>
+                            <span
+                              class="absolute w-32 p-2 mt-2 text-sm text-white transition-opacity bg-gray-700 rounded opacity-0 right-5 group-hover:opacity-100"
+                            >
+                              <button type="button" (click)="reportComment()">
+                                Báo cáo bình luận
+                              </button>
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                      <p
+                        class="pb-3 text-sm font-normal leading-snug text-gray-800"
+                      >
+                        Mauris luctus habitasse turpis elementum vitae in. Ut
+                        habitasse orci sed aliquam bibendum. Sem in nisl
+                        vestibulum rhoncus sed diam amet nulla. Netus feugiat
+                        nunc vulputate eros pellentesque. A at augue elementum
+                        aliquet in aliquet. Vitae amet quisque massa egestas
+                        amet. Vitae id ipsum lacus tellus facilisis sit. Nunc ut
+                        pellentesque lacus massa arcu neque mi ultrices
+                        convallis.
+                      </p>
+                    </div>
+                    <!-- comment section -->
+                    <div
+                      class="w-full flex-col justify-start items-start gap-3.5 flex border-b-2 border-gray-500"
+                    >
+                      <div
+                        class="inline-flex items-center justify-between w-full pt-2"
+                      >
+                        <div class="justify-start items-center gap-2.5 flex">
+                          <div
+                            class="w-10 h-10 bg-stone-300 rounded-full justify-start items-start gap-2.5 flex"
+                          >
+                            <img
+                              class="object-cover rounded-full"
+                              src="https://pagedone.io/asset/uploads/1710225753.png"
+                              alt="John smith image"
+                            />
+                          </div>
+                          <div
+                            class="inline-flex flex-col items-start justify-start gap-1"
+                          >
+                            <h5
+                              class="text-sm font-semibold leading-snug text-gray-900"
+                            >
+                              John smith
+                            </h5>
+                            <h6
+                              class="text-xs font-normal leading-5 text-gray-500"
+                            >
+                              5 Day ago
+                            </h6>
+                          </div>
+                        </div>
+                        <div class="flex items-center justify-end group">
+                          <button
+                            type="button"
+                            class="relative flex items-center justify-center px-1 py-1 transition-all duration-700 ease-in-out cursor-pointer group hover:bg-gray-200"
+                          >
+                            <i
+                              class="text-gray-500 cursor-pointer bi bi-three-dots-vertical"
+                            ></i>
+                            <span
+                              class="absolute w-32 p-2 mt-2 text-sm text-white transition-opacity bg-gray-700 rounded opacity-0 right-5 group-hover:opacity-100"
+                            >
+                              <button type="button" (click)="reportComment()">
+                                Báo cáo bình luận
+                              </button>
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                      <p
+                        class="pb-3 text-sm font-normal leading-snug text-gray-800"
+                      >
+                        Mauris luctus habitasse turpis elementum vitae in. Ut
+                        habitasse orci sed aliquam bibendum. Sem in nisl
+                        vestibulum rhoncus sed diam amet nulla. Netus feugiat
+                        nunc vulputate eros pellentesque. A at augue elementum
+                        aliquet in aliquet. Vitae amet quisque massa egestas
+                        amet. Vitae id ipsum lacus tellus facilisis sit. Nunc ut
+                        pellentesque lacus massa arcu neque mi ultrices
+                        convallis.
+                      </p>
+                    </div>
+                    <!-- comment section -->
+                    <div
+                      class="w-full flex-col justify-start items-start gap-3.5 flex border-b-2 border-gray-500"
+                    >
+                      <div
+                        class="inline-flex items-center justify-between w-full pt-2"
+                      >
+                        <div class="justify-start items-center gap-2.5 flex">
+                          <div
+                            class="w-10 h-10 bg-stone-300 rounded-full justify-start items-start gap-2.5 flex"
+                          >
+                            <img
+                              class="object-cover rounded-full"
+                              src="https://pagedone.io/asset/uploads/1710225753.png"
+                              alt="John smith image"
+                            />
+                          </div>
+                          <div
+                            class="inline-flex flex-col items-start justify-start gap-1"
+                          >
+                            <h5
+                              class="text-sm font-semibold leading-snug text-gray-900"
+                            >
+                              John smith
+                            </h5>
+                            <h6
+                              class="text-xs font-normal leading-5 text-gray-500"
+                            >
+                              5 Day ago
+                            </h6>
+                          </div>
+                        </div>
+                        <div class="flex items-center justify-end group">
+                          <button
+                            type="button"
+                            class="relative flex items-center justify-center px-1 py-1 transition-all duration-700 ease-in-out cursor-pointer group hover:bg-gray-200"
+                          >
+                            <i
+                              class="text-gray-500 cursor-pointer bi bi-three-dots-vertical"
+                            ></i>
+                            <span
+                              class="absolute w-32 p-2 mt-2 text-sm text-white transition-opacity bg-gray-700 rounded opacity-0 right-5 group-hover:opacity-100"
+                            >
+                              <button type="button" (click)="reportComment()">
+                                Báo cáo bình luận
+                              </button>
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                      <p
+                        class="pb-3 text-sm font-normal leading-snug text-gray-800"
+                      >
+                        Mauris luctus habitasse turpis elementum vitae in. Ut
+                        habitasse orci sed aliquam bibendum. Sem in nisl
+                        vestibulum rhoncus sed diam amet nulla. Netus feugiat
+                        nunc vulputate eros pellentesque. A at augue elementum
+                        aliquet in aliquet. Vitae amet quisque massa egestas
+                        amet. Vitae id ipsum lacus tellus facilisis sit. Nunc ut
+                        pellentesque lacus massa arcu neque mi ultrices
+                        convallis.
+                      </p>
+                    </div>
+
+                    <!-- buton show more comment -->
+                    <button
+                      class="w-full py-3 mt-5 font-bold text-gray-500 duration-500 border border-gray-500 rounded-md hover:bg-gray-200 hover:text-gray-800 hover:border-gray-800 transtion"
+                    >
+                      Xem thêm
                     </button>
                   </div>
                 </div>
-                <!-- comment -->
-                <div
-                  class="flex flex-col items-center w-2/3 h-auto overflow-y-scroll"
-                >
-                  <!-- comment section -->
-                  <div
-                    class="w-full flex-col justify-start items-start gap-3.5 flex border-b-2 border-gray-500"
-                  >
-                    <div
-                      class="inline-flex items-center justify-between w-full pt-2"
-                    >
-                      <div class="justify-start items-center gap-2.5 flex">
-                        <div
-                          class="w-10 h-10 bg-stone-300 rounded-full justify-start items-start gap-2.5 flex"
-                        >
-                          <img
-                            class="object-cover rounded-full"
-                            src="https://pagedone.io/asset/uploads/1710225753.png"
-                            alt="John smith image"
-                          />
-                        </div>
-                        <div
-                          class="inline-flex flex-col items-start justify-start gap-1"
-                        >
-                          <h5
-                            class="text-sm font-semibold leading-snug text-gray-900"
-                          >
-                            John smith
-                          </h5>
-                          <h6
-                            class="text-xs font-normal leading-5 text-gray-500"
-                          >
-                            5 Day ago
-                          </h6>
-                        </div>
-                      </div>
-                      <div class="flex items-center justify-end group">
-                        <button
-                          type="button"
-                          class="flex items-center justify-center px-1 py-1 transition-all duration-700 ease-in-out cursor-pointer hover:bg-gray-200"
-                        >
-                          <i
-                            class="text-gray-500 cursor-pointer bi bi-three-dots-vertical"
-                          ></i>
-                        </button>
-                      </div>
-                    </div>
-                    <p
-                      class="pb-3 text-sm font-normal leading-snug text-gray-800"
-                    >
-                      Mauris luctus habitasse turpis elementum vitae in. Ut
-                      habitasse orci sed aliquam bibendum. Sem in nisl
-                      vestibulum rhoncus sed diam amet nulla. Netus feugiat nunc
-                      vulputate eros pellentesque. A at augue elementum aliquet
-                      in aliquet. Vitae amet quisque massa egestas amet. Vitae
-                      id ipsum lacus tellus facilisis sit. Nunc ut pellentesque
-                      lacus massa arcu neque mi ultrices convallis.
-                    </p>
-                  </div>
-                  <!-- comment section -->
-                  <div
-                    class="w-full flex-col justify-start items-start gap-3.5 flex border-b-2 border-gray-500"
-                  >
-                    <div
-                      class="inline-flex items-center justify-between w-full pt-2"
-                    >
-                      <div class="justify-start items-center gap-2.5 flex">
-                        <div
-                          class="w-10 h-10 bg-stone-300 rounded-full justify-start items-start gap-2.5 flex"
-                        >
-                          <img
-                            class="object-cover rounded-full"
-                            src="https://pagedone.io/asset/uploads/1710225753.png"
-                            alt="John smith image"
-                          />
-                        </div>
-                        <div
-                          class="inline-flex flex-col items-start justify-start gap-1"
-                        >
-                          <h5
-                            class="text-sm font-semibold leading-snug text-gray-900"
-                          >
-                            John smith
-                          </h5>
-                          <h6
-                            class="text-xs font-normal leading-5 text-gray-500"
-                          >
-                            5 Day ago
-                          </h6>
-                        </div>
-                      </div>
-                      <div class="flex items-center justify-end group">
-                        <button
-                          type="button"
-                          class="flex items-center justify-center px-1 py-1 transition-all duration-700 ease-in-out cursor-pointer hover:bg-gray-200"
-                        >
-                          <i
-                            class="text-gray-500 cursor-pointer bi bi-three-dots-vertical"
-                          ></i>
-                        </button>
-                      </div>
-                    </div>
-                    <p
-                      class="pb-3 text-sm font-normal leading-snug text-gray-800"
-                    >
-                      Mauris luctus habitasse turpis elementum vitae in. Ut
-                      habitasse orci sed aliquam bibendum. Sem in nisl
-                      vestibulum rhoncus sed diam amet nulla. Netus feugiat nunc
-                      vulputate eros pellentesque. A at augue elementum aliquet
-                      in aliquet. Vitae amet quisque massa egestas amet. Vitae
-                      id ipsum lacus tellus facilisis sit. Nunc ut pellentesque
-                      lacus massa arcu neque mi ultrices convallis.
-                    </p>
-                  </div>
-                  <!-- comment section -->
-                  <div
-                    class="w-full flex-col justify-start items-start gap-3.5 flex border-b-2 border-gray-500"
-                  >
-                    <div
-                      class="inline-flex items-center justify-between w-full pt-2"
-                    >
-                      <div class="justify-start items-center gap-2.5 flex">
-                        <div
-                          class="w-10 h-10 bg-stone-300 rounded-full justify-start items-start gap-2.5 flex"
-                        >
-                          <img
-                            class="object-cover rounded-full"
-                            src="https://pagedone.io/asset/uploads/1710225753.png"
-                            alt="John smith image"
-                          />
-                        </div>
-                        <div
-                          class="inline-flex flex-col items-start justify-start gap-1"
-                        >
-                          <h5
-                            class="text-sm font-semibold leading-snug text-gray-900"
-                          >
-                            John smith
-                          </h5>
-                          <h6
-                            class="text-xs font-normal leading-5 text-gray-500"
-                          >
-                            5 Day ago
-                          </h6>
-                        </div>
-                      </div>
-                      <div class="flex items-center justify-end group">
-                        <button
-                          type="button"
-                          class="flex items-center justify-center px-1 py-1 transition-all duration-700 ease-in-out cursor-pointer hover:bg-gray-200"
-                        >
-                          <i
-                            class="text-gray-500 cursor-pointer bi bi-three-dots-vertical"
-                          ></i>
-                        </button>
-                      </div>
-                    </div>
-                    <p
-                      class="pb-3 text-sm font-normal leading-snug text-gray-800"
-                    >
-                      Mauris luctus habitasse turpis elementum vitae in. Ut
-                      habitasse orci sed aliquam bibendum. Sem in nisl
-                      vestibulum rhoncus sed diam amet nulla. Netus feugiat nunc
-                      vulputate eros pellentesque. A at augue elementum aliquet
-                      in aliquet. Vitae amet quisque massa egestas amet. Vitae
-                      id ipsum lacus tellus facilisis sit. Nunc ut pellentesque
-                      lacus massa arcu neque mi ultrices convallis.
-                    </p>
-                  </div>
-                  <!-- comment section -->
-                  <div
-                    class="w-full flex-col justify-start items-start gap-3.5 flex border-b-2 border-gray-500"
-                  >
-                    <div
-                      class="inline-flex items-center justify-between w-full pt-2"
-                    >
-                      <div class="justify-start items-center gap-2.5 flex">
-                        <div
-                          class="w-10 h-10 bg-stone-300 rounded-full justify-start items-start gap-2.5 flex"
-                        >
-                          <img
-                            class="object-cover rounded-full"
-                            src="https://pagedone.io/asset/uploads/1710225753.png"
-                            alt="John smith image"
-                          />
-                        </div>
-                        <div
-                          class="inline-flex flex-col items-start justify-start gap-1"
-                        >
-                          <h5
-                            class="text-sm font-semibold leading-snug text-gray-900"
-                          >
-                            John smith
-                          </h5>
-                          <h6
-                            class="text-xs font-normal leading-5 text-gray-500"
-                          >
-                            5 Day ago
-                          </h6>
-                        </div>
-                      </div>
-                      <div class="flex items-center justify-end group">
-                        <button
-                          type="button"
-                          class="flex items-center justify-center px-1 py-1 transition-all duration-700 ease-in-out cursor-pointer hover:bg-gray-200"
-                        >
-                          <i
-                            class="text-gray-500 cursor-pointer bi bi-three-dots-vertical"
-                          ></i>
-                        </button>
-                      </div>
-                    </div>
-                    <p
-                      class="pb-3 text-sm font-normal leading-snug text-gray-800"
-                    >
-                      Mauris luctus habitasse turpis elementum vitae in. Ut
-                      habitasse orci sed aliquam bibendum. Sem in nisl
-                      vestibulum rhoncus sed diam amet nulla. Netus feugiat nunc
-                      vulputate eros pellentesque. A at augue elementum aliquet
-                      in aliquet. Vitae amet quisque massa egestas amet. Vitae
-                      id ipsum lacus tellus facilisis sit. Nunc ut pellentesque
-                      lacus massa arcu neque mi ultrices convallis.
-                    </p>
-                  </div>
-                  <!-- buton show more comment -->
-                  <button
-                    class="w-full py-3 mt-5 font-bold text-gray-500 duration-500 border border-gray-500 rounded-md hover:bg-gray-200 hover:text-gray-800 hover:border-gray-800 transtion"
-                  >
-                    Xem thêm
-                  </button>
-                </div>
               </div>
             </div>
           </div>
+          <!-- Free zone -->
+          <div
+            (click)="hiddenModalComment($event)"
+            class="w-1/5 h-full mx-auto bg-gray-700 bg-opacity-80"
+          ></div>
         </div>
-        <!-- Free zone -->
-        <div
-          (click)="hiddenModalComment($event)"
-          class="w-1/5 h-full mx-auto bg-gray-700 bg-opacity-80"
-        ></div>
       </div>
     </div>
+    <!-- end modal comment-->
   </div>
-  <!-- end modal comment-->
 </div>

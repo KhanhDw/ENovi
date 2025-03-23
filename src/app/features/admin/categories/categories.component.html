@@ -13,25 +13,38 @@
         <h2 class="font-semibold">Lĩnh vực</h2>
         <input
           type="text"
-          name=""
-          id=""
+          name="category"
+          id="category"
           required
+          #categoryInput
+          [(ngModel)]="inputLinhVuc"
           placeholder="Nhập tên lĩnh vực"
           class="w-1/2 px-2 rounded-md focus:outline-none"
         />
-        <button type="button" class="cursor-pointer">
+        <button
+          (click)="createNewLinhVuc(inputLinhVuc)"
+          type="button"
+          class="cursor-pointer"
+        >
           <i
             class="cursor-pointer bi bi-plus-square-fill hover:text-orange-600"
           ></i>
         </button>
       </div>
       <div class="h-full bg-white">
-        <ul class="h-full overflow-y-auto divide-y divide-gray-200">
+        <ul class="h-[560px] py-1 overflow-y-auto divide-y divide-gray-200">
           <li
             *ngFor="let item of linhvuc"
-            class="px-4 py-3 transition-colors hover:bg-rose-400"
+            (click)="getV1category(item.id)"
+            class="flex items-center justify-between px-4 py-3 transition-colors hover:bg-rose-400"
           >
-            {{ item.name }}
+            <span> {{ item.name }}</span>
+            <button
+              (click)="deleteNewLinhVuc(item.id)"
+              class="px-2 py-1 rounded-md hover:bg-slate-300"
+            >
+              <i class="cursor-pointer bi bi-trash"></i>
+            </button>
           </li>
         </ul>
       </div>
@@ -47,25 +60,44 @@
         <h2 class="font-semibold">Chuyên ngành</h2>
         <input
           type="text"
-          name=""
-          id=""
+          name="categoryv1"
+          id="categoryv1"
           required
+          #categoryv1Input
+          [(ngModel)]="inputChuyenNganh"
           placeholder="Nhập tên chuyên ngành"
           class="w-1/2 px-2 rounded-md focus:outline-none"
         />
-        <button type="button" class="cursor-pointer">
+        <button
+          (click)="createNewChuyenNganh(inputChuyenNganh)"
+          type="button"
+          class="cursor-pointer"
+        >
           <i
             class="cursor-pointer bi bi-plus-square-fill hover:text-orange-600"
           ></i>
         </button>
       </div>
       <div class="h-full bg-white">
-        <ul class="h-full overflow-y-auto divide-y divide-gray-200">
+        <ul class="h-[560px] overflow-y-auto divide-y divide-gray-200">
           <li
             *ngFor="let item of chuyennganh"
-            class="px-4 py-3 transition-colors hover:bg-rose-400"
+            (click)="getV2category(item.id)"
+            class="flex items-center justify-between px-4 py-3 transition-colors hover:bg-rose-400"
           >
-            {{ item.name }}
+            <span> {{ item.name }}</span>
+            <button
+              (click)="deleteNewChuyenNganh(item.id)"
+              class="px-2 py-1 rounded-md hover:bg-slate-300"
+            >
+              <i class="cursor-pointer bi bi-trash"></i>
+            </button>
+          </li>
+          <li
+            class="text-black"
+            *ngIf="messageChuyenNganh !== '' && idLinhVuc === 0"
+          >
+            {{ messageChuyenNganh }}
           </li>
         </ul>
       </div>
@@ -81,25 +113,43 @@
         <h2 class="font-semibold">Phân mục</h2>
         <input
           type="text"
-          name=""
-          id=""
+          name="categoryv2"
+          id="categoryv2"
           required
+          #categoryv2Input
+          [(ngModel)]="inputPhanMuc"
           placeholder="Nhập tên phân mục"
           class="w-1/2 px-2 rounded-md focus:outline-none"
         />
-        <button type="button" class="cursor-pointer">
+        <button
+          (click)="createNewPhanMuc(inputPhanMuc)"
+          type="button"
+          class="cursor-pointer"
+        >
           <i
             class="cursor-pointer bi bi-plus-square-fill hover:text-orange-600"
           ></i>
         </button>
       </div>
       <div class="h-full bg-white">
-        <ul class="h-full overflow-y-auto divide-y divide-gray-200">
+        <ul class="h-[560px] overflow-y-auto divide-y divide-gray-200">
           <li
             *ngFor="let item of phanmuc"
-            class="px-4 py-3 transition-colors hover:bg-rose-400"
+            class="flex items-center justify-between px-4 py-3 transition-colors hover:bg-rose-400"
           >
-            {{ item.name }}
+            <span> {{ item.name }}</span>
+            <button
+              (click)="deleteNewPhanMuc(item.id)"
+              class="px-2 py-1 rounded-md hover:bg-slate-300"
+            >
+              <i class="cursor-pointer bi bi-trash"></i>
+            </button>
+          </li>
+          <li
+            class="text-black"
+            *ngIf="messagePhanMuc !== '' && idChuyenNganh === 0"
+          >
+            {{ messagePhanMuc }}
           </li>
         </ul>
       </div>

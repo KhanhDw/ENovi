@@ -27,7 +27,8 @@ export class SearchServiceService {
     duration: number,
     level: string,
     price: number,
-    page: number
+    page: number,
+    sort:string
   ): Observable<any> {
     let params = new HttpParams();
       
@@ -39,6 +40,7 @@ export class SearchServiceService {
     if (level) params = params.set('level', encodeURIComponent(level));
     if (price) params = params.set('price', encodeURIComponent(price.toString()));
     if (page) params = params.set('page', encodeURIComponent(page.toString()));
+    if (sort) params = params.set('sort', encodeURIComponent(sort));
 
 
     return this.http.get<any>(`${this.apiUrl}/course`, { params });

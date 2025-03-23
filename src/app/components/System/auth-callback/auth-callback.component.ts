@@ -37,8 +37,8 @@ export class AuthCallbackComponent implements OnInit {
                 next: (response: any) => {
                     if (response.success && response.token) {
                         this.cookieService.setCookie('token', response.token, 1);
-                        this.cookieService.setCookie('user', JSON.stringify(response.user),1);
-
+                        this.cookieService.setCookie('user', JSON.stringify(response.user),1); // line 95 at file:authRoutes in backend to edit value response.user
+ 
                         this.router.navigate(['/home']);
                     } else {
                         this.router.navigate(['/login'], {

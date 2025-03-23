@@ -132,11 +132,19 @@
     </form>
   </div>
 
-  <div class="flex flex-wrap items-center justify-center">
+  <div class="relative flex flex-wrap items-center justify-center">
+    <!-- <div *ngIf="loaddata"
+      class="absolute flex items-center justify-end top-0 left-0 w-full bg-[#231D1D] z-[999] h-full"
+    >
+      <h1 class="animate-pulse font-signika">Đang kiểm tra dữ liệu</h1>
+    </div> -->
     <a
       *ngIf="isLogin > 0"
       [routerLink]="instructorDashboardURL"
-      class="flex items-center justify-center gap-2 px-3 py-2 mx-1 text-sm font-semibold group hover:text-red-300"
+      [ngClass]="{'hover:text-red-300 hover:border-red-300':isLogin === 1,
+        'hover:text-green-300 hover:border-green-300':isLogin > 1,
+      }"
+      class="flex items-center justify-center gap-2 px-3 py-1 mx-1 text-xs font-semibold transition-all duration-300 border-2 border-transparent rounded-md group "
       ><i class="text-3xl bi bi-mortarboard-fill"></i>
       <div
         class="flex flex-col items-center justify-center group-hover:text-red-300"
@@ -149,7 +157,7 @@
         </div>
         <div
           *ngIf="isLogin > 1"
-          class="flex flex-col items-center justify-center group-hover:text-red-300"
+          class="flex flex-col items-center justify-center group-hover:text-green-300"
         >
           <span>Hoạt động</span><span>giảng dạy</span>
         </div>
@@ -172,7 +180,7 @@
       class="flex items-center justify-center h-full px-4 py-2 mx-1 text-xl transition duration-300 rounded hover:bg-gray-700"
       ><i class="bi bi-cart"></i
     ></a>
-    <a
+    <a hidden
       *ngIf="isLoggedIn || isLoggedInWithEnovi"
       href="#"
       class="items-center justify-center h-full px-4 py-2 mx-1 text-xl transition duration-300 rounded hover:bg-gray-700"
@@ -211,7 +219,7 @@
           type="button"
           (click)="toggleDropdown()"
         >
-          <img class="w-8 h-8 mr-1 rounded-full" [src]="picture" alt="avarta" />
+          <img class="w-8 h-8 mr-1 rounded-full" http-equiv="Content-Security-Policy" [src]="picture" alt="avarta" />
           <h6
             class="font-medium text-black max-w-[100px] w-auto flex flex-nowrap truncate overflow-x-hidden"
           >
@@ -227,30 +235,29 @@
           class="absolute z-[9999] bg-white divide-y divide-gray-400 rounded-lg shadow top-14 right-16 shadow-slate-700 w-60"
         >
           <div class="px-4 py-3 text-sm text-gray-900">
-            <a
-              [href]="publishProfileURL"
-              class="font-semibold hover:text-blue-600"
+            <div
+              class="font-semibold "
             >
               <div>{{ nameUser }}</div>
-              <div class="font-medium truncate">{{ emailUser }}</div></a
+              <div class="font-medium truncate">{{ emailUser }}</div></div
             >
           </div>
           <ul class="py-2 text-sm text-gray-700">
             <li>
               <a
                 class="block px-4 py-2 hover:bg-gray-100"
-                *ngFor="let item of avartFeature"
+                *ngFor="let item of avartFeature" 
                 href="{{ item.url }}"
                 >{{ item.name }}</a
               >
             </li>
           </ul>
-          <div class="py-2">
+          <div class="w-full py-2">
             <button
               type="button"
               *ngIf="isLoggedIn || isLoggedInWithEnovi"
               (click)="logout()"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              class="flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
               Đăng xuất
             </button>

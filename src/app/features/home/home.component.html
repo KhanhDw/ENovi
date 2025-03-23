@@ -13,7 +13,7 @@
             [src]="item.imgage"
             alt="Slidebanner"
             class="w-full h-[500px] object-cover border-none"
-            loading="lazy"
+            loading="eager"
             height="500"
           />
         </div>
@@ -48,7 +48,7 @@
         Kỹ năng công nghệ cần thiết trong thời đại số hóa, giúp nâng cao kỹ năng
         và chất lượng công việc
       </p>
-      <div class="flex items-center justify-between">
+      <!-- <div class="flex items-center justify-between">
         <ul
           class="flex items-center justify-center gap-0 mt-10 border-b-2 border-gray-200"
         >
@@ -97,7 +97,6 @@
               </div>
             </div>
 
-            <!-- Navigation Arrows -->
             <button
               *ngIf="currentIndexSkill > 0"
               (click)="PreSlideCourseForClient()"
@@ -114,7 +113,7 @@
             </button>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 
@@ -127,7 +126,7 @@
         Khoá học thịnh hành
       </h1>
       <div class="flex items-center justify-center gap-4">
-        <a
+        <a hidden
           href="#"
           class="px-2 py-1 mr-10 transition-all bg-blue-200 rounded-md hover:bg-blue-800 font-signika hover:text-white"
           >Xem thêm</a
@@ -151,18 +150,19 @@
     <!-- list card - carousel -->
     <div class="flex w-full mx-auto mt-1 overflow-hidden">
       <div
-        class="flex gap-6 transition-transform duration-500"
+        class="flex gap-4 transition-transform duration-500"
         [style.transform]="'translateX(-' + currentIndexCourseViral * 6 + '%)'"
       >
-        <!-- card courses -->
+        <!-- card courses prevailing-->
         <div
-          class="relative flex flex-col flex-shrink-0 my-6 transition-all duration-500 bg-white border rounded-lg shadow-md w-96 border-slate-300 hover:shadow-black"
+          *ngFor="let item of CourseViral"
+          class="relative flex flex-col flex-shrink-0 w-64 my-6 transition-all duration-500 bg-white border rounded-lg shadow-md border-slate-300 hover:shadow-blue-500"
         >
           <!-- image of course  -->
           <div class="h-62 m-2.5 overflow-hidden text-white rounded-md">
             <img
               class="object-fill w-full h-5/6"
-              src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
+              [src]="urlBackend_img_banner_course + item.img"
               alt="card-image"
             />
             <div
@@ -170,733 +170,39 @@
             >
               <!--5 start -->
               <div class="flex items-center justify-center gap-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
+                <span class="text-xl font-bold font-signika"
+                  >{{ item.price | number : "1.0-0" }} đ</span
                 >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
               </div>
               <!-- the number of rate of the user -->
               <div class="flex items-center justify-center">
-                <span class="ml-1.5 text-white">5.0</span>
-                <span class="ml-1.5 text-white">(2,313)</span>
+                <span class="ml-1.5 text-white">{{
+                  item.rating | number : "1.0-0"
+                }}</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="w-5 h-5 text-yellow-300"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
               </div>
             </div>
           </div>
           <!-- name of course -->
-          <div class="px-4 py-0">
+          <div class="px-4 py-2">
             <div class="flex items-center mb-2">
-              <h6
-                class="overflow-y-hidden text-xl font-semibold leading-none text-slate-800 line-clamp-2"
+              <a  (click)="goToCourseDetail(item.id,item.title)"
+                class="overflow-y-hidden text-xl font-semibold leading-none font-signika text-slate-800 line-clamp-3 hover:text-blue-500"
               >
-                Wooden House, Florida Wooden House, Florida Wooden House,
-                Florida Wooden House, Florida
-              </h6>
+                {{ item.title }}
+              </a>
             </div>
-
-            <p
-              class="overflow-y-hidden text-sm font-light leading-normal text-slate-600 line-clamp-2"
-            >
-              Enter a freshly updated and thoughtfully furnished peaceful home
-              surrounded by ancient trees, stone walls, and open meadows.
-            </p>
-          </div>
-          <!-- avarta and price of course and Course duration -->
-          <div class="flex flex-wrap items-center justify-between px-4 my-3">
-            <a
-              href="#"
-              class="flex items-center px-2 py-1 text-sm text-center transition-all bg-white rounded-lg hover:bg-gray-200"
-            >
-              <img
-                class="w-8 h-8 rounded-full"
-                src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-                alt="card-image"
-              />
-              <span class="mx-1 font-semibold">hehe</span>
-            </a>
-            <button
-              class="p-1 font-normal text-center transition-all rounded-lg shadow-sm pointer-events-none border-slate-300 hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              <span class="text-sm"><i class="bi bi-play-circle"></i> 28</span>
-              <span class="ml-2 text-sm"
-                ><i class="bi bi-clock"></i> 19h24m</span
-              >
-            </button>
-            <button
-              class="font-semibold rounded-lg pointer-events-none border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              200,000 đ
-            </button>
-          </div>
-          <!-- button add to card and buy course -->
-          <div
-            class="flex items-center justify-between gap-1 px-4 pt-0 pb-4 mt-2"
-          >
-            <button
-              class="w-full h-12 px-4 text-sm font-semibold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-500 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Thêm vào giỏ hàng
-            </button>
-            <button
-              class="w-full h-12 px-4 py-2 text-sm font-bold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-800 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Mua khóa học
-            </button>
-          </div>
-        </div>
-        <!-- card courses -->
-        <div
-          class="relative flex flex-col flex-shrink-0 my-6 transition-all duration-500 bg-white border rounded-lg shadow-md w-96 border-slate-300 hover:shadow-black"
-        >
-          <!-- image of course  -->
-          <div class="h-62 m-2.5 overflow-hidden text-white rounded-md">
-            <img
-              class="object-fill w-full h-5/6"
-              src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-              alt="card-image"
-            />
-            <div
-              class="flex items-center justify-between w-full px-2 border-gray-200 rounded-b-lg h-1/6 bg-slate-800"
-            >
-              <!--5 start -->
-              <div class="flex items-center justify-center gap-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-              </div>
-              <!-- the number of rate of the user -->
-              <div class="flex items-center justify-center">
-                <span class="ml-1.5 text-white">5.0</span>
-                <span class="ml-1.5 text-white">(2,313)</span>
-              </div>
-            </div>
-          </div>
-          <!-- name of course -->
-          <div class="px-4 py-0">
-            <div class="flex items-center mb-2">
-              <h6
-                class="overflow-y-hidden text-xl font-semibold leading-none text-slate-800 line-clamp-2"
-              >
-                Wooden House, Florida Wooden House, Florida Wooden House,
-                Florida Wooden House, Florida
-              </h6>
-            </div>
-
-            <p
-              class="overflow-y-hidden text-sm font-light leading-normal text-slate-600 line-clamp-2"
-            >
-              Enter a freshly updated and thoughtfully furnished peaceful home
-              surrounded by ancient trees, stone walls, and open meadows.
-            </p>
-          </div>
-          <!-- avarta and price of course and Course duration -->
-          <div class="flex flex-wrap items-center justify-between px-4 my-3">
-            <a
-              href="#"
-              class="flex items-center px-2 py-1 text-sm text-center transition-all bg-white rounded-lg hover:bg-gray-200"
-            >
-              <img
-                class="w-8 h-8 rounded-full"
-                src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-                alt="card-image"
-              />
-              <span class="mx-1 font-semibold">hehe</span>
-            </a>
-            <button
-              class="p-1 font-normal text-center transition-all rounded-lg shadow-sm pointer-events-none border-slate-300 hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              <span class="text-sm"><i class="bi bi-play-circle"></i> 28</span>
-              <span class="ml-2 text-sm"
-                ><i class="bi bi-clock"></i> 19h24m</span
-              >
-            </button>
-            <button
-              class="font-semibold rounded-lg pointer-events-none border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              200,000 đ
-            </button>
-          </div>
-          <!-- button add to card and buy course -->
-          <div
-            class="flex items-center justify-between gap-1 px-4 pt-0 pb-4 mt-2"
-          >
-            <button
-              class="w-full h-12 px-4 text-sm font-semibold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-500 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Thêm vào giỏ hàng
-            </button>
-            <button
-              class="w-full h-12 px-4 py-2 text-sm font-bold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-800 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Mua khóa học
-            </button>
-          </div>
-        </div>
-        <!-- card courses -->
-        <div
-          class="relative flex flex-col flex-shrink-0 my-6 transition-all duration-500 bg-white border rounded-lg shadow-md w-96 border-slate-300 hover:shadow-black"
-        >
-          <!-- image of course  -->
-          <div class="h-62 m-2.5 overflow-hidden text-white rounded-md">
-            <img
-              class="object-fill w-full h-5/6"
-              src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-              alt="card-image"
-            />
-            <div
-              class="flex items-center justify-between w-full px-2 border-gray-200 rounded-b-lg h-1/6 bg-slate-800"
-            >
-              <!--5 start -->
-              <div class="flex items-center justify-center gap-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-              </div>
-              <!-- the number of rate of the user -->
-              <div class="flex items-center justify-center">
-                <span class="ml-1.5 text-white">5.0</span>
-                <span class="ml-1.5 text-white">(2,313)</span>
-              </div>
-            </div>
-          </div>
-          <!-- name of course -->
-          <div class="px-4 py-0">
-            <div class="flex items-center mb-2">
-              <h6
-                class="overflow-y-hidden text-xl font-semibold leading-none text-slate-800 line-clamp-2"
-              >
-                Wooden House, Florida Wooden House, Florida Wooden House,
-                Florida Wooden House, Florida
-              </h6>
-            </div>
-
-            <p
-              class="overflow-y-hidden text-sm font-light leading-normal text-slate-600 line-clamp-2"
-            >
-              Enter a freshly updated and thoughtfully furnished peaceful home
-              surrounded by ancient trees, stone walls, and open meadows.
-            </p>
-          </div>
-          <!-- avarta and price of course and Course duration -->
-          <div class="flex flex-wrap items-center justify-between px-4 my-3">
-            <a
-              href="#"
-              class="flex items-center px-2 py-1 text-sm text-center transition-all bg-white rounded-lg hover:bg-gray-200"
-            >
-              <img
-                class="w-8 h-8 rounded-full"
-                src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-                alt="card-image"
-              />
-              <span class="mx-1 font-semibold">hehe</span>
-            </a>
-            <button
-              class="p-1 font-normal text-center transition-all rounded-lg shadow-sm pointer-events-none border-slate-300 hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              <span class="text-sm"><i class="bi bi-play-circle"></i> 28</span>
-              <span class="ml-2 text-sm"
-                ><i class="bi bi-clock"></i> 19h24m</span
-              >
-            </button>
-            <button
-              class="font-semibold rounded-lg pointer-events-none border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              200,000 đ
-            </button>
-          </div>
-          <!-- button add to card and buy course -->
-          <div
-            class="flex items-center justify-between gap-1 px-4 pt-0 pb-4 mt-2"
-          >
-            <button
-              class="w-full h-12 px-4 text-sm font-semibold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-500 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Thêm vào giỏ hàng
-            </button>
-            <button
-              class="w-full h-12 px-4 py-2 text-sm font-bold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-800 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Mua khóa học
-            </button>
-          </div>
-        </div>
-        <!-- card courses -->
-        <div
-          class="relative flex flex-col flex-shrink-0 my-6 transition-all duration-500 bg-white border rounded-lg shadow-md w-96 border-slate-300 hover:shadow-black"
-        >
-          <!-- image of course  -->
-          <div class="h-62 m-2.5 overflow-hidden text-white rounded-md">
-            <img
-              class="object-fill w-full h-5/6"
-              src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-              alt="card-image"
-            />
-            <div
-              class="flex items-center justify-between w-full px-2 border-gray-200 rounded-b-lg h-1/6 bg-slate-800"
-            >
-              <!--5 start -->
-              <div class="flex items-center justify-center gap-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-              </div>
-              <!-- the number of rate of the user -->
-              <div class="flex items-center justify-center">
-                <span class="ml-1.5 text-white">5.0</span>
-                <span class="ml-1.5 text-white">(2,313)</span>
-              </div>
-            </div>
-          </div>
-          <!-- name of course -->
-          <div class="px-4 py-0">
-            <div class="flex items-center mb-2">
-              <h6
-                class="overflow-y-hidden text-xl font-semibold leading-none text-slate-800 line-clamp-2"
-              >
-                Wooden House, Florida Wooden House, Florida Wooden House,
-                Florida Wooden House, Florida
-              </h6>
-            </div>
-
-            <p
-              class="overflow-y-hidden text-sm font-light leading-normal text-slate-600 line-clamp-2"
-            >
-              Enter a freshly updated and thoughtfully furnished peaceful home
-              surrounded by ancient trees, stone walls, and open meadows.
-            </p>
-          </div>
-          <!-- avarta and price of course and Course duration -->
-          <div class="flex flex-wrap items-center justify-between px-4 my-3">
-            <a
-              href="#"
-              class="flex items-center px-2 py-1 text-sm text-center transition-all bg-white rounded-lg hover:bg-gray-200"
-            >
-              <img
-                class="w-8 h-8 rounded-full"
-                src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-                alt="card-image"
-              />
-              <span class="mx-1 font-semibold">hehe</span>
-            </a>
-            <button
-              class="p-1 font-normal text-center transition-all rounded-lg shadow-sm pointer-events-none border-slate-300 hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              <span class="text-sm"><i class="bi bi-play-circle"></i> 28</span>
-              <span class="ml-2 text-sm"
-                ><i class="bi bi-clock"></i> 19h24m</span
-              >
-            </button>
-            <button
-              class="font-semibold rounded-lg pointer-events-none border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              200,000 đ
-            </button>
-          </div>
-          <!-- button add to card and buy course -->
-          <div
-            class="flex items-center justify-between gap-1 px-4 pt-0 pb-4 mt-2"
-          >
-            <button
-              class="w-full h-12 px-4 text-sm font-semibold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-500 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Thêm vào giỏ hàng
-            </button>
-            <button
-              class="w-full h-12 px-4 py-2 text-sm font-bold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-800 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Mua khóa học
-            </button>
-          </div>
-        </div>
-        <!-- card courses -->
-        <div
-          class="relative flex flex-col flex-shrink-0 my-6 transition-all duration-500 bg-white border rounded-lg shadow-md w-96 border-slate-300 hover:shadow-black"
-        >
-          <!-- image of course  -->
-          <div class="h-62 m-2.5 overflow-hidden text-white rounded-md">
-            <img
-              class="object-fill w-full h-5/6"
-              src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-              alt="card-image"
-            />
-            <div
-              class="flex items-center justify-between w-full px-2 border-gray-200 rounded-b-lg h-1/6 bg-slate-800"
-            >
-              <!--5 start -->
-              <div class="flex items-center justify-center gap-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-              </div>
-              <!-- the number of rate of the user -->
-              <div class="flex items-center justify-center">
-                <span class="ml-1.5 text-white">5.0</span>
-                <span class="ml-1.5 text-white">(2,313)</span>
-              </div>
-            </div>
-          </div>
-          <!-- name of course -->
-          <div class="px-4 py-0">
-            <div class="flex items-center mb-2">
-              <h6
-                class="overflow-y-hidden text-xl font-semibold leading-none text-slate-800 line-clamp-2"
-              >
-                Wooden House, Florida Wooden House, Florida Wooden House,
-                Florida Wooden House, Florida
-              </h6>
-            </div>
-
-            <p
-              class="overflow-y-hidden text-sm font-light leading-normal text-slate-600 line-clamp-2"
-            >
-              Enter a freshly updated and thoughtfully furnished peaceful home
-              surrounded by ancient trees, stone walls, and open meadows.
-            </p>
-          </div>
-          <!-- avarta and price of course and Course duration -->
-          <div class="flex flex-wrap items-center justify-between px-4 my-3">
-            <a
-              href="#"
-              class="flex items-center px-2 py-1 text-sm text-center transition-all bg-white rounded-lg hover:bg-gray-200"
-            >
-              <img
-                class="w-8 h-8 rounded-full"
-                src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-                alt="card-image"
-              />
-              <span class="mx-1 font-semibold">hehe</span>
-            </a>
-            <button
-              class="p-1 font-normal text-center transition-all rounded-lg shadow-sm pointer-events-none border-slate-300 hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              <span class="text-sm"><i class="bi bi-play-circle"></i> 28</span>
-              <span class="ml-2 text-sm"
-                ><i class="bi bi-clock"></i> 19h24m</span
-              >
-            </button>
-            <button
-              class="font-semibold rounded-lg pointer-events-none border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              200,000 đ
-            </button>
-          </div>
-          <!-- button add to card and buy course -->
-          <div
-            class="flex items-center justify-between gap-1 px-4 pt-0 pb-4 mt-2"
-          >
-            <button
-              class="w-full h-12 px-4 text-sm font-semibold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-500 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Thêm vào giỏ hàng
-            </button>
-            <button
-              class="w-full h-12 px-4 py-2 text-sm font-bold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-800 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Mua khóa học
-            </button>
           </div>
         </div>
       </div>
@@ -915,7 +221,7 @@
         Khoá học miễn phí chất lượng cao
       </h1>
       <div class="flex items-center justify-center gap-4">
-        <a
+        <a hidden
           href="#"
           class="px-2 py-1 mr-10 transition-all bg-blue-200 rounded-md hover:bg-blue-800 font-signika hover:text-white"
           >Xem thêm</a
@@ -937,755 +243,51 @@
       </div>
     </div>
     <!-- list card - carousel -->
-    <div class="flex w-full mx-auto mt-1 overflow-hidden">
-      <div
-        class="flex gap-6 transition-transform duration-500"
-        [style.transform]="'translateX(-' + currentIndexCourseFree * 6 + '%)'"
-      >
-        <!-- card courses -->
+    <!-- card courses -->
+    <div
+      *ngFor="let item of CourseFree"
+      class="relative flex flex-col flex-shrink-0 w-64 my-6 transition-all duration-500 bg-white border rounded-lg shadow-md border-slate-300 hover:shadow-blue-500"
+    >
+      <!-- image of course  -->
+      <div class="h-62 m-2.5 overflow-hidden text-white rounded-md">
+        <img
+          class="object-fill w-full h-5/6"
+          [src]="urlBackend_img_banner_course + item.img"
+          alt="card-image"
+        />
         <div
-          class="relative flex flex-col flex-shrink-0 my-6 transition-all duration-500 bg-white border rounded-lg shadow-md w-96 border-slate-300 hover:shadow-black"
+          class="flex items-center justify-between w-full px-2 border-gray-200 rounded-b-lg h-1/6 bg-slate-800"
         >
-          <!-- image of course  -->
-          <div class="h-62 m-2.5 overflow-hidden text-white rounded-md">
-            <img
-              class="object-fill w-full h-5/6"
-              src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-              alt="card-image"
-            />
-            <div
-              class="flex items-center justify-between w-full px-2 border-gray-200 rounded-b-lg h-1/6 bg-slate-800"
-            >
-              <!--5 start -->
-              <div class="flex items-center justify-center gap-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-              </div>
-              <!-- the number of rate of the user -->
-              <div class="flex items-center justify-center">
-                <span class="ml-1.5 text-white">5.0</span>
-                <span class="ml-1.5 text-white">(2,313)</span>
-              </div>
-            </div>
+          <!--5 start -->
+          <div class="flex items-center justify-center">
+            <span class="text-xl font-bold text-green-300 font-signika"> {{ item.price === 0 ? 'FREE' : item.price  }}</span>
           </div>
-          <!-- name of course -->
-          <div class="px-4 py-0">
-            <div class="flex items-center mb-2">
-              <h6
-                class="overflow-y-hidden text-xl font-semibold leading-none text-slate-800 line-clamp-2"
-              >
-                Wooden House, Florida Wooden House, Florida Wooden House,
-                Florida Wooden House, Florida
-              </h6>
-            </div>
-
-            <p
-              class="overflow-y-hidden text-sm font-light leading-normal text-slate-600 line-clamp-2"
+          <!-- the number of rate of the user -->
+          <div class="flex items-center justify-center">
+            <span class="ml-1.5 text-white">{{ item.rating }}</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="w-5 h-5 text-yellow-300"
             >
-              Enter a freshly updated and thoughtfully furnished peaceful home
-              surrounded by ancient trees, stone walls, and open meadows.
-            </p>
-          </div>
-          <!-- avarta and price of course and Course duration -->
-          <div class="flex flex-wrap items-center justify-between px-4 my-3">
-            <a
-              href="#"
-              class="flex items-center px-2 py-1 text-sm text-center transition-all bg-white rounded-lg hover:bg-gray-200"
-            >
-              <img
-                class="w-8 h-8 rounded-full"
-                src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-                alt="card-image"
-              />
-              <span class="mx-1 font-semibold">hehe</span>
-            </a>
-            <button
-              class="p-1 font-normal text-center transition-all rounded-lg shadow-sm pointer-events-none border-slate-300 hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              <span class="text-sm"><i class="bi bi-play-circle"></i> 28</span>
-              <span class="ml-2 text-sm"
-                ><i class="bi bi-clock"></i> 19h24m</span
-              >
-            </button>
-            <button
-              class="font-semibold rounded-lg pointer-events-none border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              FREE
-            </button>
-          </div>
-          <!-- button add to card and buy course -->
-          <div
-            class="flex items-center justify-between gap-1 px-4 pt-0 pb-4 mt-2"
-          >
-            <button
-              class="w-full h-12 px-4 text-sm font-semibold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-500 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Thêm vào giỏ hàng
-            </button>
-            <button
-              class="w-full h-12 px-4 py-2 text-sm font-bold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-800 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Mua khóa học
-            </button>
+              <path
+                fill-rule="evenodd"
+                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
           </div>
         </div>
-        <!-- card courses -->
-        <div
-          class="relative flex flex-col flex-shrink-0 my-6 transition-all duration-500 bg-white border rounded-lg shadow-md w-96 border-slate-300 hover:shadow-black"
-        >
-          <!-- image of course  -->
-          <div class="h-62 m-2.5 overflow-hidden text-white rounded-md">
-            <img
-              class="object-fill w-full h-5/6"
-              src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-              alt="card-image"
-            />
-            <div
-              class="flex items-center justify-between w-full px-2 border-gray-200 rounded-b-lg h-1/6 bg-slate-800"
-            >
-              <!--5 start -->
-              <div class="flex items-center justify-center gap-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-              </div>
-              <!-- the number of rate of the user -->
-              <div class="flex items-center justify-center">
-                <span class="ml-1.5 text-white">5.0</span>
-                <span class="ml-1.5 text-white">(2,313)</span>
-              </div>
-            </div>
-          </div>
-          <!-- name of course -->
-          <div class="px-4 py-0">
-            <div class="flex items-center mb-2">
-              <h6
-                class="overflow-y-hidden text-xl font-semibold leading-none text-slate-800 line-clamp-2"
-              >
-                Wooden House, Florida Wooden House, Florida Wooden House,
-                Florida Wooden House, Florida
-              </h6>
-            </div>
-
-            <p
-              class="overflow-y-hidden text-sm font-light leading-normal text-slate-600 line-clamp-2"
-            >
-              Enter a freshly updated and thoughtfully furnished peaceful home
-              surrounded by ancient trees, stone walls, and open meadows.
-            </p>
-          </div>
-          <!-- avarta and price of course and Course duration -->
-          <div class="flex flex-wrap items-center justify-between px-4 my-3">
-            <a
-              href="#"
-              class="flex items-center px-2 py-1 text-sm text-center transition-all bg-white rounded-lg hover:bg-gray-200"
-            >
-              <img
-                class="w-8 h-8 rounded-full"
-                src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-                alt="card-image"
-              />
-              <span class="mx-1 font-semibold">hehe</span>
-            </a>
-            <button
-              class="p-1 font-normal text-center transition-all rounded-lg shadow-sm pointer-events-none border-slate-300 hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              <span class="text-sm"><i class="bi bi-play-circle"></i> 28</span>
-              <span class="ml-2 text-sm"
-                ><i class="bi bi-clock"></i> 19h24m</span
-              >
-            </button>
-            <button
-              class="font-semibold rounded-lg pointer-events-none border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              FREE
-            </button>
-          </div>
-          <!-- button add to card and buy course -->
-          <div
-            class="flex items-center justify-between gap-1 px-4 pt-0 pb-4 mt-2"
+      </div>
+      <!-- name of course -->
+      <div class="px-4 py-2">
+        <div class="flex items-center mb-2">
+          <a (click)="goToCourseDetail(item.id,item.title)"
+            class="overflow-y-hidden text-xl font-semibold leading-none font-signika text-slate-800 line-clamp-3 hover:text-blue-500"
           >
-            <button
-              class="w-full h-12 px-4 text-sm font-semibold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-500 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Thêm vào giỏ hàng
-            </button>
-            <button
-              class="w-full h-12 px-4 py-2 text-sm font-bold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-800 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Mua khóa học
-            </button>
-          </div>
-        </div>
-        <!-- card courses -->
-        <div
-          class="relative flex flex-col flex-shrink-0 my-6 transition-all duration-500 bg-white border rounded-lg shadow-md w-96 border-slate-300 hover:shadow-black"
-        >
-          <!-- image of course  -->
-          <div class="h-62 m-2.5 overflow-hidden text-white rounded-md">
-            <img
-              class="object-fill w-full h-5/6"
-              src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-              alt="card-image"
-            />
-            <div
-              class="flex items-center justify-between w-full px-2 border-gray-200 rounded-b-lg h-1/6 bg-slate-800"
-            >
-              <!--5 start -->
-              <div class="flex items-center justify-center gap-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-              </div>
-              <!-- the number of rate of the user -->
-              <div class="flex items-center justify-center">
-                <span class="ml-1.5 text-white">5.0</span>
-                <span class="ml-1.5 text-white">(2,313)</span>
-              </div>
-            </div>
-          </div>
-          <!-- name of course -->
-          <div class="px-4 py-0">
-            <div class="flex items-center mb-2">
-              <h6
-                class="overflow-y-hidden text-xl font-semibold leading-none text-slate-800 line-clamp-2"
-              >
-                Wooden House, Florida Wooden House, Florida Wooden House,
-                Florida Wooden House, Florida
-              </h6>
-            </div>
-
-            <p
-              class="overflow-y-hidden text-sm font-light leading-normal text-slate-600 line-clamp-2"
-            >
-              Enter a freshly updated and thoughtfully furnished peaceful home
-              surrounded by ancient trees, stone walls, and open meadows.
-            </p>
-          </div>
-          <!-- avarta and price of course and Course duration -->
-          <div class="flex flex-wrap items-center justify-between px-4 my-3">
-            <a
-              href="#"
-              class="flex items-center px-2 py-1 text-sm text-center transition-all bg-white rounded-lg hover:bg-gray-200"
-            >
-              <img
-                class="w-8 h-8 rounded-full"
-                src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-                alt="card-image"
-              />
-              <span class="mx-1 font-semibold">hehe</span>
-            </a>
-            <button
-              class="p-1 font-normal text-center transition-all rounded-lg shadow-sm pointer-events-none border-slate-300 hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              <span class="text-sm"><i class="bi bi-play-circle"></i> 28</span>
-              <span class="ml-2 text-sm"
-                ><i class="bi bi-clock"></i> 19h24m</span
-              >
-            </button>
-            <button
-              class="font-semibold rounded-lg pointer-events-none border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              FREE
-            </button>
-          </div>
-          <!-- button add to card and buy course -->
-          <div
-            class="flex items-center justify-between gap-1 px-4 pt-0 pb-4 mt-2"
-          >
-            <button
-              class="w-full h-12 px-4 text-sm font-semibold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-500 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Thêm vào giỏ hàng
-            </button>
-            <button
-              class="w-full h-12 px-4 py-2 text-sm font-bold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-800 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Mua khóa học
-            </button>
-          </div>
-        </div>
-        <!-- card courses -->
-        <div
-          class="relative flex flex-col flex-shrink-0 my-6 transition-all duration-500 bg-white border rounded-lg shadow-md w-96 border-slate-300 hover:shadow-black"
-        >
-          <!-- image of course  -->
-          <div class="h-62 m-2.5 overflow-hidden text-white rounded-md">
-            <img
-              class="object-fill w-full h-5/6"
-              src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-              alt="card-image"
-            />
-            <div
-              class="flex items-center justify-between w-full px-2 border-gray-200 rounded-b-lg h-1/6 bg-slate-800"
-            >
-              <!--5 start -->
-              <div class="flex items-center justify-center gap-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-              </div>
-              <!-- the number of rate of the user -->
-              <div class="flex items-center justify-center">
-                <span class="ml-1.5 text-white">5.0</span>
-                <span class="ml-1.5 text-white">(2,313)</span>
-              </div>
-            </div>
-          </div>
-          <!-- name of course -->
-          <div class="px-4 py-0">
-            <div class="flex items-center mb-2">
-              <h6
-                class="overflow-y-hidden text-xl font-semibold leading-none text-slate-800 line-clamp-2"
-              >
-                Wooden House, Florida Wooden House, Florida Wooden House,
-                Florida Wooden House, Florida
-              </h6>
-            </div>
-
-            <p
-              class="overflow-y-hidden text-sm font-light leading-normal text-slate-600 line-clamp-2"
-            >
-              Enter a freshly updated and thoughtfully furnished peaceful home
-              surrounded by ancient trees, stone walls, and open meadows.
-            </p>
-          </div>
-          <!-- avarta and price of course and Course duration -->
-          <div class="flex flex-wrap items-center justify-between px-4 my-3">
-            <a
-              href="#"
-              class="flex items-center px-2 py-1 text-sm text-center transition-all bg-white rounded-lg hover:bg-gray-200"
-            >
-              <img
-                class="w-8 h-8 rounded-full"
-                src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-                alt="card-image"
-              />
-              <span class="mx-1 font-semibold">hehe</span>
-            </a>
-            <button
-              class="p-1 font-normal text-center transition-all rounded-lg shadow-sm pointer-events-none border-slate-300 hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              <span class="text-sm"><i class="bi bi-play-circle"></i> 28</span>
-              <span class="ml-2 text-sm"
-                ><i class="bi bi-clock"></i> 19h24m</span
-              >
-            </button>
-            <button
-              class="font-semibold rounded-lg pointer-events-none border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              FREE
-            </button>
-          </div>
-          <!-- button add to card and buy course -->
-          <div
-            class="flex items-center justify-between gap-1 px-4 pt-0 pb-4 mt-2"
-          >
-            <button
-              class="w-full h-12 px-4 text-sm font-semibold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-500 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Thêm vào giỏ hàng
-            </button>
-            <button
-              class="w-full h-12 px-4 py-2 text-sm font-bold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-800 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Mua khóa học
-            </button>
-          </div>
-        </div>
-        <!-- card courses -->
-        <div
-          class="relative flex flex-col flex-shrink-0 my-6 transition-all duration-500 bg-white border rounded-lg shadow-md w-96 border-slate-300 hover:shadow-black"
-        >
-          <!-- image of course  -->
-          <div class="h-62 m-2.5 overflow-hidden text-white rounded-md">
-            <img
-              class="object-fill w-full h-5/6"
-              src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-              alt="card-image"
-            />
-            <div
-              class="flex items-center justify-between w-full px-2 border-gray-200 rounded-b-lg h-1/6 bg-slate-800"
-            >
-              <!--5 start -->
-              <div class="flex items-center justify-center gap-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 text-yellow-300"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-              </div>
-              <!-- the number of rate of the user -->
-              <div class="flex items-center justify-center">
-                <span class="ml-1.5 text-white">5.0</span>
-                <span class="ml-1.5 text-white">(2,313)</span>
-              </div>
-            </div>
-          </div>
-          <!-- name of course -->
-          <div class="px-4 py-0">
-            <div class="flex items-center mb-2">
-              <h6
-                class="overflow-y-hidden text-xl font-semibold leading-none text-slate-800 line-clamp-2"
-              >
-                Wooden House, Florida Wooden House, Florida Wooden House,
-                Florida Wooden House, Florida
-              </h6>
-            </div>
-
-            <p
-              class="overflow-y-hidden text-sm font-light leading-normal text-slate-600 line-clamp-2"
-            >
-              Enter a freshly updated and thoughtfully furnished peaceful home
-              surrounded by ancient trees, stone walls, and open meadows.
-            </p>
-          </div>
-          <!-- avarta and price of course and Course duration -->
-          <div class="flex flex-wrap items-center justify-between px-4 my-3">
-            <a
-              href="#"
-              class="flex items-center px-2 py-1 text-sm text-center transition-all bg-white rounded-lg hover:bg-gray-200"
-            >
-              <img
-                class="w-8 h-8 rounded-full"
-                src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-                alt="card-image"
-              />
-              <span class="mx-1 font-semibold">hehe</span>
-            </a>
-            <button
-              class="p-1 font-normal text-center transition-all rounded-lg shadow-sm pointer-events-none border-slate-300 hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              <span class="text-sm"><i class="bi bi-play-circle"></i> 28</span>
-              <span class="ml-2 text-sm"
-                ><i class="bi bi-clock"></i> 19h24m</span
-              >
-            </button>
-            <button
-              class="font-semibold rounded-lg pointer-events-none border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              FREE
-            </button>
-          </div>
-          <!-- button add to card and buy course -->
-          <div
-            class="flex items-center justify-between gap-1 px-4 pt-0 pb-4 mt-2"
-          >
-            <button
-              class="w-full h-12 px-4 text-sm font-semibold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-500 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Thêm vào giỏ hàng
-            </button>
-            <button
-              class="w-full h-12 px-4 py-2 text-sm font-bold text-center text-white transition-all border border-transparent rounded-md shadow-md bg-slate-800 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-            >
-              Mua khóa học
-            </button>
-          </div>
+          {{ item.title }}
+          </a>
         </div>
       </div>
     </div>
@@ -1789,11 +391,12 @@
       </h1>
     </div>
     <div class="flex w-4/5 mx-auto">
-      <div class="flex flex-col w-1/4 gap-4 pt-5 border-r-2 border-slate-300">
-        <h1 class="text-3xl font-bold font-signika">
-          Chatbot Ai là kỹ năng hàng đầu hiện nay
+      <div class="flex flex-col items-center justify-center w-1/4 gap-4 pt-5 border-r-2 border-slate-300">
+        <h1 class="flex text-3xl font-bold font-signika">
+         Những lĩnh vực hot nhất hiện nay
         </h1>
-        <div class="flex flex-col gap-6">
+        
+        <div hidden class="flex-col gap-6 ">
           <a
             href="#"
             class="flex items-center text-xl font-bold text-blue-600 font-signika"
@@ -1827,7 +430,7 @@
           <div class="flex flex-col gap-2">
             <a
               *ngFor="let item of CourseLapTrinh"
-              href="#"
+              (click)="submitSeach(item.value)"
               class="flex items-center text-xl font-bold text-blue-600 font-signika hover:text-blue-400"
               >{{ item.name }} <i class="font-bold bi bi-arrow-right-short"></i
             ></a>
@@ -1840,7 +443,7 @@
           <div class="flex flex-col gap-2">
             <a
               *ngFor="let item of CourseThietKe"
-              href="#"
+              (click)="submitSeach(item.value)"
               class="flex items-center text-xl font-bold text-blue-600 font-signika hover:text-blue-400"
               >{{ item.name }} <i class="font-bold bi bi-arrow-right-short"></i
             ></a>
@@ -1853,7 +456,7 @@
           <div class="flex flex-col gap-2">
             <a
               *ngFor="let item of CourseKinhdoanh"
-              href="#"
+              (click)="submitSeach(item.value)"
               class="flex items-center text-xl font-bold text-blue-600 font-signika hover:text-blue-400"
               >{{ item.name }} <i class="font-bold bi bi-arrow-right-short"></i
             ></a>
@@ -1866,7 +469,7 @@
           <div class="flex flex-col gap-2">
             <a
               *ngFor="let item of CourseGiaotiep"
-              href="#"
+              (click)="submitSeach(item.value)"
               class="flex items-center text-xl font-bold text-blue-600 font-signika hover:text-blue-400"
               >{{ item.name }} <i class="font-bold bi bi-arrow-right-short"></i
             ></a>

@@ -9,9 +9,9 @@
     (click)="sendDataToParent(item)"
     class="p-4 transition duration-200 bg-white rounded-md shadow-md hover:shadow-lg"
   >
-    <h2 class="mb-2 text-lg font-semibold line-clamp-1">{{ item.title }}</h2>
-    <div class="mb-2 text-sm font-medium text-white rounded-lg">
-      <img class="w-full h-full rounded-lg" [src]="item.thumbnail" alt="" />
+    <h2 class="mb-2 text-lg font-semibold">{{ item.title }}</h2>
+    <div hidden class="mb-2 text-sm font-medium text-white rounded-lg">
+      <img class="w-full h-full rounded-lg" [src]="item.img" alt="" />  
     </div>
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-2 mb-1 text-sm text-gray-600">
@@ -19,12 +19,8 @@
         <span>{{ item.enrollments }} học viên</span>
       </div>
       <div class="flex items-center gap-2 text-sm text-gray-600">
-        <i class="bi bi-clock"></i>
-        <span>{{ item.duration }} giờ</span>
-      </div>
-      <div class="flex items-center gap-2 text-sm text-gray-600">
         <i class="bi bi-star-fill"></i>
-        <span>{{ item.rating }} giờ</span>
+        <span>{{ item.rating }}<i class="text-yellow-500 bi bi-star-fill"></i></span>
       </div>
     </div>
   </div>
@@ -45,7 +41,7 @@
           <th
             class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
           >
-            Tên Sản Phẩm
+            Tên khóa học
           </th>
           <th
             class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
@@ -55,12 +51,17 @@
           <th
             class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
           >
-            Số Lượng
+            Số Lượng học viên
           </th>
           <th
             class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
           >
-            Trạng Thái
+            Trạng thái
+          </th>
+          <th
+            class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200"
+          >
+            Doanh thu
           </th>
         </tr>
       </thead>
@@ -83,20 +84,18 @@
           </td>
           <td class="px-5 py-5 text-sm border-b border-gray-200">
             <p class="text-gray-900 whitespace-no-wrap">
-              {{ item.commission }}
+              {{ item.commission ? item.commission : 'null' }}
             </p>
           </td>
           <td class="px-5 py-5 text-sm border-b border-gray-200">
-            <span
-              class="relative inline-block px-3 py-1 font-semibold leading-tight"
-              [class]="getStatusClass(item.duration)"
-            >
-              <span
-                aria-hidden
-                class="absolute inset-0 rounded-full opacity-50"
-              ></span>
-              <span class="relative">{{ item.enrollments }}</span>
-            </span>
+            <p class="text-gray-900 whitespace-no-wrap">
+              {{ item.status }}
+            </p>
+          </td>
+          <td class="px-5 py-5 text-sm border-b border-gray-200">
+            <p class="text-gray-900 whitespace-no-wrap">
+             chưa cập nhật
+            </p>
           </td>
         </tr>
       </tbody>

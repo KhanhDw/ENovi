@@ -3,15 +3,46 @@
   <div class="flex items-center justify-between w-full">
     <!-- title -->
     <h1 class="text-2xl font-bold uppercase font-signika">Cập nhật khóa học</h1>
+    <!-- thông báo lỗi tải khóa học -->
+    <div hidden class="font-bold text-red-500 border-red-700 rounded-md">
+      <!-- <span class="px-2 py-1 text-black bg-white border-2 rounded-md"
+        >Trạng thái:
+        {{ courseFetch[0].status ? "Hoạt động" : "Giới hạn" }}</span
+      > -->
+    </div>
+    <div
+      *ngIf="!checkParamsFetch"
+      class="flex font-bold text-red-500 border-2 border-red-700 rounded-md"
+    >
+      <h1 class="px-2 py-1">
+        Đã có lỗi khi tải dữ liệu!
+        <span
+          class="px-2 py-1 ml-2 text-white rounded-md animate-pulse bg-slate-700"
+        >
+          Đang khắc phục lỗi!</span
+        >
+      </h1>
+    </div>
+    <div
+      *ngIf="checkParamsFetch"
+      class="flex font-bold text-green-600 border-2 border-red-700 rounded-md"
+    >
+      <h1 class="px-2 py-1">
+        Lưu ý không tải lại trang khi đang cập nhật, sẽ làm mất dữ liệu đang cập
+        nhật.
+      </h1>
+    </div>
     <!-- button submit -->
     <div class="flex gap-3">
       <button
+        (click)="huyCapNhat()"
         type="button"
         class="px-3 py-2 my-3 font-semibold border rounded-md bg-zinc-200"
       >
         Hủy bỏ
       </button>
       <button
+        (click)="submitUpdateCourse()"
         type="button"
         class="px-3 py-2 my-3 border rounded-md bg-[#231D1D] text-white font-semibold"
       >
@@ -24,56 +55,255 @@
   <div class="flex w-full gap-10 mt-5 mb-8">
     <!-- title and tag -->
     <div class="flex flex-col w-full">
-      <!-- item input title course -->
-      <div class="flex flex-col w-full mb-5">
-        <label for="titleCourse" class="px-2 text-xl font-bold font-signika"
-          >Tên khóa học</label
-        >
-        <input
-          placeholder="Vui lòng nhập tên cho khóa học"
-          type="text"
-          name="titleCourse"
-          id="titleCourse"
-          class="px-2 py-2 font-semibold text-blue-600 border-b-4 border-slate-900 focus:outline-blue-600 focus:outline-4"
-        />
+      <div class="flex justify-between gap-4">
+        <!-- item input title course -->
+        <div class="flex flex-col w-full mb-5">
+          <label for="titleCourse" class="px-2 text-xl font-bold font-signika"
+            >Tên khóa học</label
+          >
+          <input
+            *ngIf="courseFetch?.length"
+            placeholder="Vui lòng nhập tên cho khóa học"
+            type="text"
+            name="titleCourse"
+            id="titleCourse"
+            [(ngModel)]="courseFetch[0].title"
+            class="px-2 py-2 font-semibold text-blue-600 border-b-4 border-slate-900 focus:outline-blue-600 focus:outline-4"
+          />
+        </div>
+        <!-- item input Price course -->
+        <div class="flex flex-col w-1/3 mb-5">
+          <label for="titleCourse" class="px-2 text-xl font-bold font-signika"
+            >Giá</label
+          >
+          <input
+            *ngIf="courseFetch?.length"
+            placeholder="1.000"
+            type="text"
+            name="priceCourse"
+            id="priceCourse"
+            [(ngModel)]="formattedPrice"
+            (input)="formatCurrency($event)"
+            (blur)="saveRawPrice()"
+            class="px-2 py-2 font-bold text-green-600 border-2 rounded-md border-slate-900 focus:outline-blue-600 focus:outline-4"
+          />
+        </div>
       </div>
+      <!-- ---------------------- -->
       <!-- item input tags course -->
+      <!-- ---------------------- -->
       <div class="flex flex-col w-full mb-5">
         <label for="titleCourse" class="pl-2 text-xl font-bold font-signika"
           >Chủ đề khóa học</label
         >
-        <input
-          placeholder="lập trình;kinh doanh;kỹ năng mềm;"
-          type="text"
-          name="titleCourse"
-          id="titleCourse"
-          class="px-2 py-2 font-semibold text-blue-600 border-b-4 border-slate-900 focus:outline-blue-600 focus:outline-4"
-        />
+        <div class="flex">
+          <input
+            *ngIf="courseFetch?.length"
+            placeholder="lập trình;kinh doanh;kỹ năng mềm;"
+            type="text"
+            name="titleCourse"
+            id="titleCourse"
+            readonly
+            [value]="savedCategoriesString"
+            class="w-full px-2 py-2 font-semibold text-blue-600 border-b-4 border-slate-900 focus:outline-blue-600 focus:outline-4"
+          />
+          <button
+            (click)="toggleShowSelectCategorie()"
+            class="flex items-center justify-center w-2/12 px-2 py-1 font-bold text-white hover:bg-slate-600 bg-slate-900"
+          >
+            <i class="px-2 bi bi-tags-fill"></i>Chọn chủ đề
+          </button>
+        </div>
       </div>
       <div class="flex items-center justify-between">
         <div class="flex gap-2">
           <i class="bi bi-info-circle"></i>
           <p class="text-xs font-signika">
-            Chủ đề khóa học của bạn càng chi tiết thì tỷ lệ trình tìm kiếm của
-            chúng tôi sẽ càng dễ tìm thầy bạn hơn <br />
+            Vui lòng để đúng theo chủ đề khóa học của bạn đề ra. chúng tôi sẽ
+            càng dễ tìm thầy bạn hơn <br />
             và đưa khóa học của bạn đến nhiều người hơn.
+            <span class="font-bold text-black">(Tối đa 6 lĩnh vực)</span>
           </p>
         </div>
-        <button
-          type="button"
-          class="px-3 py-2 font-semibold text-white transition-all duration-500 rounded-md bg-neutral-700 hover:bg-neutral-900"
-        >
-          Cập nhật ảnh bìa khóa học
-        </button>
+        <div>
+          <!--  -->
+          <div class="relative w-full mt-4 mb-4 overflow-hidden cursor-pointer">
+            <button
+              (click)="triggerFileInput()"
+              class="inline-flex items-center w-full px-4 py-2 font-bold text-white bg-[#231D1D] rounded-md hover:bg-[#0e1c5b]"
+            >
+              <svg
+                fill="#FFF"
+                height="18"
+                viewBox="0 0 24 24"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
+                class="cursor-pointer"
+              >
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z" />
+              </svg>
+              <span class="ml-2 cursor-pointer">Cập nhật ảnh bìa khóa học</span>
+            </button>
+
+            <input
+              class="absolute block w-full px-4 py-2 opacity-0 cursor-pointer"
+              type="file"
+              #fileInputImg
+              (change)="onFileSelected($event)"
+              accept="image/png, image/jpeg,image/jpg"
+            />
+          </div>
+          <!-- -->
+        </div>
       </div>
     </div>
     <!-- course cover photo -->
-    <div class="items-center justify-center w-[345px] flex">
+    <div
+      class="relative flex-col items-center justify-center w-[345px] flex"
+      (mouseenter)="isHoveringImg = true"
+      (mouseleave)="isHoveringImg = false"
+    >
       <img
+        *ngIf="imageUrl; else defaultImage"
         class="min-w-[345px] border-2 rounded-lg shadow-sm border-slate-500 shadow-black h-60"
-        src="https://product.hstatic.net/200000422751/product/dcp01llpl_33a3360d26ea4ee1989b99e08676baa5_master.jpg"
-        alt="coverphoto"
+        [src]="imageUrl"
+        alt="Uploaded Image"
       />
+
+      <!-- Ảnh mặc định nếu chưa có ảnh mới -->
+      <ng-template #defaultImage>
+        <img
+          *ngIf="courseFetch?.length"
+          class="min-w-[345px] border-2 rounded-lg shadow-sm border-slate-500 shadow-black h-60"
+          [src]="urlBackend_img_banner_course + courseFetch[0].img"
+          alt="Cover Photo"
+        />
+      </ng-template>
+
+      <!-- thông báo lỗi -->
+      <div class="flex">
+        <p class="font-bold text-red-600">{{ this.errorMessage }}</p>
+      </div>
+
+      <!-- hover lên ảnh -->
+
+      <div
+        *ngIf="imageUrl && isHoveringImg"
+        class="absolute gap-4 flex-col top-2 left-0 flex items-center justify-center rounded-lg bg-[#00000085] w-[345px] h-60"
+      >
+        <button
+          (click)="cancelImage()"
+          class="px-2 py-1 text-xl font-semibold text-black bg-gray-400 rounded-md hover:bg-gray-50"
+        >
+          Hủy thay đổi
+        </button>
+        <p class="px-2 py-1 text-xs bg-teal-100 rounded-md font-signika">
+          {{ imageName }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <!-- description -->
+  <div class="flex w-full h-auto mb-8 border-2 border-slate-600">
+    <!-- what to learn -->
+    <div class="flex flex-col h-[300px] px-2 w-1/3">
+      <h1 class="py-2 text-xl font-bold">Học viên sẽ học được</h1>
+      <quill-editor
+        placeholder="Học viên sẽ học được gì?  Phải ít nhất 3 điều"
+        theme="snow"
+        [modules]="modules"
+        class="w-full h-[220px]"
+        [(ngModel)]="updateCourse.whattolearn"
+        (ngModelChange)="onWhatToLearnChanged($event)"
+        spellcheck="false"
+      ></quill-editor>
+    </div>
+    <div class="flex flex-col h-[300px] px-2 w-1/3">
+      <h1 class="py-2 text-xl font-bold">Yêu cầu kiến thức cần có</h1>
+      <quill-editor
+        placeholder="Học viên sẽ học được gì?  Phải ít nhất 3 điều"
+        theme="snow"
+        [modules]="modules"
+        [(ngModel)]="updateCourse.requireKnowledge"
+        (ngModelChange)="onRequirementKnowledgeChanged($event)"
+        spellcheck="false"
+        class="w-full h-[220px]"
+      ></quill-editor>
+    </div>
+    <div class="flex flex-col w-1/3 p-2">
+      <!-- short description -->
+      <div class="flex flex-col w-full">
+        <h1 class="py-2 text-xl font-bold">Mô tả ngắn gọn về khóa học</h1>
+        <div class="flex flex-col">
+          <textarea
+            name="shortDesciption"
+            id="shortDesciption"
+            rows="3"
+            [(ngModel)]="textAreaIntroduceCourse"
+            (input)="checkWordLimit()"
+            cols="30"
+            spellcheck="false"
+            placeholder="Nhập giới thiệu đơn giản về khóa học của bạn"
+            class="w-full h-full p-2 border-2 rounded-md resize-none border-slate-500 required font-signika"
+          ></textarea>
+        </div>
+      </div>
+      <div class="flex w-full">
+        <div class="flex flex-col items-start justify-between w-1/2">
+          <!-- trình độ -->
+          <div class="flex flex-col">
+            <h1 class="py-2 text-xl font-bold">Trình độ yêu cầu</h1>
+            <select
+              [(ngModel)]="updateCourse.level"
+              (ngModelChange)="onLevelChange($event)"
+              class="w-[170px] text-sm py-2 border rounded-md shadow-sm shadow-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option *ngFor="let item of levelList" [value]="item.value">
+                {{ item.name }}
+              </option>
+            </select>
+          </div>
+          <!-- ngôn ngữ -->
+          <div class="flex flex-col">
+            <h1 class="py-2 text-xl font-bold">Ngôn ngữ</h1>
+            <select
+              [(ngModel)]="updateCourse.languages"
+              (ngModelChange)="onLanguageChange($event)"
+              class="w-[170px] text-sm py-2 border rounded-md shadow-sm shadow-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option
+                *ngFor="let item of languageList"
+                [value]="item.language_code"
+              >
+                {{ item.language_name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <!-- phụ đề -->
+        <div class="flex flex-col w-1/2">
+          <h1 class="py-2 text-xl font-bold">Phụ đề</h1>
+          <div
+            class="w-full py-2 border rounded-md shadow-sm shadow-black h-[120px] overflow-y-auto"
+          >
+            <div
+              *ngFor="let item of languageList"
+              class="w-full hover:bg-slate-200"
+            >
+              <label class="flex w-full px-2 py-1">
+                <input
+                  type="radio"
+                  name="updateSubtitle"
+                  [value]="item.language_code"
+                  [(ngModel)]="updateCourse.subtitles"
+                />
+                <span class="px-1">{{ item.language_name }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -89,6 +319,7 @@
       >
         <h1 class="text-xl font-bold">Phần khóa học</h1>
         <button
+          (click)="createSection()"
           type="button"
           class="flex items-center justify-center gap-2 px-2 py-1 pr-3 text-xl transition-all duration-300 rounded-md cursor-pointer bg-zinc-300 hover:bg-slate-600 hover:text-white"
         >
@@ -103,17 +334,33 @@
           id="sectionContaint"
         >
           <div class="flex flex-col w-full h-full gap-0">
-            <div class="flex" *ngFor="let item of contentOfSection">
-              <button
-                type="button"
-                class="flex items-start justify-start w-full px-2 py-2 overflow-x-hidden font-semibold border-b-2 border-slate-400 bg-zinc-100 hover:bg-slate-200"
+            <div
+              class="flex"
+              *ngFor="let item of updateCourse.section; trackBy: trackByFn"
+            >
+              <div
+                (click)="
+                  getSectionClicked(
+                    item.section_name,
+                    item.sectionOrder,
+                    item.section_id
+                  )
+                "
+                class="flex items-center justify-between w-full px-2 py-2 overflow-x-hidden font-semibold border-b-2 border-slate-400 bg-zinc-100 hover:bg-slate-200"
               >
                 <span
                   class="max-w-xs overflow-hidden whitespace-nowrap text-ellipsis"
                 >
-                  {{ item.name }}/span
+                  {{ item.section_id }}
+                  {{ item.section_name }}
                 </span>
-              </button>
+                <button
+                  (click)="deleteSection(item.sectionOrder)"
+                  class="px-1 py-1 rounded-md cursor-pointer hover:bg-slate-300"
+                >
+                  <i class="cursor-pointer bi bi-trash"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -125,54 +372,172 @@
     >
       <!-- header -->
       <div
-        class="flex items-center justify-between px-2 h-[10%] border-b-2 border-slate-500 w-full"
+        class="flex items-center gap-3 h-[10%] border-b-2 border-slate-500 w-full"
       >
-        <h1
-          class="flex items-center w-full h-full max-w-3xl pr-2 overflow-x-auto text-xl font-bold whitespace-nowrap"
+        <div
+          class="flex items-center justify-start w-full h-full max-w-3xl pr-2 overflow-x-auto text-xl font-bold whitespace-nowrap"
         >
-          Bài giảng - Phần 1: Ánh sáng cuối con đường
-        </h1>
-        <button
-          type="button"
-          class="flex items-center justify-center gap-2 px-2 py-1 pr-3 my-1 text-xl transition-all duration-300 rounded-md cursor-pointer min-w-fit bg-zinc-300 hover:bg-slate-600 hover:text-white"
-        >
-          <i class="cursor-pointer bi bi-plus-square"></i
-          ><span class="text-sm font-semibold cursor-pointer"
-            >Thêm bài giảng cho phần này</span
+          <input
+            type="text"
+            placeholder="Nhập tên phần/chương"
+            [(ngModel)]="nameSection"
+            (ngModelChange)="onNameSectionChanged($event)"
+            class="flex w-full h-full px-2 border-r-2 focus:outline-none"
+            [ngClass]="
+              isEditNameSection ? 'border-2 bg-slate-700 text-white' : ''
+            "
+            [readonly]="!isEditNameSection"
+          />
+        </div>
+        <div class="flex items-center justify-end w-fit">
+          <button
+            (click)="onEditSectionName()"
+            type="button"
+            class="px-2 py-1 mx-3 text-xl transition-all duration-300 border-2 rounded-md cursor-pointer group hover:bg-green-700 border-slate-500 bg-slate-100"
           >
-        </button>
+            <i
+              *ngIf="!isEditNameSection"
+              class="cursor-pointer group-hover:text-white bi bi-pencil-square"
+            ></i>
+            <i
+              *ngIf="isEditNameSection"
+              class="cursor-pointer bi bi-check2-square group-hover:text-white"
+            ></i>
+          </button>
+          <button (click)="createNewLesson()"
+            type="button"
+            class="flex items-center justify-center gap-2 px-2 py-1 pr-3 my-1 text-xl transition-all duration-300 rounded-md cursor-pointer min-w-fit bg-zinc-300 hover:bg-slate-600 hover:text-white"
+          >
+            <i class="cursor-pointer bi bi-plus-square"></i
+            ><span class="text-sm font-semibold cursor-pointer"
+              >Thêm bài giảng cho phần này</span
+            >
+          </button>
+        </div>
       </div>
       <!-- body -->
-      <div class="flex h-[90%] w-full">
+      <div
+        class="flex h-[90%] w-full bg-slate-700 flex-col items-center justify-center"
+      >
+        <div
+          *ngIf="isEditNameLecture"
+          class="w-full bg-transparent h-10 max-w-lg min-w-[200px]"
+        >
+          <div class="relative">
+            <input
+              *ngIf="isEditNameLecture"
+              type="text"
+              placeholder="Nhập tên bài học"
+              [(ngModel)]="nameLecture"
+              (ngModelChange)="onNameLectureChanged($event)"
+              class="w-full py-2 pl-3 pr-48 text-sm transition duration-300 bg-transparent bg-white border-2 border-black rounded-md shadow-sm placeholder:text-slate-400 text-slate-700 ease focus:outline-none focus:border-slate-900 hover:border-slate-300 focus:shadow"
+              placeholder="Nhập tên bài giảng..."
+            />
+            <button
+              (click)="updateTitleLessonOfSection(-1, nameLecture)"
+              type="button"
+              class="absolute right-1 top-1 rounded bg-slate-800 py-1 px-2.5 border border-transparent text-center text-sm text-white transition-all shadow-sm hover:shadow focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+            >
+              Cập nhật
+            </button>
+            <button
+            (click)="hiddenUpdateTitleLesson()"
+              type="button"
+              class="absolute right-20 top-1 rounded bg-slate-400 py-1 px-2.5 border border-transparent text-center text-sm text-white transition-all shadow-sm hover:shadow focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+            >
+              Hủy cập nhật
+            </button>
+          </div>
+        </div>
+
+        <div
+          *ngIf="!ClickedSection"
+          class="flex items-center justify-center w-full h-full text-black"
+        >
+          <h1>Vui lòng chọn phần khóa học</h1>
+        </div>
+
         <div class="flex w-full h-full">
           <div
             class="flex flex-col w-full h-full gap-0 overflow-x-hidden overflow-y-auto"
+            id="lectureDetail"
           >
             <div
               class="flex items-start justify-start"
-              *ngFor="let item of contentOfSection"
+              *ngFor="let item of listLecture"
             >
               <div
                 type="button"
                 class="flex items-center justify-between w-full py-2 pl-2 pr-4 font-semibold border-b-2 border-slate-400 bg-zinc-100 hover:bg-slate-200"
               >
-                <a
-                  href="#"
-                  class="flex items-start justify-start max-w-3xl cursor-pointer hover:text-blue-700 text-start"
-                >
-                  {{ item.name }}
-                </a>
                 <div class="flex">
-                  <span class="text-sm text-gray-500">chưa có bài tập</span>
+                  <span
+                    data-value="nameLecture"
+                    class="flex items-start justify-start max-w-3xl cursor-pointer hover:text-blue-700 text-start"
+                  >
+                    {{ item.title }}
+                  </span>
+                </div>
+                <div class="flex">
+                  <span
+                    [innerHTML]="
+                      item.nameFileVideo
+                        ? item.nameFileVideo
+                        : uploadStatus
+                        ? uploadStatus
+                        : 'Chưa có bài giảng'
+                    "
+                    class="text-sm text-gray-500 w-[200px]"
+                  ></span>
                 </div>
                 <div class="flex items-center justify-center">
+                  <div
+                    *ngIf="!item.nameFileVideo"
+                    class="relative w-full overflow-hidden cursor-pointer"
+                  >
+                    <button
+                      (click)="triggerFileVideoInput()"
+                      class="inline-flex items-center w-full px-4 py-2 font-bold text-white bg-[#231D1D] rounded-md hover:bg-[#0e1c5b]"
+                    >
+                      <svg
+                        fill="#FFF"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        width="18"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="cursor-pointer"
+                      >
+                        <path d="M0 0h24v24H0z" fill="none" />
+                        <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z" />
+                      </svg>
+                      <span class="ml-2 cursor-pointer">Tải video lên</span>
+                    </button>
+
+                    <input
+                      class="absolute block w-full px-4 py-2 opacity-0 cursor-pointer"
+                      type="file"
+                      #fileInputVideo
+                      (change)="
+                        onFileVideoSelected($event, item.sectionId, item.id)
+                      "
+                      accept="video/mp4"
+                    />
+                  </div>
                   <button
+                    (click)="onEditNameLecture(item.id, item.title)"
+                    type="button"
+                    class="px-2 py-1 text-gray-600 rounded-md cursor-pointer hover:bg-zinc-300 hover:text-black"
+                  >
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                  <button
+                    hidden
                     type="button"
                     class="px-2 py-1 text-gray-600 rounded-md cursor-pointer hover:bg-zinc-300 hover:text-black"
                   >
                     <i class="cursor-pointer bi bi-file-text-fill"></i>
                   </button>
-                  <button
+                  <button (click)="deleteLesson(item.id)"
                     type="button"
                     class="px-2 py-1 rounded-md cursor-pointer hover:bg-zinc-300"
                   >
@@ -180,6 +545,13 @@
                   </button>
                 </div>
               </div>
+            </div>
+            <div
+              class="flex flex-col items-center justify-center my-3 font-bold text-slate-400"
+            >
+              <p>Những thay đổi phần này sẽ được lưu ngay lập tức!</p>
+              <br />
+              <p>Muốn cập nhật lại video hãy xóa khóa học</p>
             </div>
           </div>
         </div>
@@ -190,24 +562,27 @@
   <!--description and resource -->
   <div class="flex w-full pb-8">
     <!-- description -->
-    <div class="flex items-start w-2/3 px-2 py-2 border-2 border-slate-500">
+    <div class="flex items-start w-full px-2 py-2 border-2 border-slate-500">
       <div class="flex flex-col items-start w-full">
         <div class="flex items-center justify-between w-full py-3">
           <p class="px-2 py-1 text-xl font-bold font-signika">Mô tả khóa học</p>
         </div>
-        <div class="flex w-full min-h-[calc(100vh-345px)] h-full border-2">
+        <div class="w-full min-h-[calc(100vh-345px)] h-full border-2">
           <quill-editor
             placeholder="Viết mô tả cho khóa học"
             theme="snow"
             [modules]="modules"
             class="w-full h-[calc(100vh-415px)] min-h-[calc(100vh-510px)]"
+            [(ngModel)]="updateCourse.description"
+            (ngModelChange)="onDescriptionChanged($event)"
           ></quill-editor>
         </div>
       </div>
     </div>
-    <!-- resource -->
+    <!-- resource hidden vì quá mệt không làm nổi nữa rồi-->
     <div
-      class="flex items-start self-start w-1/3 px-2 py-2 border-2 border-slate-500"
+      hidden
+      class="items-start self-start w-1/3 px-2 py-2 border-2 border-slate-500"
     >
       <div class="flex flex-col items-start w-full">
         <div class="flex items-center justify-between w-full py-3">
@@ -219,12 +594,6 @@
             class="px-2 py-1 text-sm font-semibold border-2 rounded-md hover:text-white hover:bg-gray-800 bg-zinc-100"
           >
             Thêm tài liệu học tập
-          </button>
-          <button
-            type="button"
-            class="px-2 py-1 text-sm font-semibold border-2 rounded-md hover:text-white hover:bg-orange-700 bg-zinc-100"
-          >
-            Thêm tài bài tập
           </button>
         </div>
         <div class="flex w-full h-[calc(100vh-345px)] border-2">
@@ -241,7 +610,7 @@
                   <span
                     class="max-w-xs overflow-hidden whitespace-nowrap text-ellipsis"
                   >
-                    {{ item.name }}/span
+                    {{ item.name }}
                   </span>
                   <button
                     type="button"
@@ -252,6 +621,250 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal category -->
+  <div
+    id="static_modal_category"
+    data-modal-backdrop="static"
+    tabindex="-1"
+    aria-hidden="true"
+    [ngClass]="showSelectCategorie ? 'flex' : 'hidden'"
+    class="overflow-y-auto bg-[#000000d7] overflow-x-hidden select-none fixed top-1/2 right-1/2 left-1/2 z-[99999] justify-center items-center w-screen md:inset-0 h-screen"
+  >
+    <div class="relative w-1/2 h-screen">
+      <!-- Modal content -->
+      <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+        <!-- Modal header -->
+        <div
+          class="flex items-center justify-between border-b border-gray-200 rounded-t md:p-5 dark:border-gray-600"
+        >
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+            Lĩnh vực khóa học
+          </h3>
+          <button
+            hidden
+            (click)="toggleShowSelectCategorie()"
+            type="button"
+            class="inline-flex items-center justify-center w-8 h-8 text-sm text-gray-400 bg-transparent rounded-lg hover:bg-gray-200 hover:text-gray-900 ms-auto dark:hover:bg-gray-600 dark:hover:text-white"
+            data-modal-hide="static-modal"
+          >
+            <svg
+              class="w-3 h-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+        </div>
+        <!-- Modal body -->
+        <div class="bg-gray-100 rounded-b">
+          <div class="container mx-auto">
+            <div class="flex flex-col h-full gap-2 p-2 bg-white shadow-md">
+              <div class="grid grid-cols-3 gap-2">
+                <div
+                  id="static_modal_category_lv"
+                  class="col-span-1 p-1 overflow-y-auto border-2 rounded-md h-96 border-slate-600"
+                >
+                  <h1 class="flex items-center justify-center mb-2 font-bold">
+                    Lĩnh vực
+                  </h1>
+                  <ul>
+                    <li
+                      *ngFor="let category of categories"
+                      (click)="selectCategory(category)"
+                      class="w-full px-4 py-2 mb-2 text-gray-700 bg-gray-200 rounded hover:bg-slate-700 hover:text-white"
+                    >
+                      {{ category.categoryName }}
+                    </li>
+                  </ul>
+                </div>
+                <div
+                  id="static_modal_category_cn"
+                  class="col-span-1 p-1 overflow-y-auto border-2 rounded-md h-96 border-slate-600"
+                >
+                  <h1 class="flex items-center justify-center mb-2 font-bold">
+                    Chuyên ngành
+                  </h1>
+                  <ul *ngIf="savedCategory">
+                    <li
+                      *ngFor="
+                        let sub of getSubCategories(
+                          selectedCategory?.categoryId
+                        )
+                      "
+                      (click)="toggleSubCategory(sub)"
+                      [class.selected]="isSubCategorySelected(sub)"
+                      class="w-full px-4 py-2 mb-2 text-gray-700 bg-gray-200 rounded hover:bg-slate-700 hover:text-white"
+                    >
+                      {{ sub.categoryName }}
+                    </li>
+                  </ul>
+                  <div
+                    *ngIf="!savedCategory"
+                    class="flex items-center justify-center h-full text-gray-500"
+                  >
+                    Vui lòng chọn ít nhất một lĩnh vực để xem chuyên ngành.
+                  </div>
+                </div>
+                <div
+                  id="static_modal_category_pm"
+                  class="col-span-1 p-1 overflow-y-auto border-2 rounded-md h-96 border-slate-600"
+                >
+                  <h1 class="flex items-center justify-center mb-2 font-bold">
+                    Phân mục
+                  </h1>
+                  <ul
+                    *ngIf="selectedSubCategories.length > 0"
+                    class="flex flex-wrap items-start gap-2"
+                  >
+                    <li
+                      *ngFor="let item of getSubItems()"
+                      (click)="toggleItem(item)"
+                      class="w-full px-4 py-2 mb-2 text-gray-700 bg-gray-200 rounded hover:bg-slate-700 hover:text-white"
+                    >
+                      {{ item.categoryName }}
+                    </li>
+                  </ul>
+                  <!-- Thông báo khi không có chuyên ngành nào được chọn -->
+                  <div
+                    *ngIf="selectedSubCategories.length === 0"
+                    class="flex items-center justify-center h-full text-gray-500"
+                  >
+                    Vui lòng chọn ít nhất một chuyên ngành để xem phân mục.
+                  </div>
+                </div>
+              </div>
+              <!-- ------------------------------------- -->
+              <!-- Hiển thị danh sách đã lưu với nút xóa -->
+              <!-- ------------------------------------- -->
+
+              <div class="grid grid-cols-3 gap-2">
+                <div
+                  id="static_modal_category_lv_s"
+                  class="col-span-1 p-1 overflow-y-auto border-2 rounded-md h-52 border-slate-600"
+                >
+                  <h1 class="flex items-center justify-center mb-2 font-bold">
+                    Lĩnh vực đã chọn
+                  </h1>
+                  <ul *ngIf="savedCategory" class="flex flex-col gap-2">
+                    <li
+                      class="flex items-center justify-between px-4 py-2 text-gray-700 bg-gray-200 rounded"
+                    >
+                      <span>{{ savedCategory.categoryName }}</span>
+                      <button
+                        (click)="removeCategory()"
+                        class="px-2 py-1 text-white bg-red-500 rounded hover:bg-red-700"
+                      >
+                        Xóa
+                      </button>
+                    </li>
+                  </ul>
+                  <div
+                    *ngIf="!savedCategory"
+                    class="flex items-center justify-center h-full text-gray-500"
+                  >
+                    Chưa có mục nào được chọn.
+                  </div>
+                </div>
+                <div
+                  id="static_modal_category_cn_s"
+                  class="col-span-1 p-1 overflow-y-auto border-2 rounded-md h-52 border-slate-600"
+                >
+                  <h1 class="flex items-center justify-center mb-2 font-bold">
+                    Chuyên ngành đã chọn
+                  </h1>
+                  <ul *ngIf="savedCategory" class="flex flex-col gap-2">
+                    <li
+                      *ngFor="let savedItem of savedSubCategories"
+                      class="flex items-center justify-between px-4 py-2 text-gray-700 bg-gray-200 rounded"
+                    >
+                      <span>{{ savedItem.categoryName }} </span>
+                      <button
+                        (click)="removeSubCategory(savedItem)"
+                        class="px-2 py-1 text-white bg-red-500 rounded hover:bg-red-700"
+                      >
+                        Xóa
+                      </button>
+                    </li>
+                  </ul>
+                  <div
+                    *ngIf="!savedCategory"
+                    class="flex items-center justify-center h-full text-gray-500"
+                  >
+                    Chưa có mục nào được chọn.
+                  </div>
+                </div>
+                <div
+                  id="static_modal_category_pm_s"
+                  class="col-span-1 p-1 overflow-y-auto border-2 rounded-md h-52 border-slate-600"
+                >
+                  <h1 class="flex items-center justify-center mb-2 font-bold">
+                    Phân mục đã chọn
+                  </h1>
+                  <ul
+                    *ngIf="savedSubCategories.length > 0"
+                    class="flex flex-col gap-2"
+                  >
+                    <li
+                      *ngFor="let savedItem of savedItems"
+                      class="flex items-center justify-between px-4 py-2 text-gray-700 bg-gray-200 rounded"
+                    >
+                      <span>{{ savedItem.categoryName }} </span>
+                      <button
+                        (click)="removeItem(savedItem)"
+                        class="px-2 py-1 text-white bg-red-500 rounded hover:bg-red-700"
+                      >
+                        Xóa
+                      </button>
+                    </li>
+                  </ul>
+                  <div
+                    *ngIf="savedSubCategories.length === 0"
+                    class="flex items-center justify-center h-full text-gray-500"
+                  >
+                    Chưa có mục nào được chọn.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Modal footer -->
+          <div
+            class="flex items-center justify-between h-full p-4 border-t border-gray-200 rounded-b md:p-5 dark:border-gray-600"
+          >
+            <button
+              (click)="clearAllSelections()"
+              data-modal-hide="static-modal"
+              type="button"
+              class="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              Xóa tất cả lựa chọn
+            </button>
+            <p class="font-bold text-red-700">{{ errorMessageCategory }}</p>
+
+            <button
+              (click)="confirmSelections()"
+              data-modal-hide="static-modal"
+              type="button"
+              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              Xác nhận
+            </button>
           </div>
         </div>
       </div>

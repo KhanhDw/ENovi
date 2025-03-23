@@ -4,17 +4,20 @@
   class="relative w-full h-screen overflow-y-auto font-sans antialiased bg-slate-300"
 >
   <!-- header hidden show when scoll -->
+  <!-- vui lòng xóa thẻ div hidden bên trên -->
   <div
     *ngIf="isScrolled"
-    class="sticky inset-0 top-0 right-0 flex items-center justify-between px-10 bg-gray-800 w-ful z-[99]"
+    class="sticky inset-0 z-[10000] top-0 right-0 flex items-center justify-between px-10 bg-gray-800 w-ful"
   >
     <h1 class="w-full text-2xl font-bold text-white">Quản lý khóa học</h1>
     <div
       class="flex items-center justify-end w-full my-2 space-y-4 md:flex-row md:space-y-0 md:space-x-4"
     >
-      <div class="relative w-full md:w-auto">
+      <form class="relative w-full md:w-auto" (ngSubmit)="onSearch()">
         <input
           type="text"
+          [(ngModel)]="search"
+          name="search"
           placeholder="Tìm kiêm khóa học..."
           class="py-2 pl-10 pr-5 border w-[300px] border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -36,11 +39,19 @@
             ></path>
           </svg>
         </div>
-      </div>
+        <button
+          type="submit"
+          (click)="onSearch()"
+          class="inset-y-0 right-0 px-4 py-2 text-white bg-blue-500 rounded-r-md"
+        >
+          Tìm kiếm
+        </button>
+      </form>
+    </div>
 
-      <div class="relative w-full md:w-auto">
-        <div class="relative inline-block w-full">
-          <select
+    <!-- <div class="relative w-full md:w-auto">
+           <div class="relative inline-block w-full">
+        <select
             class="block w-full px-4 py-2 pr-8 leading-tight transition-all duration-200 bg-white border border-gray-300 rounded-lg shadow-sm appearance-none hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
             <option
@@ -64,7 +75,7 @@
               />
             </svg>
           </div>
-        </div>
+        </div> 
         <div
           class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none"
         >
@@ -78,8 +89,7 @@
             />
           </svg>
         </div>
-      </div>
-    </div>
+      </div>-->
   </div>
 
   <!-- detail course -->
@@ -127,13 +137,6 @@
     </div>
     <!-- the number of course -->
     <div class="flex w-full gap-2 mt-1">
-      <h1 class="text-xl">Tổng thời lượng:</h1>
-      <p class="text-xl font-semibold text-yellow-100">
-        {{ CourseDetailRecive.duration }} giờ
-      </p>
-    </div>
-    <!-- the number of course -->
-    <div class="flex w-full gap-2 mt-1">
       <h1 class="text-xl">Tổng bài giảng:</h1>
       <p class="text-xl font-semibold text-yellow-100">
         {{ CourseDetailRecive.lecture }} bài
@@ -170,8 +173,9 @@
           alt="avatar"
         />
         <div class="flex flex-col w-full">
-          <h1 class="text-xl font-bold">{{ CourseDetailRecive.instructor }}</h1>
-          <h1 class="text-gray-300">{{ CourseDetailRecive.category }}</h1>
+          <h1 class="text-xl font-bold">
+            {{ CourseDetailRecive.instructorName }}
+          </h1>
         </div>
       </div>
     </div>
@@ -201,10 +205,15 @@
       <div
         class="flex flex-col items-center w-full mb-2 space-y-4 md:flex-row md:space-y-0 md:space-x-4"
       >
-        <div class="relative w-full md:w-auto">
+        <form
+          class="relative flex w-full gap-2 md:w-auto"
+          (ngSubmit)="onSearch()"
+        >
           <input
             type="text"
-            placeholder="Tìm kiêm khóa học..."
+            [(ngModel)]="search"
+            name="search"
+            placeholder="Nhập tên khóa học..."
             class="w-full py-2 pl-10 pr-5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <div
@@ -225,10 +234,24 @@
               ></path>
             </svg>
           </div>
-        </div>
+          <button
+            (click)="onSearch()"
+            class="w-32 text-white border rounded-md bg-slate-700"
+          >
+            Tìm kiếm
+          </button>
+        </form>
+        <button
+          (click)="huySearch()"
+          *ngIf="search !== '' && this.checksearch === true"
+          type="button"
+          class="px-2 py-2 text-white bg-gray-400 border rounded-md"
+        >
+          Hủy tìm kiếm
+        </button>
 
-        <div class="relative w-full md:w-auto">
-          <div class="relative inline-block w-full">
+        <!-- <div class="relative w-full md:w-auto">
+     <div class="relative inline-block w-full">
             <select
               class="block w-full px-4 py-2 pr-8 leading-tight transition-all duration-200 bg-white border border-gray-300 rounded-lg shadow-sm appearance-none hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
@@ -239,7 +262,7 @@
               >
                 {{ item.name }}
               </option>
-            </select>
+            </select> 
             <div
               class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none"
             >
@@ -267,7 +290,7 @@
               />
             </svg>
           </div>
-        </div>
+        </div>-->
 
         <button
           [ngClass]="!listORCard ? 'bg-yellow-200' : 'bg-gray-200'"
@@ -291,11 +314,15 @@
         ><span>Nhấp phải để ẩn chi tiết thông tin khóa học</span>
       </p>
     </div>
+    <!-- ------------------------- -->
+    <!-- table data users          -->
+    <!-- ------------------------- -->
     <div class="flex items-center justify-between w-full">
       <div class="w-full h-full">
         <app-list-courses-admin
+          *ngIf="(listCourseAdmin$ | async)?.length"
           (itemClicked)="handleCourseClick($event)"
-          [listCourseAdmin]="listCourseAdmin"
+          [listCourseAdmin]="listCourseAdmin$ | async"
           [listORCard]="listORCard"
         ></app-list-courses-admin>
       </div>

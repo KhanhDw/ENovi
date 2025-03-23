@@ -413,9 +413,9 @@ export class RevenueComponent implements AfterViewInit, OnInit {
 
   nameChart = 'Tổng doanh thu các khóa học';
   dataChart = [10, 41, 35, 51, 405, 62, 69, 91, 148, 168, 248, 348];
-  typeChartInput: ChartType = 'line';
+  typeChartInput: ChartType = 'area';
   typeChartList = [
-    { name: 'line', title: 'Biểu đồ đường' },
+    // { name: 'line', title: 'Biểu đồ đường' },
     { name: 'area', title: 'Biểu đồ vùng' },
     { name: 'bar', title: 'Biểu đồ cột' },
   ];

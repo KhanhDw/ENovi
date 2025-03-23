@@ -1,5 +1,16 @@
-import { Component, HostListener, ElementRef, ViewChild } from '@angular/core';
+import { User } from './../../../interface/user';
+import { error } from 'node:console';
+import {
+  Component,
+  HostListener,
+  ElementRef,
+  ViewChild,
+  OnInit,
+} from '@angular/core';
 import { CourseAdmin } from './../../../interface/course';
+import { ApiService } from '@app/services/api.service';
+import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-admin-courses',
@@ -7,370 +18,9 @@ import { CourseAdmin } from './../../../interface/course';
   styleUrl: './admin-courses.component.css',
   standalone: false,
 })
-export class AdminCoursesComponent {
+export class AdminCoursesComponent implements OnInit {
   //  truyền data đến component con
-  listCourseAdmin: CourseAdmin[] = [
-    {
-      id: 1,
-      title: 'Lập trình JavaScript cơ bản',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 1500,
-      rating: 4.5,
-      duration: 123,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 2,
-      title: 'Lập trình ReactJS từ zero đến hero',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 2300,
-      rating: 4.8,
-      duration: 123,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 3,
-      title: 'Xây dựng API với Node.js và Express',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 800,
-      rating: 4.2,
-      duration: 123,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 4,
-      title: 'Làm chủ TypeScript',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 1200,
-      rating: 4.6,
-      duration: 123,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 5,
-      title: 'Thiết kế giao diện web responsive',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 950,
-      rating: 4.3,
-      duration: 1234,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 6, // Thêm một khóa học mới.
-      title: 'Data Science with Python',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 500,
-      rating: 4.7,
-      duration: 123,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 1,
-      title: 'Lập trình JavaScript cơ bản',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 1500,
-      rating: 4.5,
-      duration: 123,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 2,
-      title: 'Lập trình ReactJS từ zero đến hero',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 2300,
-      rating: 4.8,
-      duration: 1,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 3,
-      title: 'Xây dựng API với Node.js và Express',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 800,
-      rating: 4.2,
-      duration: 1,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 4,
-      title: 'Làm chủ TypeScript',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 1200,
-      rating: 4.6,
-      duration: 1,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 5,
-      title: 'Thiết kế giao diện web responsive',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 950,
-      rating: 4.3,
-      duration: 1,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 6, // Thêm một khóa học mới.
-      title: 'Data Science with Python',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 500,
-      rating: 4.7,
-      duration: 1,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 1,
-      title: 'Lập trình JavaScript cơ bản',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 1500,
-      rating: 4.5,
-      duration: 1,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 2,
-      title: 'Lập trình ReactJS từ zero đến hero',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 2300,
-      rating: 4.8,
-      duration: 1,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 3,
-      title: 'Xây dựng API với Node.js và Express',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 800,
-      rating: 4.2,
-      duration: 2,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 4,
-      title: 'Làm chủ TypeScript',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 1200,
-      rating: 4.6,
-      duration: 4,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 5,
-      title: 'Thiết kế giao diện web responsive',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 950,
-      rating: 4.3,
-      duration: 1,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 6, // Thêm một khóa học mới.
-      title: 'Data Science with Python',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 500,
-      rating: 4.7,
-      duration: 1,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 1,
-      title: 'Lập trình JavaScript cơ bản',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 1500,
-      rating: 4.5,
-      duration: 1,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 2,
-      title: 'Lập trình ReactJS từ zero đến hero',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 2300,
-      rating: 4.8,
-      duration:12,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 3,
-      title: 'Xây dựng API với Node.js và Express',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 800,
-      rating: 4.2,
-      duration:12,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 4,
-      title: 'Làm chủ TypeScript',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 1200,
-      rating: 4.6,
-      duration:12,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 5,
-      title: 'Thiết kế giao diện web responsive',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 950,
-      rating: 4.3,
-      duration:12,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-    {
-      id: 6, // Thêm một khóa học mới.
-      title: 'Data Science with Python',
-      thumbnail:
-        'https://phongvu.vn/cong-nghe/wp-content/uploads/2025/01/hinh-nen-co-viet-nam-53-1024x576.jpg',
-      enrollments: 500,
-      rating: 4.7,
-      duration: 1234,
-      price: 2999000,
-      lecture: 891,
-      revenue: 632532000,
-      commission: 6325320,
-      category: 'Marketing',
-      instructor: 'Nguyễn Văn Giang',
-    },
-  ];
+  listCourseAdmin: CourseAdmin[] | null = null;
 
   sortCourses = [
     { name: 'Sắp xếp theo ...', value: '' },
@@ -390,6 +40,16 @@ export class AdminCoursesComponent {
   listORCard = false;
   gotoDetail = '/admin/courses/detail';
   ShowModalsubmitDeleteCourse = false;
+
+  listCourseAdmin$ = new BehaviorSubject<CourseAdmin[]>([]);
+
+  search:string = '';
+  checksearch:boolean  = false
+
+  constructor(private apiService: ApiService, private http: HttpClient) {}
+  ngOnInit() {
+    this.getAllCourse();
+  }
 
   toggleShowModalsubmitDeleteCourse() {
     this.ShowModalsubmitDeleteCourse = !this.ShowModalsubmitDeleteCourse;
@@ -424,9 +84,11 @@ export class AdminCoursesComponent {
     }
   }
 
-  handleCourseClick(course: any) {
+  handleCourseClick(course: CourseAdmin) {
     const validCourse = course as CourseAdmin; // Ép kiểu về Course
     console.log('Received in Parent:', validCourse);
+    console.log(course.instructorId);
+    this.getNameInstructor(course.instructorId)
     this.CourseDetailRecive = {};
     this.CourseDetailRecive = course;
     this.showDetailInfo = true;
@@ -435,9 +97,62 @@ export class AdminCoursesComponent {
 
   @HostListener('document:contextmenu', ['$event'])
   onRightClick(event: MouseEvent) {
-    console.log('phát hiện clik phải');
     if (this.showDetailInfo) {
       this.showDetailInfo = false;
+    }
+  }
+
+  getAllCourse() {
+    this.apiService.adminCourseService.getAllCourse().subscribe({
+      next: (res) => {
+        if (res.succese) {
+          console.log('thanfh cogn');
+          this.listCourseAdmin = res.courses;
+          this.listCourseAdmin$.next(res.courses);
+          console.log('00000: ' + res.courses);
+        }
+      },
+      error: (error) => {
+        console.warn('admin course http reponse');
+      },
+    });
+  }
+
+  getNameInstructor(instructorId:number){
+    this.apiService.adminCourseService.getNameInstructor(instructorId).subscribe({
+      next: (res) => {
+        if (res.success) {
+          console.log(res.user[0].username);
+          this.CourseDetailRecive.instructorName = res.user[0].username;
+          this.CourseDetailRecive.img = res.user[0].img;
+        }
+      },
+      error: (error) => {
+        console.warn('admin course http reponse');
+      },
+    });
+  }
+
+
+  onSearch() {
+    this.checksearch = true;
+    this.apiService.adminCourseService.getCourseByName(this.search).subscribe({
+      next: (res) => {
+        if (res.success) {
+          console.log('laays thanh cong');
+          this.listCourseAdmin$.next(res.course);
+        }
+      },
+      error: (error) => {
+        console.warn('admin course http reponse');
+      },
+    });
+  }
+
+  huySearch(){
+    if (this.search !== '' && this.checksearch === true){
+        this.getAllCourse();
+        this.search = '';
     }
   }
 }

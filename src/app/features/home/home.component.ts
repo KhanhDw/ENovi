@@ -1,6 +1,18 @@
+import { CourseRrevailing } from './../../interface/course';
 import { link } from 'node:fs';
-import { Component, NgZone, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  NgZone,
+  AfterViewInit,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { CookieStorageService } from '@app/services/cookie_storage/cookie-storage.service';
+import { ApiService } from '@app/services/api.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ShareHeaderSearchService } from '@app/services/search/header_search/share-header-search.service';
 
 @Component({
   selector: 'app-home',
@@ -8,7 +20,16 @@ import { CookieStorageService } from '@app/services/cookie_storage/cookie-storag
   styleUrl: './home.component.css',
   standalone: false,
 })
-export class HomeComponent implements AfterViewInit {
+export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
+  urlBackend_img_banner_course: string = '';
+  CourseViral: CourseRrevailing[] = [];
+  CourseFree: CourseRrevailing[] = [];
+  private destroy$ = new Subject<void>();
+  isLoadingCourseViral = false;
+  isLoadingCourseFree = false;
+  searchFormMode = {
+    SearchContext: '',
+  };
   // ==============================
   // banner Carousel
   // ==============================
@@ -23,13 +44,35 @@ export class HomeComponent implements AfterViewInit {
 
   constructor(
     private ngZone: NgZone,
-    private cookieService: CookieStorageService
+    private apiService: ApiService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private cookieService: CookieStorageService,
+    private shareHeaderSearchService: ShareHeaderSearchService
   ) {}
 
   ngOnInit(): void {
     // this.startSlideShow();
-  }
+    this.urlBackend_img_banner_course =
+      this.apiService.API_URL + '/uploads/img/bannerCourses/';
 
+    this.CourseViral = this.CourseViral || [];
+    this.CourseFree = this.CourseFree || [];
+
+    if (this.CourseViral.length === 0) {
+      if (!this.isLoadingCourseViral) {
+        this.isLoadingCourseViral = true;
+        this.loadCoursePrevailing();
+      }
+    } 
+
+    if (this.CourseFree.length === 0) {
+      if (!this.isLoadingCourseFree) {
+        this.isLoadingCourseFree = true;
+        this.loadCourseFreePrevailing();
+      }
+    }
+  }
 
   ngAfterViewInit(): void {
     this.ngZone.runOutsideAngular(() => {
@@ -41,11 +84,10 @@ export class HomeComponent implements AfterViewInit {
     });
   }
 
-
   updateInforUser(): void {
     const userString = this.cookieService.getCookie('user');
     if (userString !== null) {
-        this.ngOnInit();
+      this.ngOnInit();
     }
   }
 
@@ -180,28 +222,15 @@ export class HomeComponent implements AfterViewInit {
   //==================================
   // Khoá học hay được nhiều người học
   //==================================
-  CourseViral = [
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-  ];
 
   currentIndexCourseViral: number = 0;
 
   // Kiểm tra xem đã đến cuối danh sách chưa
   get isAtEndCourseviral(): boolean {
-    return this.currentIndexCourseViral >= this.CourseViral.length - 1;
+    return (
+      this.CourseViral &&
+      this.currentIndexCourseViral >= this.CourseViral.length - 1
+    );
   }
 
   NextSlideCourseViral(): void {
@@ -220,28 +249,11 @@ export class HomeComponent implements AfterViewInit {
   // Khoá học miễn phí được nhiều người học
   //=======================================
 
-  CourseFree = [
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-    { name: 'dữ liệu tạm thời sau này thay thế sql khoá học' },
-  ];
-
   currentIndexCourseFree: number = 0;
 
   // Kiểm tra xem đã đến cuối danh sách chưa
   get isAtEndCourseFree(): boolean {
-    return this.currentIndexCourseFree >= this.CourseFree.length - 1;
+    return this.currentIndexCourseFree >= (this.CourseFree?.length ?? 0) - 1;
   }
 
   NextSlideCourseFree(): void {
@@ -261,27 +273,145 @@ export class HomeComponent implements AfterViewInit {
   //=================
 
   CourseLapTrinh = [
-    { name: 'Python' },
-    { name: 'Lập trình Web' },
-    { name: 'Máy học' },
-    { name: 'Khoa học dữ liệu' },
+    { name: 'Python', value: 'Python' },
+    { name: 'Lập trình Web', value: 'Lập trình Web' },
+    { name: 'Máy học', value: 'Máy học' },
+    { name: 'Khoa học dữ liệu', value: 'Khoa học dữ liệu' },
   ];
   CourseThietKe = [
-    { name: 'Blender' },
-    { name: 'Adobe Photoshop' },
-    { name: 'Thiết kế đồ họa' },
-    { name: 'Chỉnh sửa video' },
+    { name: 'Blender', value: 'Blender' },
+    { name: 'Adobe Photoshop', value: 'Adobe Photoshop' },
+    { name: 'Thiết kế đồ họa', value: 'Thiết kế đồ họa' },
+    { name: 'Chỉnh sửa video', value: 'Chỉnh sửa video' },
   ];
   CourseKinhdoanh = [
-    { name: 'Quản lý dự án' },
-    { name: 'Microsoft Power BI' },
-    { name: 'Kỹ năng bán hàng' },
-    { name: 'Phân tích kinh doanh' },
+    { name: 'Quản lý dự án', value: 'Quản lý dự án' },
+    { name: 'Microsoft Power BI', value: 'Microsoft Power BI' },
+    { name: 'Kỹ năng bán hàng', value: 'Kỹ năng bán hàng' },
+    { name: 'Phân tích kinh doanh', value: 'Phân tích kinh doanh' },
   ];
   CourseGiaotiep = [
-    { name: 'Kỹ năng giao tiếp' },
-    { name: 'Kỹ năng trình bày' },
-    { name: 'Trình bày PowerPoint' },
-    { name: 'Viết' },
+    { name: 'Kỹ năng giao tiếp', value: 'Kỹ năng giao tiếp' },
+    { name: 'Kỹ năng trình bày', value: 'Kỹ năng trình bày' },
+    { name: 'Trình bày PowerPoint', value: 'Trình bày PowerPoint' },
+    { name: 'Viết', value: 'Viết' },
   ];
+
+  loadCoursePrevailing() {
+    console.log('load course prevailing');
+
+    this.apiService.courseInstructorService
+      .getTopRatedCourses()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.CourseViral = res.courses;
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching top-rated courses:');
+        },
+      });
+  }
+
+  loadCourseFreePrevailing() {
+    console.log('loadCourseFreePrevailing');
+
+    this.apiService.courseInstructorService
+      .getTopRatedFreeCourses()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.CourseFree = res.courses;
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching top-rated free courses:');
+        },
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  goToCourseDetail(id: number, title: string) {
+    this.router.navigate(['/course', id, encodeURIComponent(title)]);
+  }
+
+  //=======================
+
+  submitSeach(searchcontext:string) { 
+    // const searchcontext = this.searchFormMode.SearchContext.trim();
+    if (searchcontext != '') {
+      if (searchcontext.trim()) {
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: {
+            title: searchcontext,
+            page: this.shareHeaderSearchService.currentSearchTermPage,
+          },
+          queryParamsHandling: 'merge', // Giữ nguyên các query params khác nếu có
+        });
+      }
+      // Điều hướng với query params mới
+      this.router.navigate(['/search'], { 
+        queryParams: { title: searchcontext },
+      }).then(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      this.fetchResults(searchcontext, 0, -1, 0, '', 0, 1, 'Mới nhất');
+    }
+  }
+
+  fetchResults(
+    titleSearch: string,
+    ratingSearch: number,
+    languageSearch: number,
+    durationSearch: number,
+    levelSearch: string,
+    priceSearch: number,
+    page: number,
+    sort: string
+  ) {
+    if (titleSearch !== '') {
+      this.apiService.searchServiceService
+        .searchCoursesByTitle(
+          titleSearch,
+          ratingSearch,
+          languageSearch,
+          durationSearch,
+          levelSearch,
+          priceSearch,
+          page,
+          sort
+        )
+        .subscribe({
+          next: (data) => {
+            if (data.success) {
+              this.shareHeaderSearchService.updateSearchTerm(
+                titleSearch,
+                ratingSearch,
+                languageSearch,
+                durationSearch,
+                levelSearch,
+                priceSearch,
+                data.courses,
+                data.currentPage,
+                data.total,
+                sort
+              );
+            }
+          },
+          error: (error) => {
+            console.log(
+              'Lỗi HTTP 0 self signal chứng chỉ https home component:'
+            );
+          },
+        });
+    }
+  }
 }

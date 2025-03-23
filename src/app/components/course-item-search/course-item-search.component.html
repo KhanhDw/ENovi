@@ -6,42 +6,44 @@
   <div class="flex items-center justify-center w-1/4 h-5/6">
     <img
       class="object-cover w-full h-full border rounded-md"
-      src="./imgCourse/{{ item.img }}"
+      [src]="urlBackend_img_banner_course + item.img "
       alt="AnhBiaKhoaHoc"
     />
   </div>
-  <!-- infor of course -->  
+  <!-- infor of course -->
   <div class="flex items-start justify-between w-3/4 pl-4 bg-white h-5/6">
     <!-- info -->
     <div
       class="flex flex-col items-start justify-start flex-shrink-0 w-3/4 bg-white"
     >
       <!-- title -->
-      <h1
-        class="w-[536px] overflow-hidden text-xl font-semibold break-all text-slate-800 whitespace-nowrap text-ellipsis"
+      <a
+        (click)="goToCourseDetail(item.id,item.title)"
+        class="w-[536px] cursor-pointer hover:text-blue-500 overflow-hidden text-xl font-semibold break-all text-slate-800 whitespace-nowrap text-ellipsis"
       >
         {{ item.title }}
-      </h1>
+      </a>
       <!-- description -->
-      <p
+      <!-- <h6 hidden
         class="w-[536px] mt-4 overflow-hidden text-md text-slate-800 line-clamp-1 text-ellipsis"
       >
-        {{ item.description }}
-      </p>
+        Mô tả:
+       <p [innerHTML]="item.description ? item.description : 'không có mô tả cho khóa học'"></p>
+      </h6> -->
       <!-- author -->
       <p
         class="w-[536px] mt-1 overflow-hidden text-md break-all line-clamp-1 text-gray-600 text-ellipsis"
       >
-        <span>Tác giả: </span>{{ item.author }}
+        <!-- <span>Tác giả: </span>{{ item.author }} -->
       </p>
       <!-- rate -->
       <p class="w-full overflow-hidden text-gray-600 text-md">
-        <span>Đánh giá: </span>{{ item.rate }}
+        <span>Đánh giá: </span>{{ item.rating }}
         <i class="text-yellow-400 bi bi-star-fill"></i>
       </p>
       <!-- duration -->
-      <p class="w-[536px] overflow-hidden text-md text-gray-600">
-        <span>Thời lượng: </span>{{ item.duration }}
+      <p hidden class="w-[536px] overflow-hidden text-md text-gray-600">
+        <!-- <span>Thời lượng: </span>{{ item.duration }} -->
       </p>
     </div>
     <!-- price -->
@@ -50,7 +52,9 @@
     >
       <!-- giá -->
       <div>
-        <h6 [ngClass]="{'text-blue-700 px-1':+item.price === 0}">{{ +item.price === 0 ? 'Miễn phí' : item.price + 'đ' }}</h6>
+        <h6 [ngClass]="{ 'text-blue-700 px-1': +item.price === 0 }">
+          {{ +item.price === 0 ? "Miễn phí" : (item.price | number:'1.0-0') + "đ" }}
+        </h6>
       </div>
       <!-- danh hiệu -->
       <div hidden class="flex-col">

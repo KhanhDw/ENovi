@@ -8,8 +8,8 @@ import { Component } from '@angular/core';
 })
 export class PaymentsComponent {
   urls = [
-    { title: 'Nhận tiền', url: '/user/payments/recive', activeURL: true },
-    { title: 'Chuyển tiền', url: '/user/payments/transfer', activeURL: false },
+    // { title: 'Nhận tiền', url: '/user/payments/recive', activeURL: true },
+    // { title: 'Chuyển tiền', url: '/user/payments/transfer', activeURL: false },
   ];
 
   activeButtonIndex: number = 0;

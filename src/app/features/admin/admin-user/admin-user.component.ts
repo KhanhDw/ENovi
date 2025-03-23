@@ -1,3 +1,4 @@
+import { AdminUserService } from './../../../services/admin/user/admin-user.service';
 import {
   Component,
   ElementRef,
@@ -38,19 +39,8 @@ export type ChartOptions = {
   fill: ApexFill;
 };
 
-interface Product {
-  name: string;
-  price: number;
-  quantity: number;
-  status: 'In Stock' | 'Out of Stock';
-}
-
-interface user {
-  username: string;
-  email: string;
-  role: string;
-  createdAt: Date;
-}
+import { UserAdmin } from '@app/interface/user';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-admin-user',
@@ -60,6 +50,10 @@ interface user {
 })
 export class AdminUserComponent implements OnInit {
   selectedFilter: string = '';
+  searchKey: string = '';
+
+  countUsers: any[] = []; // Mảng lưu dữ liệu
+
   kindInforUser = [
     { name: 'Thông tin chung' },
     { name: 'Quản lý học viên' },
@@ -68,7 +62,10 @@ export class AdminUserComponent implements OnInit {
   tableReciveData = this.kindInforUser[0];
   @ViewChild('chartContainer') chartContainer!: ElementRef;
 
-  constructor(private dataService: ApiService) {
+  constructor(
+    private apiService: ApiService,
+    private adminUserService: AdminUserService
+  ) {
     this.updateChartOptions(); // Cập nhật lại `chartOptions`
   }
 
@@ -89,25 +86,26 @@ export class AdminUserComponent implements OnInit {
 
   title = 'my-angular-app';
 
-  products0: user[] = [];
-  products1: user[] = [];
-  products2: user[] = [];
+  user0: UserAdmin[] = [];
+  user1: UserAdmin[] = [];
+  user2: UserAdmin[] = [];
 
-  products: user[] = this.products0;
+  users: UserAdmin[] = [];
+  usersSubject = new BehaviorSubject<UserAdmin[]>([]);
 
   toggleDataTable(index: number) {
     switch (index) {
       case 1:
-        this.products = this.products0;
+        this.users = this.user0;
         break;
       case 2:
-        this.products = this.products1;
+        this.users = this.user1;
         break;
       case 3:
-        this.products = this.products2;
+        this.users = this.user2;
         break;
       default:
-        this.products = this.products0;
+        this.users = this.user0;
     }
   }
 
@@ -129,11 +127,10 @@ export class AdminUserComponent implements OnInit {
     }
   }
 
-  nameChart = 'người dùng';
+  nameChart = 'Người dùng đăng ký theo tháng';
   dataChart = [10, 41, 35, 51, 405, 62, 69, 91, 148, 168, 248, 348];
-  typeChartInput: ChartType = 'bar';
+  typeChartInput: ChartType = 'area';
   typeChartList = [
-    { name: 'line', title: 'Biểu đồ đường' },
     { name: 'area', title: 'Biểu đồ vùng' },
     { name: 'bar', title: 'Biểu đồ cột' },
   ];
@@ -170,18 +167,18 @@ export class AdminUserComponent implements OnInit {
       },
       xaxis: {
         categories: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
+          'Tháng 1',
+          'Tháng 2',
+          'Tháng 3',
+          'Tháng 4',
+          'Tháng 5',
+          'Tháng 6',
+          'Tháng 7',
+          'Tháng 8',
+          'Tháng 9',
+          'Tháng 10',
+          'Tháng 11',
+          'Tháng 12',
         ],
       },
       yaxis: {
@@ -193,15 +190,68 @@ export class AdminUserComponent implements OnInit {
     };
   }
 
-  // kết nối backend
-
-  data: any;
-
   ngOnInit(): void {
-    // this.dataService.getUsers().subscribe((response) => {
-    //   this.data = response;
-    //   console.log(this.data);
-    //   this.products = response;
-    // });
+    this.getAllUser();
+    this.getCountUserRegiterInMonth(this.getCurrentYear());
+  }
+
+  getCurrentYear(): number {
+    return new Date().getFullYear();
+  }
+
+  getAllUser() {
+    this.adminUserService.getAllUser().subscribe({
+      next: (res) => {
+        if (res.success) {
+          console.log('thanh cong');
+          this.user0 = res.users;
+          // Sử dụng .next() để cập nhật giá trị cho BehaviorSubject
+          this.usersSubject.next(res.users);
+          console.log(this.user0);
+        }
+      },
+      error: (err) => {
+        console.warn('load user all admin user');
+      },
+    });
+  }
+
+  btnSearch() {
+    this.searchUser(this.searchKey);
+  }
+
+  searchUser(searchKey: string) {
+    console.log('searchKey: ' + searchKey);
+    this.adminUserService
+      .getSearchUser(encodeURIComponent(searchKey))
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            console.log('thanh cong 11');
+            this.usersSubject.next(res.user);
+          }
+        },
+        error: (err) => {
+          console.warn('load user all admin user');
+        },
+      });
+  }
+
+  getCountUserRegiterInMonth(year: number) {
+    console.log('searchKey: ' + year);
+    this.adminUserService.getCountUserRegiterInMonth(year).subscribe({
+      next: (res) => {
+        if (res.success) {
+          console.log('thanh con');
+          this.dataChart = res.countuser.map(
+            (item: { user_count: any }) => item.user_count
+          );
+          this.updateChartOptions(); // Cập nhật lại `chartOptions` sau khi thay đổi dữ liệu
+        }
+      },
+      error: (err) => {
+        console.warn('load user all admin user');
+      },
+    });
   }
 }

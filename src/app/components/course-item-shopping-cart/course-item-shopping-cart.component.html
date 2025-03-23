@@ -15,7 +15,7 @@
     />
     <img
       class="object-cover w-10/12 h-full rounded-md"
-      src="{{ item.img }}"
+      [src]="urlBackend_img_banner_course + item.img"
       alt="AnhBiaKhoaHoc"
     />
   </div>
@@ -27,39 +27,40 @@
     >
       <!-- title -->
       <h1
-        class="w-[536px] overflow-hidden text-xl font-semibold leading-none break-all text-slate-800 whitespace-nowrap text-ellipsis"
+        class="w-[536px] overflow-hidden flex-wrap text-xl font-semibold text-slate-800"
       >
         {{ item.title }}
       </h1>
       <!-- description -->
-      <p
+      <p hidden
         class="w-[536px] mt-2 overflow-hidden text-md leading-none break-all text-slate-800 line-clamp-2 text-ellipsis"
       >
         {{ item.description }}
       </p>
-      <!-- author -->
-      <p
-        class="w-[536px] mt-1 overflow-hidden text-md leading-none break-all line-clamp-1 text-gray-600 text-ellipsis"
-      >
-        {{ item.author }}
-      </p>
       <!-- rate -->
       <p class="w-full overflow-hidden text-gray-600 text-md">
-        {{ item.rate }}
+        Đánh giá: <span> {{ item.rating }}</span>
       </p>
       <!-- duration -->
-      <p class="w-[536px] overflow-hidden text-md text-gray-600">
-        {{ item.duration }}
+      <p hidde class="w-[536px] overflow-hidden text-md text-gray-600">
+        <!-- {{ item.duration }} -->
       </p>
     </div>
     <!-- price -->
     <div
       class="flex flex-col items-end justify-between w-1/4 h-full pr-2 text-xl font-bold"
     >
-      <!-- giá -->
-      <h6>{{ item.price }}đ</h6>
-      <!-- danh hiệu -->
+      <!-- btn -->
       <div class="flex flex-col">
+        <button (click)="removeCourse(item.id)"
+          class="px-2 py-1 mt-2 text-xs text-center text-black transition-all border border-transparent rounded-md cursor-default hover:bg-red-400 shado w-md"
+          type="button"
+        >
+          Xoá
+        </button>
+      </div>
+      <!-- danh hiệu -->
+      <div class="flex-col hidden">
         <button
           class="px-2 py-1 mt-2 text-xs text-center transition-all bg-green-400 border border-transparent rounded-md cursor-default text-slate-700 shado w-md"
           type="button"
@@ -67,15 +68,10 @@
           New
         </button>
       </div>
-      <!-- btn -->
-      <div class="flex flex-col">
-        <button
-          class="px-2 py-1 mt-2 text-xs text-center text-black transition-all border border-transparent rounded-md cursor-default hover:bg-red-400 shado w-md"
-          type="button"
-        >
-          Xoá
-        </button>
-      </div>
+
+      <!-- giá -->
+      <h6>{{ item.price | number : "1.0-1" }}</h6>
     </div>
   </div>
 </div>
+

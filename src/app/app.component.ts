@@ -54,7 +54,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           event.url === '/user/instructor/register' ||
           event.url === '/user/instructor/ratting' ||
           event.url === '/user/instructor/courses-instructor' ||
-          event.url === '/user/instructor/courses-instructor/update' ||
+          event.url.includes('/user/instructor/courses-instructor/update')  ||
           event.url === '/user/instructor/courses-instructor/new' ||
           event.url === '/user/instructor/message' ||
           event.url === '/user/instructor/basic-information' ||
@@ -94,12 +94,12 @@ export class AppComponent implements OnInit, AfterViewInit {
           event.url === '/user/photo' ||
           event.url === '/user/delete-account' ||
           event.url === '/user/profile' ||
-          event.url === '/user/security' ||
+          event.url.includes('/user/security') ||
           event.url === '/user/instructor' ||
           event.url === '/user/instructor/register' ||
           event.url === '/user/instructor/revenue' ||
           event.url === '/user/instructor/ratting' ||
-          event.url === '/user/instructor/courses-instructor/update' ||
+          event.url.includes('/user/instructor/courses-instructor/update') ||
           event.url === '/user/instructor/courses-instructor/new' ||
           event.url === '/user/instructor/courses-instructor' ||
           event.url === '/user/instructor/message' ||

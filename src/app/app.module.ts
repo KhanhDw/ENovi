@@ -5,6 +5,7 @@ import { provideHttpClient, withFetch } from '@angular/common/http'; // Import m
 import { QuillModule } from 'ngx-quill';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgApexchartsModule } from 'ng-apexcharts'; // Import đúng cách
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {
   BrowserModule,
   provideClientHydration,
@@ -62,6 +63,7 @@ import { AuthCallbackComponent } from './components/System/auth-callback/auth-ca
 import { ResetPasswordComponent } from './features/reset-password/reset-password.component';
 import { RegisterInstructorComponent } from './features/user/register-instructor/register-instructor.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
+import { CommentCourseComponent } from './components/comment-course/comment-course.component';
 
 @NgModule({
   declarations: [
@@ -127,6 +129,7 @@ import { PaginationComponent } from './components/pagination/pagination.componen
     ResetPasswordComponent,
     RegisterInstructorComponent,
     PaginationComponent,
+    CommentCourseComponent,
   ],
   imports: [
     BrowserModule,
@@ -135,7 +138,9 @@ import { PaginationComponent } from './components/pagination/pagination.componen
     QuillModule.forRoot(),
     ReactiveFormsModule,
     NgApexchartsModule,
+    MatSnackBarModule,
   ],
+  
   providers: [provideClientHydration(),  provideHttpClient(withFetch())],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

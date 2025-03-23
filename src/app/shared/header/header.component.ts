@@ -15,6 +15,8 @@ import { Observable } from 'rxjs';
 import { User } from '@app/interface/user';
 import { NgForm } from '@angular/forms';
 import { ShareHeaderSearchService } from '@app/services/search/header_search/share-header-search.service';
+import { ReloadSystemService } from '@app/services/reload_system/reload-system.service';
+import { SharedDataService } from '@app/services/share/shared-data.service';
 
 // Định nghĩa kiểu dữ liệu cho subitem
 interface Subitem {
@@ -44,7 +46,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   adminDashboardURL: string = '/admin';
   userDashboardURL: string = '/user/';
   instructorDashboardURL: string = '/user/instructor';
-  publishProfileURL: string = '/user/profile';
+  // publishProfileURL: string = '/user/profile';
   cartURL: string = '/cart';
   signupURL: string = '/register';
   loginURL: string = '/login';
@@ -76,12 +78,13 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   // dropdown
   isOpen: boolean = false;
 
+  // load data user login
+  loaddata: boolean = true;
+
   avartFeature = [
     { name: 'Khoá học của tôi', url: '/my-learning' },
-    { name: 'Hoạt động giảng dạy', url: '/user/courses-instructor' },
-    { name: 'Điều chỉnh hồ sơ giảng viên', url: '/notfound' },
-    { name: 'Điều chỉnh hồ sơ cá nhân', url: '' },
-    { name: 'Ngôn ngữ', url: '' },
+    { name: 'Hoạt động giảng dạy', url: '/user/instructor/courses-instructor' },
+    { name: 'Điều chỉnh hồ sơ', url: '/user/edit-information' },
   ];
 
   constructor(
@@ -92,7 +95,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private ngZone: NgZone,
     private router: Router,
     private route: ActivatedRoute,
-    private shareHeaderSearchService: ShareHeaderSearchService
+    private shareHeaderSearchService: ShareHeaderSearchService,
+    private reloadSystemService: ReloadSystemService,
+    private sharedDataService: SharedDataService
   ) {}
 
   get isLoggedIn(): boolean {
@@ -285,6 +290,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   isShowCol3: boolean = false;
 
   ngOnInit() {
+    this.sharedDataService.setHeaderComponent(this);
+
     const categoriesCookie = this.cookieService.getCookie('categories');
     const categoriesCookieV1 = this.cookieService.getCookie('categoriesV1');
     const categoriesCookieV2 = this.cookieService.getCookie('categoriesV2');
@@ -319,7 +326,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       this.selectedSubfields = this.fields[0].subfields;
     }
 
-    this.updateInforUser();
+    if (this.cookieService.getCookie('user')) {
+      this.updateInforUser();
+    }
 
     this.getQueryParam();
   }
@@ -334,8 +343,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       const level = params['level'];
       const price = params['price'];
       const page = params['page'];
+      const sort = params['sort'];
 
-      if (title || rating || language || duration || level || price) {
+      if (title || rating || language || duration || level || price || sort) {
         this.fetchResults(
           title,
           rating,
@@ -343,7 +353,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
           duration,
           level,
           price,
-          page
+          page,
+          sort
         );
       }
     });
@@ -353,9 +364,13 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.ngZone.runOutsideAngular(() => {
       setInterval(() => {
         this.ngZone.run(() => {
-          this.updateInforUser();
+          if (this.cookieService.getCookie('user')) {
+            this.updateInforUser();
+          }
+          this.loaddata = false;
+          this.reloadSystemService.reloadSystem();
         });
-      }, 5000);
+      }, 1500);
     });
   }
 
@@ -379,6 +394,12 @@ export class HeaderComponent implements OnInit, AfterViewInit {
           if (this.isLoggedIn) {
             this.nameUser = user.name || '';
             this.picture = user.picture || '';
+          }
+
+          // khi đăng ký instructor và load lại data thì dùng cái này
+          if (user.username) {
+            this.nameUser = user.username || '';
+            this.picture = user.avatar || '/img/avatar.png';
           }
 
           // console.log('22222', user.username);
@@ -410,6 +431,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     } else {
       this.isLogin = 0; // Reset nếu role không hợp lệ
     }
+
+    console.log("......"+this.isLogin);
   }
 
   onHover(isHovered: boolean) {
@@ -480,7 +503,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       this.router.navigate(['/search'], {
         queryParams: { title: searchcontext },
       });
-      this.fetchResults(searchcontext, 0, -1, 0, '', 0, 1);
+      this.fetchResults(searchcontext, 0, -1, 0, '', 0, 1, 'Mới nhất');
     }
   }
 
@@ -491,7 +514,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     durationSearch: number,
     levelSearch: string,
     priceSearch: number,
-    page: number
+    page: number,
+    sort: string
   ) {
     if (titleSearch !== '') {
       this.apiService.searchServiceService
@@ -502,7 +526,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
           durationSearch,
           levelSearch,
           priceSearch,
-          page
+          page,
+          sort
         )
         .subscribe({
           next: (data) => {
@@ -521,7 +546,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                 priceSearch,
                 data.courses,
                 data.currentPage,
-                data.total
+                data.total,
+                sort
               );
             }
           },

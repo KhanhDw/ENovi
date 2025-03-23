@@ -1,0 +1,13 @@
+.custom-snackbar .mat-simple-snackbar-action button {
+    color: white;
+    background-color: #059669;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-weight: bold;
+    border: none;
+    transition: background-color 0.3s;
+  }
+  
+  .custom-snackbar .mat-simple-snackbar-action button:hover {
+    background-color: #047857;
+  }

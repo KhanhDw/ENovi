@@ -1,7 +1,7 @@
-<div class="flex flex-col w-full h-screen px-4 py-8 overflow-y-auto">
+<div class="flex flex-col w-full min-h-screen px-4 py-8 overflow-y-auto">
   <div class="flex flex-col h-full max-w-6xl gap-8 pb-8 mx-auto lg:flex-row">
     <!-- Main Content -->
-    <div class="flex-1 h-full">
+    <div class="flex-1 h-full  w-[780px]">
       <!-- Header -->
       <div class="mb-6">
         <div class="mb-1 text-sm tracking-wider text-gray-600 uppercase">
@@ -10,29 +10,33 @@
         <h1 class="mb-2 text-4xl font-bold text-gray-900">
           {{ instructor.name }}
         </h1>
-        <p class="text-lg text-gray-600">{{ instructor.title }}</p>
+        <!-- <p class="text-lg text-gray-600">{{ instructor.overview }}</p> -->
       </div>
 
       <!-- Stats -->
-      <div class="flex gap-8 mb-8">
+      <div class="flex gap-8 mb-8 ">
         <div>
           <div class="text-2xl font-bold text-gray-900">
-            {{ instructor.stats.totalStudents }}
+            {{ instructor.stats.totalStudents | number }}
           </div>
-          <div class="text-sm text-gray-600">Total students</div>
+          <div class="text-sm text-gray-600">Tổng học viên</div>
         </div>
         <div>
+          <div class="text-2xl font-bold text-gray-900">{{ instructor.stats.totalCourses | number }}</div>
+          <div class="text-sm text-gray-600">Khóa học</div>
+        </div>
+        <div hidden>
           <div class="text-2xl font-bold text-gray-900">
-            {{ instructor.stats.reviews }}
+            {{ instructor.stats.reviews | number }}
           </div>
           <div class="text-sm text-gray-600">Reviews</div>
         </div>
       </div>
 
       <!-- About Section -->
-      <div class="mb-8">
-        <h2 class="mb-4 text-xl font-bold text-gray-900">About me</h2>
-        <div class="h-full mb-10 space-y-4 text-gray-600 whitespace-pre-line">
+      <div class="w-full mb-8">
+        <h2 class="w-full mb-4 text-xl font-bold text-gray-900">Giới thiệu</h2>
+        <div class=" p-3 w-full h-[500px] overflow-y-auto mb-10 space-y-4 text-gray-600 whitespace-pre-line border-2 border-gray-300 rounded-md">
           {{ instructor.bio }}
         </div>
       </div>
@@ -51,9 +55,7 @@
       <!-- Profile Image -->
       <div class="mb-6">
         <img
-          [src]="
-            'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7BF17E03CC-2329-41AB-BBA5-4B194A196E8F%7D-UxMB1NQIIEHcM8begQWMOFwqm3wsjh.png'
-          "
+          [src]="urlBackend_img_banner_course + avatarUrl"
           alt="Profile photo"
           class="object-cover w-64 h-64 mx-auto border-2 rounded-full border-slate-400"
         />
@@ -63,8 +65,9 @@
       <div class="space-y-3">
         <a
           *ngFor="let link of instructor.socialLinks"
-          [href]="link.url"
-          class="flex items-center justify-center w-full p-3 transition-colors border border-gray-300 rounded-lg hover:bg-gray-50"
+          [href]="'https://' + link.url"
+          target="_blank"
+          class="flex items-center justify-start w-full p-3 overflow-x-hidden font-bold truncate transition-colors border border-gray-300 rounded-lg hover:bg-gray-50"
         >
           <i [class]="'fas fa-' + link.icon + ' mr-2'"></i>
           {{ link.name }}
