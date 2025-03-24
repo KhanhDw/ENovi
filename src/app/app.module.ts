@@ -113,7 +113,6 @@ import { CommentCourseComponent } from './components/comment-course/comment-cour
     UserProfileComponent,
     AdminComponent,
     UploadPhotoUserComponent,
-    PaymentsComponent,
     AdminCourseDetailComponent,
     ForgotPasswordComponent,
 

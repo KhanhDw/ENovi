@@ -21,11 +21,13 @@ import { AdminCourseService } from './admin/course/admin-course.service';
 import { CartService } from './cart/cart.service';
 import { MyLearningService } from './my-learning/my-learning.service';
 import { EnrollmentService } from './enrollment/enrollment.service';
+import { VnpayService } from './vnpay/vnpay.service';
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  public API_URL = 'https://localhost:3000';
+  // public API_URL = 'https://localhost:3000';
+  public API_URL = 'https://enovi.loca.lt';
 
   constructor(
     private http: HttpClient,
@@ -47,7 +49,8 @@ export class ApiService {
     public adminCourseService: AdminCourseService,
     public cartService: CartService,
     public myLearningService: MyLearningService,
-    public enrollmentService: EnrollmentService
+    public enrollmentService: EnrollmentService,
+    public vnpayService: VnpayService
   ) {
     this.loginServiceService.setApiUrl(`${this.API_URL}/login`);
     this.authGoogleServiceService.setApiUrl(`${this.API_URL}/auth`);
@@ -74,6 +77,8 @@ export class ApiService {
     this.uploadImgServerService.setApiUrl(`${this.API_URL}/upload-img`);
     // upload video
     this.uploadVideoService.setApiUrl(`${this.API_URL}/upload-video`);
-   
+    // vnpay
+    this.vnpayService.setApiUrl(`${this.API_URL}/vnpay/order`);
+
   }
 }
