@@ -213,8 +213,9 @@
                   courseExitCart ? "Đã thêm vào giỏ hàng" : "Thêm vào giỏ hàng"
                 }}
               </button>
+              <!-- (click)="addCourseToMyLearning(courseDetailAPI.id)" -->
               <button
-                (click)="addCourseToMyLearning(courseDetailAPI.id)"
+              (click)="buyCourse(courseDetailAPI.id)"
                 type="button"
                 [ngClass]="courseInMyLearning ? 'bg-green-600 hover:bg-green-400' : ''"
                 class="w-full py-4 font-bold text-black border-2 rounded-md border-slate-600 bg-slate-100 hover:bg-slate-200"

@@ -42,16 +42,15 @@ import { CourseNewComponent } from './features/user/courses-of-instructor/course
 import { CategoriesComponent } from './features/admin/categories/categories.component';
 import { AuthCallbackComponent } from './components/System/auth-callback/auth-callback.component';
 import { ResetPasswordComponent } from './features/reset-password/reset-password.component';
+import { PaymentStatusComponent } from './features/payment/payment-status/payment-status.component';
 //service prevent reload page
-
-
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
 
-  { path: 'auth/callback', component: AuthCallbackComponent }, // đặc biệt dùng để nhận call back từ goolge gửi về 
-  
+  { path: 'auth/callback', component: AuthCallbackComponent }, // đặc biệt dùng để nhận call back từ goolge gửi về
+
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'search', component: SearchComponent },
@@ -60,9 +59,14 @@ const routes: Routes = [
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'my-learning', component: MyLearningComponent },
   { path: 'course/:id/:title', component: CourseComponent },
-  { path: 'payment', component: PaymentComponent },
   {
-    path: 'course/:title/lecture', component: LectureComponent
+    path: 'payment',
+    component: PaymentComponent,
+  },
+  { path: 'payment/:status', component: PaymentStatusComponent },
+  {
+    path: 'course/:title/lecture',
+    component: LectureComponent,
   },
 
   // =====
@@ -98,7 +102,7 @@ const routes: Routes = [
         path: 'instructor',
         children: [
           { path: '', redirectTo: 'courses-instructor', pathMatch: 'full' },
-          { path: 'register', component: RegisterInstructorComponent, },
+          { path: 'register', component: RegisterInstructorComponent },
           {
             path: 'courses-instructor',
             component: CoursesOfInstructorComponent,
@@ -106,7 +110,7 @@ const routes: Routes = [
           {
             path: 'courses-instructor',
             children: [
-              { path: 'update/:title', component: CourseUpdateComponent  },
+              { path: 'update/:title', component: CourseUpdateComponent },
               { path: 'new', component: CourseNewComponent },
             ],
           },

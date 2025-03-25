@@ -38,6 +38,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           event.url === '/user' ||
           event.url === '/forgot-password' ||
           event.url.includes('/reset-password') ||
+          event.url.includes('/payment/') ||
           event.url === '/admin' ||
           event.url === '/admin/courses' ||
           event.url === '/admin/user' ||
@@ -73,13 +74,15 @@ export class AppComponent implements OnInit, AfterViewInit {
           event.url === '/admin/courses/detail' ||
           event.url === '/admin/categories' ||
           event.url === '/user/purchase-history'
+
+
         );
         this.hiddenFooter = !(
           event.url === '/login' ||
-          event.url === '/payment' ||
           event.url === '/register' ||
           event.url === '/reset-password' ||
           event.url.includes('/reset-password') ||
+          event.url.includes('/payment/') ||
           event.url === '/lecture' ||
           event.url === '/user' ||
           event.url === '/admin' ||

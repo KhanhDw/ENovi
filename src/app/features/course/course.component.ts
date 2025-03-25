@@ -22,6 +22,7 @@ import { CookieStorageService } from '@app/services/cookie_storage/cookie-storag
 import { MyLearningService } from '@app/services/my-learning/my-learning.service';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { UserServiceService } from '@app/services/user/user-service.service';
+import { VnpayService } from '@app/services/vnpay/vnpay.service';
 
 @Component({
   selector: 'app-course',
@@ -30,7 +31,9 @@ import { UserServiceService } from '@app/services/user/user-service.service';
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CourseComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+export class CourseComponent
+  implements OnInit, AfterViewInit, OnChanges, OnDestroy
+{
   private destroy$ = new Subject<void>();
   private avatarSubject = new BehaviorSubject<string>('');
   avatarUrl$ = this.avatarSubject.asObservable();
@@ -64,6 +67,24 @@ export class CourseComponent implements OnInit, AfterViewInit, OnChanges, OnDest
 
   courseInMyLearning: boolean = false;
 
+  orderData = {
+    amount: 100000,
+    orderDescription: 'Thanh toán đơn hàng khóa học trực tuyến',
+    orderType: 'billpayment',
+    language: 'vn',
+    orderId: new Date()
+      .toLocaleString('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      })
+      .replace(/[\/\s,:]/g, ''),
+  };
+  listCourseBuy: string[] = [];
+
   constructor(
     private elementRef: ElementRef,
     private route: ActivatedRoute,
@@ -72,9 +93,11 @@ export class CourseComponent implements OnInit, AfterViewInit, OnChanges, OnDest
     private cookieStorageService: CookieStorageService,
     private cdRef: ChangeDetectorRef,
     private myLearningService: MyLearningService,
-    private userServiceService: UserServiceService
+    private userServiceService: UserServiceService,
+    private vnpayService: VnpayService
   ) {
-    this.urlBackend_img_avatar = this.apiService.API_URL + '/uploads/img/avartaUser/';
+    this.urlBackend_img_avatar =
+      this.apiService.API_URL + '/uploads/img/avartaUser/';
   }
 
   ngOnInit() {
@@ -103,9 +126,6 @@ export class CourseComponent implements OnInit, AfterViewInit, OnChanges, OnDest
   // ==================
 
   courseDetailFetch() {
-
-    
-
     if (!this.courseDetailAPI) {
       const rawTitle = this.route.snapshot.paramMap.get('title') || '';
       const rawId = this.route.snapshot.paramMap.get('id') || -1;
@@ -117,7 +137,11 @@ export class CourseComponent implements OnInit, AfterViewInit, OnChanges, OnDest
 
       this.route.paramMap.subscribe((params) => {
         this.apiService.courseDetailServiceService
-          .GetCourseDetailAPI(decodeURI(rawId.toString())!, decodeURI(rawTitle)!, this.getInstructorId().toString())
+          .GetCourseDetailAPI(
+            decodeURI(rawId.toString())!,
+            decodeURI(rawTitle)!,
+            this.getInstructorId().toString()
+          )
           .subscribe({
             next: (res) => {
               if (res.course && res.course.length > 0) {
@@ -133,7 +157,7 @@ export class CourseComponent implements OnInit, AfterViewInit, OnChanges, OnDest
                 this.instructorBio = res.course[0].instructorBiography;
                 // Cập nhật avatar thông qua Subject
                 this.updateAvatar(res.course[0].instructorAvatar);
-                
+
                 this.getSectionFetch(Number(rawId));
                 this.renderStars();
                 this.getLanguages();
@@ -343,7 +367,7 @@ export class CourseComponent implements OnInit, AfterViewInit, OnChanges, OnDest
   renderStars() {
     this.stars = [];
     if (!this.rating) return;
-    
+
     let fullStars = Math.floor(this.rating);
     let hasHalfStar = this.rating - fullStars > 0.5;
     let emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
@@ -357,7 +381,7 @@ export class CourseComponent implements OnInit, AfterViewInit, OnChanges, OnDest
     for (let i = 0; i < emptyStars; i++) {
       this.stars.push('bi bi-star');
     }
-    
+
     this.cdRef.detectChanges();
   }
 
@@ -376,7 +400,7 @@ export class CourseComponent implements OnInit, AfterViewInit, OnChanges, OnDest
         }
       },
       error: (err) => {
-        console.log("lỗi getSectionFetch http response: ");
+        console.log('lỗi getSectionFetch http response: ');
       },
     });
   }
@@ -415,7 +439,7 @@ export class CourseComponent implements OnInit, AfterViewInit, OnChanges, OnDest
           }
         },
         error: (err) => {
-          console.log("lỗi getListLectureOfSection http response: ");
+          console.log('lỗi getListLectureOfSection http response: ');
         },
       });
   }
@@ -458,7 +482,7 @@ export class CourseComponent implements OnInit, AfterViewInit, OnChanges, OnDest
         }
       },
       error: (err) => {
-        console.error('Error checking course in cart:'  );
+        console.error('Error checking course in cart:');
       },
     });
   }
@@ -585,5 +609,63 @@ export class CourseComponent implements OnInit, AfterViewInit, OnChanges, OnDest
           }
         },
       });
+  }
+
+  // buy course
+  buyCourse(courseId: number): void {
+    const userId = this.getInstructorId();
+    if (userId === -1) {
+      console.warn('Người dùng chưa đăng nhập');
+      return;
+    }
+    this.listCourseBuy[0] = courseId.toString();
+
+    this.createPayment(
+      this.orderData.amount,
+      this.orderData.language,
+      this.orderData.orderType,
+      this.orderData.orderDescription,
+      this.orderData.orderId,
+      this.listCourseBuy,
+      userId
+    );
+
+
+    // this.addCourseToMyLearning(courseId);
+  }
+
+  createPayment(
+    amount: any,
+    language: any,
+    orderType: any,
+    orderDescription: any,
+    orderId: any,
+    listCourseBuy:string[],
+    userId: number
+  ) {
+    // Cấu hình các tham số thanh toán
+    const paymentData = {
+      amount: amount,
+      bankCode: 'NCB', // Tạm thời chọn ngân hàng NCB để test
+      language: language,
+      orderType: orderType,
+      orderDescription: orderDescription,
+      orderRef: orderId,
+    };
+
+    // Gọi service để tạo URL thanh toán
+    this.vnpayService.createPayment(paymentData, listCourseBuy, userId).subscribe({
+      next: (response) => {
+        if (response.urlvnpay) {
+          // Chuyển hướng sang trang thanh toán VNPay
+          window.location.href = response.urlvnpay;
+        } else {
+          console.error('Lỗi tạo URL thanh toán: Không nhận được URL');
+        }
+      },
+      error: (error) => {
+        console.error('Lỗi kết nối:', error);
+      },
+    });
   }
 }

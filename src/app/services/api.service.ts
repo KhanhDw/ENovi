@@ -26,8 +26,8 @@ import { VnpayService } from './vnpay/vnpay.service';
   providedIn: 'root',
 })
 export class ApiService {
-  // public API_URL = 'https://localhost:3000';
-  public API_URL = 'https://enovi.loca.lt';
+  public API_URL = 'https://localhost:3000';
+  // public API_URL = 'https://enovi-backend.loca.lt/';
 
   constructor(
     private http: HttpClient,

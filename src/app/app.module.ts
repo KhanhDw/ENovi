@@ -64,6 +64,7 @@ import { ResetPasswordComponent } from './features/reset-password/reset-password
 import { RegisterInstructorComponent } from './features/user/register-instructor/register-instructor.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { CommentCourseComponent } from './components/comment-course/comment-course.component';
+import { PaymentStatusComponent } from './features/payment/payment-status/payment-status.component';
 
 @NgModule({
   declarations: [
@@ -129,6 +130,7 @@ import { CommentCourseComponent } from './components/comment-course/comment-cour
     RegisterInstructorComponent,
     PaginationComponent,
     CommentCourseComponent,
+    PaymentStatusComponent,
   ],
   imports: [
     BrowserModule,
