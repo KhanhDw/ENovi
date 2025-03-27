@@ -3,26 +3,24 @@
   <div class="flex w-full justify-between items-center h-[52px] bg-[#231d1d]">
     <!-- banner -->
     <div class="flex items-center gap-2 px-5 text-white">
-      <a href="#" class="text-xl font-bold">ENovi</a>
+      <a href="/" class="text-xl font-bold">ENovi</a>
       <h1 class="text-xl font-bold">|</h1>
       <a
-        href="#"
+        (click)="navigateToMyLearning()"
         class="text-xs font-bold text-center text-gray-500 uppercase transition-all duration-300 font-signika hover:text-white"
         >Khóa học <br />của tôi</a
       >
       <h1 class="text-xl font-bold">|</h1>
-      <a href="#" class="font-signika"
-        >Lập trình C++ căn bản đến nâng cao 2024 Bootcamp (Vietnamese)</a
-      >
+      <a  class="pointer-events-none font-signika">{{ titleCourse }}</a>
     </div>
     <!--right col - process and tool -->
-    <div  class="flex items-center justify-center gap-5 mr-4 text-white">
+    <div class="flex items-center justify-center gap-5 mr-4 text-white">
       <!-- process -->
       <div hidden>
         <app-progress-learning [progress]="progress"></app-progress-learning>
       </div>
       <!-- number lecture -->
-      <div>
+      <div hidden>
         <p class="text-sm font-semibold font-signikam">
           {{ numberLectureFinish }}/{{ totalNumberLectureFinish }} bài giảng
         </p>
@@ -54,18 +52,20 @@
   </div>
   <!-- body -->
   <div
-    class="flex items-center justify-between w-full overflow-hidden bg-white"
+    class="flex items-start justify-between w-full h-full bg-white"
   >
     <!-- video - left -->
     <div
       id="videoZone"
-      class="flex w-full h-[calc(100vh-104px)] overflow-y-scroll overflow-x-scroll border-r-2 border-gray-500"
+      class="flex w-full h-full overflow-x-scroll overflow-y-scroll border-r-2 border-gray-500"
     >
       <!-- video -->
       <div class="flex w-full">
         <app-youtube-player
           class="w-full"
-          [titleCourse]="titleCourse"
+          [titleLesson]="nameLecture"
+          [nameVideo]="nameVideo"
+          [createAtLesson]="createAtLesson"
         ></app-youtube-player>
       </div>
       <!-- section and title -->
@@ -79,10 +79,10 @@
         'w-0 animate-collapse-to-left duration-[0.301s] bg-zinc-100 overflow-hidden flex-nowrap':
           isShowLayoutSection
       }"
-      class="flex h-[calc(100vh-104px)] overflow-y-scroll flex-col truncate bg-white"
+      class="flex flex-col h-[calc(100vh-52px)] bg-white "
     >
       <!-- header-->
-      <div class="flex items-center justify-between w-full p-2 bg-white">
+      <div class="flex items-center self-start justify-between w-full p-2 bg-white">
         <!-- title -->
         <h1 class="text-xl font-bold">Danh sách bài giảng</h1>
         <!-- Collapse section lecture -->
@@ -106,28 +106,32 @@
         </button>
       </div>
       <!-- body -->
-      <div class="flex flex-col overflow-y-auto">
+      <div class="flex flex-col flex-1 overflow-y-auto">
         <!--list section -->
-        <div *ngFor="let section of sections" class="flex flex-col h-full">
+        <div
+          *ngFor="let item of sections; let i = index"
+          (click)="handleSectionClick(item.id)"
+          class="flex flex-col "
+        >
           <button
-            (click)="toggleSectionItem(section.id)"
+            (click)="toggleSectionItem(item.id)"
             type="button"
-            class="flex flex-col items-center w-full gap-2 pl-2 pr-4 font-semibold bg-white border cursor-pointer border-slate-300 hover:bg-slate-100"
+            class="flex flex-col items-center w-full h-10 gap-2 pl-2 pr-4 font-semibold bg-white border cursor-pointer border-slate-300 hover:bg-slate-100"
           >
             <!-- title button -->
             <div
               class="flex items-center justify-between w-full truncate cursor-pointer flex-nowrap"
             >
-              <span class="cursor-pointer">{{ section.title }}</span>
+              <span class="cursor-pointer">{{ item.title }}</span>
               <i
-                *ngIf="!section.isExpanded"
+                *ngIf="!item.isExpanded"
                 class="cursor-pointer bi bi-caret-down-fill"
               ></i>
-              <i *ngIf="section.isExpanded" class="bi bi-caret-up"></i>
+              <i *ngIf="item.isExpanded" class="bi bi-caret-up"></i>
             </div>
             <!-- time of lecture -->
-            <div
-              class="flex items-center justify-between w-full text-xs font-normal truncate cursor-pointer flex-nowrap"
+            <div hidden
+              class="items-center justify-between w-full text-xs font-normal truncate cursor-pointer flex-nowrap"
             >
               <p class="cursor-pointer">Hoàn thành 0/12 bài giảng</p>
               <p class="cursor-pointer">1:23:53</p>
@@ -135,19 +139,20 @@
           </button>
           <!-- content -->
           <div
-            class="flex flex-col pl-6 bg-slate-600"
-            *ngIf="section.isExpanded"
+            class="flex flex-col pl-6 bg-emerald-600"
+            *ngIf="item.isExpanded"
           >
             <a
-              href="#"
+              *ngFor="let item of listLecture"
+              (click)="watchLecture(sectionIdClicked, item.id)"
               class="flex items-center justify-between w-full gap-2 pl-2 pr-4 font-semibold bg-white border-b-2 border-l-2 cursor-pointer hover:bg-slate-50"
             >
               <!-- title button -->
               <div
                 class="flex flex-col w-full truncate cursor-pointer flex-nowrap"
               >
-                <span class="h-10 cursor-pointer">tổng quan</span>
-                <p hidden class="gap-2 text-xs font-normal cursor-pointer ">
+                <span class="h-10 cursor-pointer">{{ item.title }}</span>
+                <p hidden class="gap-2 text-xs font-normal cursor-pointer">
                   <i class="bi bi-play-circle-fill"></i><span>01:43</span>
                 </p>
               </div>
@@ -155,14 +160,15 @@
               <div
                 class="flex items-center justify-end w-full gap-5 truncate cursor-pointer flex-nowrap"
               >
-                <a hidden
+                <a
+                  hidden
                   [routerLink]="linkTaiBaiTap"
                   class="px-2 text-xl border-2 rounded-md opacity-100 cursor-pointer border-slate-600 hover:text-pink-600 hover:border-pink-600"
                   ><span class="text-sm cursor-pointer">Bài tập</span
                   ><i class="cursor-pointer bi bi-file-earmark-text-fill"></i
                 ></a>
-                <i 
-                  *ngIf="section.finish"
+                <i
+                  *ngIf="item.finish"
                   class="flex justify-end text-green-700 cursor-pointer bi bi-check-circle-fill"
                 ></i>
               </div>
@@ -170,37 +176,39 @@
           </div>
         </div>
       </div>
+      <!-- footer -->
+      <div class="flex w-full h-[52px] truncate self-end bg-[#231D1D]">
+        <div class="flex items-center justify-between w-full px-3">
+          <div class="flex items-center justify-start w-1/3 gap-4">
+            <!-- tài liệu  -->
+            <button
+              hidden
+              type="button"
+              class="px-3 py-1 text-xl font-semibold bg-blue-200 rounded-sm"
+            >
+              Tài liệu học tập
+            </button>
+          </div>
+          <div class="flex items-center justify-center w-1/3 gap-4">
+            <button
+              type="button"
+              class="px-5 py-1 text-xl font-semibold rounded-2xl bg-zinc-200"
+            >
+              Bài trước đó
+            </button>
+            <button (click)="nextLesson()"
+              type="button" 
+              class="px-5 py-1 text-xl font-semibold rounded-2xl bg-zinc-200"
+            >
+              Bài kế tiếp
+            </button>
+          </div>
+          <div class="flex items-center justify-end w-1/3 gap-4"></div>
+        </div>
+      </div>
     </div>
   </div>
-  <!-- footer -->
-  <div class="flex w-full h-[52px] bg-[#231D1D]">
-    <div class="flex items-center justify-between w-full px-3">
-      <div class="flex items-center justify-start w-1/3 gap-4">
-        <!-- tài liệu  -->  
-        <button hidden
-          type="button"
-          class="px-3 py-1 text-xl font-semibold bg-blue-200 rounded-sm"
-        >
-          Tài liệu học tập
-        </button>
-      </div>
-      <div class="flex items-center justify-center w-1/3 gap-4">
-        <button
-          type="button"
-          class="px-5 py-1 text-xl font-semibold rounded-2xl bg-zinc-200"
-        >
-          Bài trước đó
-        </button>
-        <button
-          type="button"
-          class="px-5 py-1 text-xl font-semibold rounded-2xl bg-zinc-200"
-        >
-          Bài kế tiếp
-        </button>
-      </div>
-      <div class="flex items-center justify-end w-1/3 gap-4"></div>
-    </div>
-  </div>
+
   <!-- note screen -->
   <div
     class="absolute left-0 top-0 w-full h-screen z-[999]"

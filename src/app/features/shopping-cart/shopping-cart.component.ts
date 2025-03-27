@@ -1,10 +1,16 @@
 import { ApiService } from '@app/services/api.service';
-import { Component, QueryList, ViewChildren, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  QueryList,
+  ViewChildren,
+  OnInit,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { CourseItemShoppingCartComponent } from '../../components/course-item-shopping-cart/course-item-shopping-cart.component';
 import { cart } from '@app/interface/cart';
 import { CourseSearch } from '@app/interface/course';
 import { CookieStorageService } from '@app/services/cookie_storage/cookie-storage.service';
-
+import { MyLearningService } from '@app/services/my-learning/my-learning.service';
 @Component({
   selector: 'app-shopping-cart',
   templateUrl: './shopping-cart.component.html',
@@ -12,17 +18,31 @@ import { CookieStorageService } from '@app/services/cookie_storage/cookie-storag
   standalone: false,
 })
 export class ShoppingCartComponent implements OnInit {
-  
   // ===========
   // construstor
   // ===========
   constructor(
     private apiService: ApiService,
     private CookieStorageService: CookieStorageService,
+    private myLearningService: MyLearningService,
     private cdr: ChangeDetectorRef // Inject ChangeDetectorRef
   ) {}
   ngOnInit(): void {
     this.ShowListCourseInCart();
+    // Check if the user has already visited the page
+    const hasVisited = localStorage.getItem('hasVisitedShoppingCart');
+    if (!hasVisited) {
+      localStorage.setItem('hasVisitedShoppingCart', 'true');
+      console.log('First time visiting the shopping cart page.');
+    } else {
+      console.log('Reloading shopping cart data.');
+      this.ShowListCourseInCart();
+    }
+
+    // Handle component destruction to clear localStorage
+    window.addEventListener('beforeunload', () => {
+      localStorage.removeItem('hasVisitedShoppingCart');
+    });
   }
   ShoppingCartComponent() {}
 
@@ -67,7 +87,9 @@ export class ShoppingCartComponent implements OnInit {
 
     if (this.isSelectAll) {
       this.checkedCount = this.listCourse.length;
-      this.listCourse.forEach(course => this.selectedItems.set(course.id.toString(), true));
+      this.listCourse.forEach((course) =>
+        this.selectedItems.set(course.id.toString(), true)
+      );
     } else {
       this.checkedCount = 0;
       this.selectedItems.clear();
@@ -114,6 +136,9 @@ export class ShoppingCartComponent implements OnInit {
           this.listCourse = res.listCourse;
           this.checkedCount = 0;
           this.selectedItems.clear();
+       
+          this.checkCouseHasInMylearning();
+
           this.cdr.detectChanges(); // Trigger change detection
         }
       },
@@ -126,13 +151,102 @@ export class ShoppingCartComponent implements OnInit {
   // ==================
   // Calculate total price for selected items
   // ==================
+  getTotalOriginalPrice(): number {
+    let totalOriginalPrice = 0;
+    this.listCourse.forEach((course) => {
+      if (this.selectedItems.has(course.id.toString())) {
+        totalOriginalPrice += course.price;
+      }
+    });
+    return totalOriginalPrice;
+  }
   getTotalSelectedPrice(): number {
     let totalSelectedPrice = 0;
-    this.listCourse.forEach(course => {
+    this.listCourse.forEach((course) => {
       if (this.selectedItems.has(course.id.toString())) {
-        totalSelectedPrice += course.price;
+        const discount = course.percent_discount; // Default to 0% if no discount
+        const discountedPrice = course.price * (1 - discount / 100);
+        totalSelectedPrice += discountedPrice;
       }
     });
     return totalSelectedPrice;
+  }
+  // ==================
+  // Calculate total discount for selected items
+  // ==================
+  getTotalSelectedDiscount(): number {
+    let totalSelectedDiscount = 0;
+    this.listCourse.forEach((course) => {
+      if (this.selectedItems.has(course.id.toString())) {
+        const discount = course.percent_discount; // Default to 0% if no discount
+        const discountAmount = (course.price * discount) / 100;
+        totalSelectedDiscount += discountAmount;
+      }
+    });
+    return totalSelectedDiscount;
+  }
+
+  confirmPayment() {
+    const selectedCourses = this.listCourse.filter((course) =>
+      this.selectedItems.has(course.id.toString())
+    );
+
+    if (selectedCourses.length === 0) {
+      console.log('No courses selected for payment.');
+      alert(
+        'Vui lòng chọn ít nhất một khóa học trước khi tiến hành thanh toán.'
+      );
+      return;
+    }
+
+    const paymentData = {
+      courses: selectedCourses,
+      totalOriginalPrice: this.getTotalOriginalPrice(),
+      totalSelectedPrice: this.getTotalSelectedPrice(),
+      totalDiscount: this.getTotalSelectedDiscount(),
+      timestamp: new Date().toISOString(),
+    };
+
+    localStorage.setItem('paymentData', JSON.stringify(paymentData));
+    console.log('Payment data saved to localStorage:', paymentData);
+
+    // Optionally, you can clear the selection after confirming payment
+    this.selectedItems.clear();
+    this.checkedCount = 0;
+    this.isSelectAll = false;
+    this.courseItemShoppingCartComponents.forEach(
+      (item) => (item.isSelected = false)
+    );
+
+    // Navigate to the payment page
+    window.location.href = '/payment';
+  }
+
+  checkCouseHasInMylearning() {
+    const userId = this.getInstructorId();
+    if (userId === -1) {
+      console.log('Invalid user ID');
+      return;
+    }
+
+    const courseIds = this.listCourse.map((course) => course.id);
+
+    console.log('courseIds11:', this.listCourse.length);
+    console.log('courseIds:', courseIds);
+
+    this.myLearningService
+      .checkMultipleCoursesInMyLearning(userId, courseIds)
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            console.log('Courses in My Learning:', res.data);
+          } else {
+            console.warn('Failed to check courses in My Learning');
+          }
+        },
+        error: (err) => {
+          console.error('Error checking courses in My Learning:', err);
+        },
+      });
   }
 }

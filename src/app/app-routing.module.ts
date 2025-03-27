@@ -1,6 +1,6 @@
 import { RegisterInstructorComponent } from './features/user/register-instructor/register-instructor.component';
 import { Component, NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, UrlSegment } from '@angular/router';
 import { HomeComponent } from './features/home/home.component';
 import { NotfoundComponent } from './features/notfound/notfound.component';
 import { SearchComponent } from './features/search/search.component';
@@ -49,25 +49,29 @@ const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
 
-  { path: 'auth/callback', component: AuthCallbackComponent }, // đặc biệt dùng để nhận call back từ goolge gửi về
+  // đặc biệt dùng để nhận call back từ goolge gửi về
+  {path: 'auth/callback', component: AuthCallbackComponent},
 
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'search', component: SearchComponent },
-  { path: 'cart', component: ShoppingCartComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'search', component: SearchComponent },
+  { path: 'cart', component: ShoppingCartComponent },
   { path: 'my-learning', component: MyLearningComponent },
-  { path: 'course/:id/:title', component: CourseComponent },
+  {
+   path: 'course-lecture/:id/:title/section/:idSection/lecture/:nameLecture',
+    component: LectureComponent,
+  },
+  {
+    path: 'course/:id/:title',
+    component: CourseComponent, 
+  },
   {
     path: 'payment',
     component: PaymentComponent,
   },
   { path: 'payment/:status', component: PaymentStatusComponent },
-  {
-    path: 'course/:title/lecture',
-    component: LectureComponent,
-  },
 
   // =====
   // user

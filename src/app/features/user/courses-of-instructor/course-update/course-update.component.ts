@@ -954,8 +954,6 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
     sectionOrderClicked: number,
     section_id: number
   ) {
-
-
     this.ClickedSection = true;
     this.nameSectionDefault = sectionNameClicked;
     this.nameSection = sectionNameClicked;
@@ -963,8 +961,6 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
     this.idSectionDefault = section_id;
     this.getListLectureOfSection(section_id);
 
-   
-    
     console.log(sectionNameClicked, sectionOrderClicked);
   }
 
@@ -1153,8 +1149,7 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
       });
   }
 
-
-  hiddenUpdateTitleLesson(){
+  hiddenUpdateTitleLesson() {
     this.isEditNameLecture = !this.isEditNameLecture;
   }
 
@@ -1163,32 +1158,32 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
     this.idLecture = id;
   }
 
-  createNewLesson(){
-
+  createNewLesson() {
     const idCourseString = this.sharedDataService.getIdCourse();
     const idCourse = idCourseString ? parseInt(idCourseString) : -1;
 
-    this.apiService.courseInstructorService.createNewLesson(this.idSectionDefault, idCourse).subscribe({
-      next: (res)=>{
-        if (res.success){
-          this.getListLectureOfSection(this.idSectionDefault);
-        }
-      },
-      error: (err)=>{
-        console.log("loxio sss"+err);
-      },
-    });
+    this.apiService.courseInstructorService
+      .createNewLesson(this.idSectionDefault, idCourse)
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.getListLectureOfSection(this.idSectionDefault);
+          }
+        },
+        error: (err) => {
+          console.log('loxio sss' + err);
+        },
+      });
   }
-  deleteLesson(lessonId:number){
-
+  deleteLesson(lessonId: number) {
     this.apiService.courseInstructorService.deleteLesson(lessonId).subscribe({
-      next: (res)=>{
-        if (res.success){
+      next: (res) => {
+        if (res.success) {
           this.getListLectureOfSection(this.idSectionDefault);
         }
       },
-      error: (err)=>{
-        console.log("loxio sss"+err);
+      error: (err) => {
+        console.log('loxio sss' + err);
       },
     });
   }
@@ -1214,8 +1209,6 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
         this.selectedVideoFile = file;
         console.log('File hợp lệ:', file.name);
 
-        this.updateNameVideo(sectionId, lessonId);
-
         // Upload trực tiếp cho file nhỏ
         this.apiService.uploadVideoService
           .uploadVideo(this.selectedVideoFile)
@@ -1224,7 +1217,10 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
               if (res.success) {
                 this.uploading = false;
                 this.uploadComplete = true;
-                console.log('Upload thành công:', res.nameFileVideo);
+                this.nameVideo = res.namevideo;
+                this.updateNameVideo(sectionId, lessonId);
+
+                console.log('Upload thành công:', res.namevideo);
               } else {
                 console.log('saisai sai');
               }
@@ -1250,13 +1246,9 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
   }
 
   updateNameVideo(sectionId: number, lessonId: number) {
-    if (this.selectedVideoFile) {
+    if (this.nameVideo) {
       this.apiService.courseInstructorService
-        .updateNameVideoLesson(
-          this.selectedVideoFile?.name,
-          sectionId,
-          lessonId
-        )
+        .updateNameVideoLesson(this.nameVideo, sectionId, lessonId)
         .subscribe({
           next: (res) => {
             if (res.success) {

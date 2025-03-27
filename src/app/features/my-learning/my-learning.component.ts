@@ -110,6 +110,9 @@ export class MyLearningComponent implements OnInit {
 
   onDeleteCourse(courseId: number) {
     const userId = this.getInstructorId();
+    if (!confirm('Bạn có chắc chắn muốn xóa khóa học này không?')) {
+      return; // Thoát nếu người dùng hủy xác nhận
+    }
     this.removeFromMyLearning(userId, courseId);
   }
 
@@ -138,7 +141,5 @@ export class MyLearningComponent implements OnInit {
     this.isSearchPerformed = false; // Reset to false when search is cleared
   }
 
-  goToCourseLecture(id: number, title: string) {
-    this.router.navigate(['/course', id, encodeURIComponent(title)]);
-  }
+ 
 }

@@ -1,129 +1,71 @@
-import { Component } from '@angular/core';
-
-interface PurchaseItem {
-  id: number;
-  date: string;
-  product: string;
-  amount: number;
-  status: 'Completed' | 'Pending' | 'Cancelled';
-}
-
+import { Component, OnInit } from '@angular/core';
+import { PaymentsHistory } from '@app/interface/paymentshistory';
+import { ApiService } from '@app/services/api.service';
+import { UserServiceService } from '@app/services/user/user-service.service';
 @Component({
-    selector: 'app-purchase-history',
-    templateUrl: './purchase-history.component.html',
-    styleUrl: './purchase-history.component.css',
-    standalone: false
+  selector: 'app-purchase-history',
+  templateUrl: './purchase-history.component.html',
+  styleUrl: './purchase-history.component.css',
+  standalone: false,
 })
-export class PurchaseHistoryComponent {
-  purchases: PurchaseItem[] = [
-    {
-      id: 1,
-      date: '2023-05-01',
-      product: 'Lập trình C++ từ cơ bản đến nâng cao bootcamp (Vietnamese)',
-      amount: 999.99,
-      status: 'Completed',
-    },
-    {
-      id: 2,
-      date: '2023-05-15',
-      product: 'Smartphone',
-      amount: 599.99,
-      status: 'Completed',
-    },
-    {
-      id: 3,
-      date: '2023-06-02',
-      product: 'Headphones',
-      amount: 149.99,
-      status: 'Pending',
-    },
-    {
-      id: 4,
-      date: '2023-06-10',
-      product: 'Smartwatch',
-      amount: 249.99,
-      status: 'Cancelled',
-    },
-    {
-      id: 5,
-      date: '2023-06-20',
-      product: 'Tablet',
-      amount: 399.99,
-      status: 'Completed',
-    },
-    {
-      id: 5,
-      date: '2023-06-20',
-      product: 'Tablet',
-      amount: 399.99,
-      status: 'Completed',
-    },
-    {
-      id: 5,
-      date: '2023-06-20',
-      product: 'Tablet',
-      amount: 399.99,
-      status: 'Completed',
-    },
-    {
-      id: 5,
-      date: '2023-06-20',
-      product: 'Tablet',
-      amount: 399.99,
-      status: 'Completed',
-    },
-    {
-      id: 5,
-      date: '2023-06-20',
-      product: 'Tablet',
-      amount: 399.99,
-      status: 'Completed',
-    },
-    {
-      id: 5,
-      date: '2023-06-20',
-      product: 'Tablet',
-      amount: 399.99,
-      status: 'Completed',
-    },
-    {
-      id: 5,
-      date: '2023-06-20',
-      product: 'Tablet',
-      amount: 399.99,
-      status: 'Completed',
-    },
-    {
-      id: 5,
-      date: '2023-06-20',
-      product: 'Tablet',
-      amount: 399.99,
-      status: 'Completed',
-    },
-    {
-      id: 5,
-      date: '2023-06-20',
-      product: 'Tablet',
-      amount: 399.99,
-      status: 'Completed',
-    },
-    {
-      id: 5,
-      date: '2023-06-20',
-      product: 'Tablet',
-      amount: 399.99,
-      status: 'Completed',
-    },
-  ];
+export class PurchaseHistoryComponent implements OnInit {
+  paymentshistory: PaymentsHistory[] = [];
 
-  getStatusColor(status: string): string {
+  constructor(
+    private apiService: ApiService,
+    private userServiceService: UserServiceService
+  ) {
+    // Initialization logic can go here
+  }
+
+  ngOnInit(): void {
+    this.fetchDataPaymentHistory();
+  }
+
+  // ====================
+  // get user id
+  // ====================
+
+  getInstructorId(): number {
+    const userInfo = this.userServiceService.getUserLogin();
+    if (!userInfo || userInfo.id === -1) {
+      return 0; // Trả về 0 nếu chưa đăng nhập
+    }
+    return userInfo.id;
+  }
+
+  fetchDataPaymentHistory() {
+    const userId = this.getInstructorId();
+
+    this.apiService.paymentHistoryService
+      .getPaymentHistoryByUserId(userId.toString())
+      .subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.paymentshistory = response.data;
+          } else {
+            console.error('Failed to fetch payment history:', response.message);
+          }
+        },
+        error: (err) => {
+          console.error('Error fetching payment history:', err);
+        },
+        complete: () => {
+          console.log('Payment history fetch completed.');
+        },
+      });
+  }
+
+  getStatusColor(status: string) {
     switch (status) {
-      case 'Completed':
+      case 'completed':
         return 'text-green-600';
-      case 'Pending':
+      case 'pending':
         return 'text-yellow-600';
-      case 'Cancelled':
+      case 'failed':
         return 'text-red-600';
+      case 'refunded':
+        return 'text-blue-600';
       default:
         return '';
     }

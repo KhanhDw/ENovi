@@ -44,10 +44,13 @@ export class CourseInstructorService {
     return this.http.get<any>(`${this.apiUrl}/instructor/search`, { params });
   }
 
-
   // lấy số lượng khóa học của instructor
   getTotalCourses(instructorId: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/instructor/${encodeURIComponent(instructorId)}/total-courses`);
+    return this.http.get<any>(
+      `${this.apiUrl}/instructor/${encodeURIComponent(
+        instructorId
+      )}/total-courses`
+    );
   }
 
   // ===================
@@ -177,12 +180,17 @@ export class CourseInstructorService {
     );
   }
 
-  createNewLesson(sectionId: number, courseId:number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/lesson/create`, { sectionId, courseId });
+  createNewLesson(sectionId: number, courseId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/lesson/create`, {
+      sectionId,
+      courseId,
+    });
   }
 
   deleteLesson(lessonId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/lesson/${encodeURIComponent(lessonId)}/delete`);
+    return this.http.delete(
+      `${this.apiUrl}/lesson/${encodeURIComponent(lessonId)}/delete`
+    );
   }
 
   // ====================
@@ -201,9 +209,8 @@ export class CourseInstructorService {
     });
   }
 
-
   // home==
-  
+
   getTopRatedFreeCourses(limit: number = 10): Observable<any> {
     const params = new HttpParams().set('limit', limit);
     return this.http.get(`${this.apiUrl}/top-rated/free`, { params });
@@ -211,8 +218,13 @@ export class CourseInstructorService {
 
   getTopRatedCourses(limit: number = 10): Observable<any> {
     const params = new HttpParams().set('limit', limit);
-    return this.http.get(`${this.apiUrl}/top-rated`,  { params });
+    return this.http.get(`${this.apiUrl}/top-rated`, { params });
   }
 
- 
+  //  get course by id to pay
+
+  getCoursePaymentById(courseIds: number[]): Observable<any> {
+    console.log('courseIds111111111', courseIds);
+    return this.http.post(`${this.apiUrl}/course/payment`, { courseIds });
+  }
 }

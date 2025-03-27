@@ -30,9 +30,10 @@ export interface CourseSearch {
   img: string;
   title: string;
   description: string;
-  // duration: number;
   rating: number;
   price: number;
+  percent_discount: number;
+  code_discount: string;
 }
 
 export interface CourseDetail {

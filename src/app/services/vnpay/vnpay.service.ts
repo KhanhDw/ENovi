@@ -22,7 +22,7 @@ export class VnpayService {
     return this.apiUrl;
   }
 
-  createPayment(orderData: any, listCourse:string[], userId:number): Observable<any> {
+  createPayment(orderData: any, listCourse:number[], userId:number): Observable<any> {
     return this.http.post(`${this.apiUrl}/create_payment_url`, { orderData, listCourse, userId });
   }
 

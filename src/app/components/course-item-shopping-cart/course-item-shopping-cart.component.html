@@ -69,8 +69,10 @@
         </button>
       </div>
 
-      <!-- giá -->
-      <h6>{{ item.price | number : "1.0-1" }}</h6>
+      <!-- giá đúng-->
+      <h6 class="text-gray-400 line-through">{{ item.price | number : "1.0-1" }}</h6>
+      <!-- giá khuyến mãi-->
+      <h6>{{ (item.price * (1 - item.percent_discount / 100)) | number : "1.0-0" }}</h6>
     </div>
   </div>
 </div>

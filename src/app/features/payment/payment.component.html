@@ -1,104 +1,84 @@
-<section class="h-[calc(100vh-60px)] py-8 antialiased bg-white dark:bg-gray-900 md:py-16">
+<section
+  class="h-[calc(100vh-60px)] py-8 antialiased bg-white dark:bg-gray-900 md:py-16"
+>
   <div class="max-w-screen-xl px-4 mx-auto bg-white 2xl:px-0">
     <div class="max-w-5xl mx-auto">
-      <h2
-        class="text-4xl font-bold text-gray-900 font-signika"
-      >
+      <h2 class="text-4xl font-bold text-gray-900 font-signika">
         XÁC NHẬN THANH TOÁN
       </h2>
 
-      <div class="mt-6 sm:mt-8 lg:flex lg:items-start lg:gap-12">
-        <form
-          action="#"
-          class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6 lg:max-w-xl lg:p-8"
+      <div class="mt-6 sm:mt-8 lg:flex lg:items-start lg:gap-5">
+        <!-- left side -->
+        <div
+          class="w-full p-1 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-1 lg:max-w-xl lg:p-1"
         >
-          <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="col-span-2 sm:col-span-1">
-              <label
-                for="full_name"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          <div class="grid grid-cols-1 gap-2 mb-3 overflow-x-hidden">
+            <!-- Item course will pay -->
+            <div
+              class="w-full col-span-2 border rounded-md sm:col-span-1"
+              *ngFor="let item of listCourse"
+            >
+              <div
+                class="flex items-start justify-start w-full h-24 mb-2 bg-white rounded-lg"
               >
-                Họ tên đầy đủ
-              </label>
-              <input
-                type="text"
-                id="full_name"
-                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                placeholder="Bonnie Green"
-                required
-              />
-            </div>
-
-            <div class="col-span-2 sm:col-span-1">
-              <label
-                for="card-number-input"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Số tài khoản
-              </label>
-              <input
-                type="text"
-                id="card-number-input"
-                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pe-10 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                placeholder="Nhập số tài khoản"
-                required
-              />
-            </div>
-
-            <div>
-              <label
-                for="card-expiration-input"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Ngân hàng
-              </label>
-              <div class="relative">
+                <!-- left img -->
+                <div class="flex items-start justify-center w-3/12 h-full pt-2">
+                  <img
+                    class="object-cover w-10/12 h-full rounded-md"
+                    [src]="urlBackend_img_banner_course + item.img"
+                    alt="AnhBiaKhoaHoc"
+                  />
+                </div>
+                <!-- infor of course -->
                 <div
-                  class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5"
-                ></div>
-                <select
-                  class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 ps-9 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                  name="nganhangselected"
-                  id="nganhangselected"
+                  class="flex items-start justify-between w-9/12 h-full pt-2 bg-white"
                 >
-                  <option value="#">VCB</option>
-                  <option value="#">VCB</option>
-                  <option value="#">VCB</option>
-                  <option value="#">VCB</option>
-                </select>
+                  <!-- info -->
+                  <div
+                    class="flex flex-col items-start justify-start flex-shrink-0 w-full bg-white"
+                  >
+                    <!-- title -->
+                    <h1
+                      class="flex-wrap w-full overflow-hidden text-sm font-semibold border line-clamp-2 text-slate-800"
+                    >
+                      {{ item.title }}
+                    </h1>
+                    <!-- description -->
+                    <p
+                      hidden
+                      class="w-[536px] mt-2 overflow-hidden text-md leading-none break-all text-slate-800 line-clamp-2 text-ellipsis"
+                    >
+                      {{ item.description }}
+                    </p>
+                    <!-- rate -->
+                    <p class="w-full overflow-hidden text-sm text-gray-600">
+                      Đánh giá: <span> {{ item.rating }}</span>
+                    </p>
+
+                    <!-- price -->
+                    <div
+                      class="flex items-end justify-end w-full h-full gap-3 pr-2 text-xl font-semibold"
+                    >
+                      <!-- giá đúng-->
+                      <h6 class="text-gray-400 line-through">
+                        {{ item.price | number : "1.0-0" }} đ
+                      </h6>
+                      <!-- giá khuyến mãi-->
+                      <h6>
+                        {{ 
+                          (item.price * (1 - (item.percent_discount || 0) / 100)) 
+                          | number : "1.0-0" 
+                        }}đ
+                      </h6>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            <div>
-              <label
-                for="cvv-input"
-                class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Nội dung chuyển khoản
-                <button
-                  data-tooltip-target="cvv-desc"
-                  data-tooltip-trigger="hover"
-                  class="text-gray-400 hover:text-gray-900 dark:text-gray-500 dark:hover:text-white"
-                ></button>
-              </label>
-              <input
-                type="text"
-                id="cvv-input"
-                aria-describedby="helper-text-explanation"
-                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                placeholder="•••"
-                required
-                readonly
-              />
-            </div>
           </div>
+        </div>
 
-          <button (click)="btnCreatePayment()"
-            type="submit"
-            class="flex w-full bg-blue-500 items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-          >
-            Thanh toán ngay
-          </button>
-        </form>
-
+        <!-- right side -->
         <div class="mt-6 grow sm:mt-8 lg:mt-0">
           <div
             class="p-6 space-y-4 border border-gray-100 rounded-lg bg-gray-50 dark:border-gray-700 dark:bg-gray-800"
@@ -111,7 +91,7 @@
                   Giá bán đầu
                 </dt>
                 <dd class="text-base font-medium text-gray-900 dark:text-white">
-                  $6,592.00
+                  {{ priceTotal | number : "1.0-0" }} đ
                 </dd>
               </dl>
 
@@ -119,9 +99,9 @@
                 <dt
                   class="text-base font-normal text-gray-500 dark:text-gray-400"
                 >
-                  Giảm
+                  Đã giảm
                 </dt>
-                <dd class="text-base font-medium text-green-500">-$299.00</dd>
+                <dd class="text-base font-medium text-green-500">-{{pricePromotion | number : "1.0-0" }} đ</dd>
               </dl>
             </div>
 
@@ -129,16 +109,24 @@
               class="flex items-center justify-between gap-4 pt-2 border-t border-gray-200 dark:border-gray-700"
             >
               <dt class="text-base font-bold text-gray-900 dark:text-white">
-                Total
+                Tổng thanh toán
               </dt>
               <dd class="text-base font-bold text-gray-900 dark:text-white">
-                $7,191.00
+                {{ priceTotal - pricePromotion | number : "1.0-0" }} đ
               </dd>
             </dl>
           </div>
 
           <div class="flex items-center justify-center gap-8 mt-6">
             <!-- logo ngân hàng -->
+
+            <button
+              (click)="btnCreatePayment()"
+              type="submit"
+              class="flex w-full bg-blue-500 items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+            >
+              Thanh toán ngay
+            </button>
           </div>
         </div>
       </div>

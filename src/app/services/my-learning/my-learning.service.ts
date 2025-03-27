@@ -57,4 +57,12 @@ export class MyLearningService {
     return this.http.get(`${this.apiUrl}/check`, { params });
   }
 
+
+  // Check if multiple courses exist in MyLearning
+  checkMultipleCoursesInMyLearning(userId: number, courseIds: number[]): Observable<any> {
+    const params = new HttpParams()
+      .set('userId', userId.toString())
+      .set('courseIds', courseIds.join(','));
+    return this.http.get(`${this.apiUrl}/has-courses`, { params });
+  }
 }

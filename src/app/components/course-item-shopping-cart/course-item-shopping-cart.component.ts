@@ -1,7 +1,7 @@
+import { CourseSearch } from '@app/interface/course';
 import { Component, Input, EventEmitter, Output, OnInit } from '@angular/core';
 import { ApiService } from '@app/services/api.service';
 import { CookieStorageService } from '@app/services/cookie_storage/cookie-storage.service';
-
 @Component({
   selector: 'app-course-item-shopping-cart',
   templateUrl: './course-item-shopping-cart.component.html',
@@ -14,15 +14,7 @@ export class CourseItemShoppingCartComponent implements OnInit {
   // ==============================
   // Nhận dữ liệu từ component cha
   // ==============================
-  @Input() listCourse!: {
-    id: number;
-    img: string;
-    title: string;
-    description: string;
-    // duration: number;
-    rating: number;
-    price: number;
-  }[];
+  @Input() listCourse!: CourseSearch[];
 
   @Input() isSelected: boolean = false;
 

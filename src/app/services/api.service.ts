@@ -22,6 +22,10 @@ import { CartService } from './cart/cart.service';
 import { MyLearningService } from './my-learning/my-learning.service';
 import { EnrollmentService } from './enrollment/enrollment.service';
 import { VnpayService } from './vnpay/vnpay.service';
+import { LectureService } from './lecture/lecture.service';
+import {PaymentHistoryService} from './payment_history/payment-history.service'
+
+
 @Injectable({
   providedIn: 'root',
 })
@@ -50,7 +54,9 @@ export class ApiService {
     public cartService: CartService,
     public myLearningService: MyLearningService,
     public enrollmentService: EnrollmentService,
-    public vnpayService: VnpayService
+    public lectureService: LectureService,
+    public vnpayService: VnpayService,
+    public paymentHistoryService: PaymentHistoryService,
   ) {
     this.loginServiceService.setApiUrl(`${this.API_URL}/login`);
     this.authGoogleServiceService.setApiUrl(`${this.API_URL}/auth`);
@@ -71,6 +77,7 @@ export class ApiService {
     this.myLearningService.setApiUrl(`${this.API_URL}/my-learning`);
      // enrollment
      this.enrollmentService.setApiUrl(`${this.API_URL}/enrollment`);
+     this.lectureService.setApiUrl(`${this.API_URL}/lesson`);
 
     // đặc biệt
     // upload
@@ -79,6 +86,8 @@ export class ApiService {
     this.uploadVideoService.setApiUrl(`${this.API_URL}/upload-video`);
     // vnpay
     this.vnpayService.setApiUrl(`${this.API_URL}/vnpay/order`);
+
+    this.paymentHistoryService.setApiUrl(`${this.API_URL}/payment-history`);
 
   }
 }

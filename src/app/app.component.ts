@@ -68,14 +68,15 @@ export class AppComponent implements OnInit, AfterViewInit {
           event.url === '/user/edit-information/basic-information' ||
           event.url === '/user/instructor/profile' ||
           event.url === '/user/payments/recive' ||
-          event.url === '/course/lecture' ||
+          event.url.includes('lecture') ||
           event.url ===
             '/user/instructor/profile/updateInfo/basic-information' ||
           event.url === '/admin/courses/detail' ||
           event.url === '/admin/categories' ||
+          event.url.includes('/course/:id/:title/section/:idSection/lecture') ||
           event.url === '/user/purchase-history'
-
-
+          
+          
         );
         this.hiddenFooter = !(
           event.url === '/login' ||
@@ -89,7 +90,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           event.url === '/admin/courses' ||
           event.url === '/admin/user' ||
           event.url ===
-            '/user/instructor/profile/updateInfo/basic-information' ||
+          '/user/instructor/profile/updateInfo/basic-information' ||
           event.url === '/admin/revenue' ||
           event.url === '/admin/pay' ||
           event.url === '/user/courses-instructor' ||
@@ -116,7 +117,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           event.url === '/user/edit-information/basic-information' ||
           event.url === '/user/instructor/profile' ||
           event.url === '/user/payments/recive' ||
-          event.url === '/course/lecture' ||
+          event.url.includes('lecture') ||
           event.url === '/admin/courses/detail' ||
           event.url === '/admin/categories' ||
           event.url === '/user/purchase-history'

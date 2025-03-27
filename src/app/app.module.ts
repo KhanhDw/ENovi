@@ -1,5 +1,9 @@
 import { CategoriesComponent } from './features/admin/categories/categories.component';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
+import {VgApiService, VgCoreModule} from '@videogular/ngx-videogular/core';
+import {VgControlsModule} from '@videogular/ngx-videogular/controls';
+import {VgOverlayPlayModule} from '@videogular/ngx-videogular/overlay-play';
+import {VgBufferingModule} from '@videogular/ngx-videogular/buffering';
 import { FormsModule } from '@angular/forms';
 import { provideHttpClient, withFetch } from '@angular/common/http'; // Import module này
 import { QuillModule } from 'ngx-quill';
@@ -140,9 +144,13 @@ import { PaymentStatusComponent } from './features/payment/payment-status/paymen
     ReactiveFormsModule,
     NgApexchartsModule,
     MatSnackBarModule,
+    VgCoreModule,
+    VgControlsModule,
+    VgBufferingModule,
+    VgOverlayPlayModule,
   ],
-  
-  providers: [provideClientHydration(),  provideHttpClient(withFetch())],
+
+  providers: [provideClientHydration(), provideHttpClient(withFetch())],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

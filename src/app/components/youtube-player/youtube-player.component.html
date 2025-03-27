@@ -1,21 +1,118 @@
 <div class="flex flex-col w-full">
   <div class="relative w-full">
     <!-- khung chứa hiển thị video của youtube nhúng vào -->
-    <div id="player"  #player class="z-10 w-full"></div>
+    <!-- <div id="player"  #player class="z-10 w-full"></div> -->
     <!-- end khung chứa hiển thị video của youtube nhúng vào -->
+    <!-- khung chứa video ngVideo -->
+    <div class="z-10 w-full text-white">
+      <vg-player>
+        <vg-overlay-play class="bg-slate-50"></vg-overlay-play>
+        <vg-buffering></vg-buffering>
+
+        <vg-scrub-bar>
+          <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+          <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+        </vg-scrub-bar>
+
+        <vg-controls>
+          <vg-play-pause></vg-play-pause>
+          <vg-playback-button></vg-playback-button>
+
+          <vg-time-display
+            vgProperty="current"
+            vgFormat="mm:ss"
+          ></vg-time-display>
+
+          <vg-scrub-bar style="pointer-events: none"></vg-scrub-bar>
+
+          <vg-time-display vgProperty="left" vgFormat="mm:ss"></vg-time-display>
+          <vg-time-display
+            vgProperty="total"
+            vgFormat="mm:ss"
+          ></vg-time-display>
+
+          <vg-track-selector></vg-track-selector>
+          <vg-mute></vg-mute>
+          <vg-volume></vg-volume>
+
+          <vg-fullscreen></vg-fullscreen>
+        </vg-controls>
+
+        <video
+          [vgMedia]="$any(media)"
+          #media
+          id="singleVideo"
+          preload="auto"  
+          crossorigin 
+          *ngIf="(videoUrl$ | async) as videoUrl"
+        >
+          <!-- <source [src]="activeVideo.src" type="video/mp4" /> -->
+          <!-- <source src="https://localhost:3000/stream/video" type="video/mp4" /> -->
+          <source [src]="videoUrl" type="video/mp4" />
+          <!-- <source [src]="activeVideo.src" type="video/ogg" /> 
+           <source [src]="activeVideo.src" type="video/webm" /> -->
+
+          <!-- <track
+            kind="subtitles"
+            label="English"
+            src="http://static.videogular.com/assets/subs/pale-blue-dot.vtt"
+            srclang="en"
+            default
+          />
+          <track
+            kind="subtitles"
+            label="Español"
+            src="http://static.videogular.com/assets/subs/pale-blue-dot-es.vtt"
+            srclang="es"
+          /> -->
+        </video>
+      </vg-player>
+    </div>
+    <!-- end khung chứa video ngVideo -->
+
     <div
       #mangche
       id="mangcheVideo"
       [ngClass]="hiddenBanner ? 'hidden' : 'flex'"
-      class="absolute top-0 left-0 z-[999] h-full w-full items-center justify-center"
+      class="absolute top-0 left-0 z-[999] h-full w-ful items-center justify-center "
     >
-      <button
-        (click)="playVideo()"
-        type="button"
-        class="p-1 -mt-10 text-green-500 transition-all duration-500 bg-black rounded-full cursor-pointer text-8xl group hover:text-red-100 hover:bg-black hover:shadow-sm shadow-black"
-      >
-        <i class="cursor-pointer bi bi-play-circle-fill"></i>
-      </button>
+      <div class="relative overflow-hidden shadow-2xl">
+        <!-- Video thumbnail -->
+        <div class="bg-black aspect-video">
+          <img
+            src="./img/bannerLecture.JPG"
+            alt="Video thumbnail"
+            class="object-cover w-full h-full opacity-80"
+          />
+        </div>
+
+        <!-- Play button -->
+        <button
+          class="absolute flex items-center justify-center w-20 h-20 transition-all duration-300 -translate-x-1/2 -translate-y-1/2 rounded-full left-1/2 top-1/2 bg-white/10 backdrop-blur-md hover:scale-110 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-slate-900 sm:h-24 sm:w-24"
+          aria-label="Play video"
+          (click)="hiddenBannerVideoAndPlayVideo()"
+          >
+          <!-- (click)="startVideo()" hàm này lỗi-->
+          <div
+            class="flex items-center justify-center w-16 h-16 rounded-full shadow-lg bg-gradient-to-r from-indigo-500 to-purple-600 sm:h-20 sm:w-20"
+          >
+            <!-- Play icon SVG -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="white"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+          </div>
+        </button>
+      </div>
     </div>
   </div>
   <div class="flex flex-col w-full">
@@ -23,13 +120,17 @@
       <!-- Thời gian hiện tại và tổng thời lượng video -->
       <!-- <p hidden>Tổng thời gian {{ formatTime(videoDuration) }}</p> -->
       <div class="flex flex-col flex-wrap items-start font-signika">
-        <h1 class="text-2xl">{{ titleCourse }}</h1>
-        <p class="text-sm text-gray-500">Cập nhật 12/12/2023</p>
+        <h1 class="text-2xl">{{ titleLesson$ | async }}</h1>
+        <!-- <h1 class="text-2xl">Đây là tiêu đề khóa học</h1> -->
+        <p class="text-sm text-gray-500">
+          Cập nhật {{ (createAtLesson$ | async) | date: 'HH:mm dd/MM/yyyy' }}
+        </p>
       </div>
-      <button hidden
+      <button
+        hidden
         (click)="toggleNote()"
         type="button"
-        class="items-start justify-start w-1/4 gap-2 px-3 py-3 transition-all duration-500 rounded-lg  bg-zinc-200 hover:bg-slate-300"
+        class="items-start justify-start w-1/4 gap-2 px-3 py-3 transition-all duration-500 rounded-lg bg-zinc-200 hover:bg-slate-300"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

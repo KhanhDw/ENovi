@@ -83,7 +83,7 @@ export class CourseComponent
       })
       .replace(/[\/\s,:]/g, ''),
   };
-  listCourseBuy: string[] = [];
+  listCourseBuy: number[] = [];
 
   constructor(
     private elementRef: ElementRef,
@@ -618,7 +618,7 @@ export class CourseComponent
       console.warn('Người dùng chưa đăng nhập');
       return;
     }
-    this.listCourseBuy[0] = courseId.toString();
+    this.listCourseBuy[0] = courseId;
 
     this.createPayment(
       this.orderData.amount,
@@ -640,7 +640,7 @@ export class CourseComponent
     orderType: any,
     orderDescription: any,
     orderId: any,
-    listCourseBuy:string[],
+    listCourseBuy:number[],
     userId: number
   ) {
     // Cấu hình các tham số thanh toán
