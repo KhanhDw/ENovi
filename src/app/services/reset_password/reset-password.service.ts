@@ -29,4 +29,18 @@ export class ResetPasswordService {
       email,
     });
   }
+
+  changePassword(
+    userId: number,
+    currentPassword: string,
+    newPassword: string
+  ): Observable<any> {
+    return this.http.post(`${this.apiUrl}/change-password`, {
+      userId,
+      currentPassword,
+      newPassword,
+    });
+  }
+
+
 }

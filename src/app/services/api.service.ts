@@ -24,8 +24,8 @@ import { EnrollmentService } from './enrollment/enrollment.service';
 import { VnpayService } from './vnpay/vnpay.service';
 import { LectureService } from './lecture/lecture.service';
 import {PaymentHistoryService} from './payment_history/payment-history.service'
-
-
+import { PaymentMethodService } from './payment_method/payment-method.service';
+import { BankService } from './bank/bank.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -56,6 +56,8 @@ export class ApiService {
     public enrollmentService: EnrollmentService,
     public lectureService: LectureService,
     public vnpayService: VnpayService,
+    public paymentMethodService: PaymentMethodService,
+    public bankService: BankService,
     public paymentHistoryService: PaymentHistoryService,
   ) {
     this.loginServiceService.setApiUrl(`${this.API_URL}/login`);
@@ -88,6 +90,7 @@ export class ApiService {
     this.vnpayService.setApiUrl(`${this.API_URL}/vnpay/order`);
 
     this.paymentHistoryService.setApiUrl(`${this.API_URL}/payment-history`);
-
+    this.paymentMethodService.setApiUrl(`${this.API_URL}/payment-method`);
+    this.bankService.setApiUrl(`${this.API_URL}/banks`);
   }
 }

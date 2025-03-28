@@ -4,6 +4,7 @@ import {
   QueryList,
   ViewChildren,
   OnInit,
+  OnDestroy, // Added OnDestroy
   ChangeDetectorRef,
 } from '@angular/core';
 import { CourseItemShoppingCartComponent } from '../../components/course-item-shopping-cart/course-item-shopping-cart.component';
@@ -17,7 +18,7 @@ import { MyLearningService } from '@app/services/my-learning/my-learning.service
   styleUrl: './shopping-cart.component.css',
   standalone: false,
 })
-export class ShoppingCartComponent implements OnInit {
+export class ShoppingCartComponent implements OnInit, OnDestroy {
   // ===========
   // construstor
   // ===========
@@ -45,6 +46,16 @@ export class ShoppingCartComponent implements OnInit {
     });
   }
   ShoppingCartComponent() {}
+
+  ngOnDestroy(): void {
+    // Clear localStorage and reset component state
+    localStorage.removeItem('hasVisitedShoppingCart');
+    this.listCourse = [];
+    this.checkedCount = 0;
+    this.selectedItems.clear();
+    this.isSelectAll = false;
+    console.log('ShoppingCartComponent destroyed.');
+  }
 
   // =========================
   // list course - right body
