@@ -41,5 +41,6 @@ export class PaymentMethodService {
     return this.http.get(`${this.apiUrl}/get/${userId}`);
   }
 
- 
+
+
 }

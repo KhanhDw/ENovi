@@ -1,15 +1,16 @@
-<div class="relative flex w-full h-screen">
+<div class="relative flex w-full h-screen ">
   <div class="flex flex-col w-full h-full">
     <!-- header -->
     <div class="flex items-end justify-between mx-6 my-5">
       <div class="flex items-center justify-start gap-4">
         <h1 class="text-4xl font-bold uppercase font-signika">Doanh thu</h1>
         <select
+          [(ngModel)]="selectedCourseId"
+            (ngModelChange)="setNameChart()"
           class="w-[180px] py-2 border rounded-md focus:outline-none shadow-sm shadow-gray-400"
         >
-          <option value="AllCourses">Tất cả khóa học</option>
-          <option value="oldest">Khóa học 1</option>
-          <option value="oldest1">Khóa học 2</option>
+          <option value="-1" selected>Tất cả khóa học</option>
+          <option *ngFor="let item of courses" [value]="item.id">{{item.title}}</option>
         </select>
       </div>
       <div class="flex gap-10">
@@ -18,7 +19,7 @@
           class="flex items-center gap-2 px-3 py-2 border-2 rounded-lg border-slate-500"
         >
           <h1 class="font-semibold text-gray-600">Có thể thanh toán:</h1>
-          <span class="text-xl font-bold text-green-700"
+          <span class="text-sm font-bold text-green-700"
             >2,000,000 <span class="text-sm text-gray-600">đ</span></span
           >
         </div>
@@ -27,7 +28,7 @@
           class="flex items-center gap-2 px-3 py-2 border-2 rounded-lg border-slate-500"
         >
           <h1 class="font-semibold text-gray-600">Đã thanh toán:</h1>
-          <span class="text-xl font-bold"
+          <span class="text-sm font-bold"
             >18,000,000 <span class="text-sm text-gray-600">đ</span></span
           >
         </div>
@@ -42,9 +43,17 @@
           Hỏi đáp
         </button>
         <button
+        (click)="toggleisShowModalEnrollmentBuyCourse()"
+          type="button"
+          class="px-3 py-2 font-semibold rounded-md bg-zinc-200"
+        >
+          Học viên mua khóa học
+        </button>
+
+        <button
           (click)="toggleShowModalWithdrawHistory()"
           type="button"
-          class="px-3 py-2 font-semibold bg-blue-200 rounded-md "
+          class="px-3 py-2 font-semibold bg-blue-200 rounded-md"
         >
           Lịch sử rút tiền
         </button>
@@ -91,9 +100,9 @@
               <span class="text-3xl font-bold"
                 >252 <span class="text-sm text-gray-600">người</span></span
               >
-            </div>  
+            </div>
             <!-- Đánh giá giảng viên -->
-            <div hidden class="flex-col ">
+            <div hidden class="flex-col">
               <h1 class="font-semibold text-gray-600">Đánh giá giảng viên</h1>
               <span class="text-3xl font-bold"
                 >4.8
@@ -126,7 +135,7 @@
           </div>
         </div>
         <!-- chart -->
-        <div class="flex w-full h-full mt-8 ">
+        <div class="flex w-full h-full mt-8">
           <div
             class="flex flex-col w-full h-full border-2 border-gray-500 rounded-md"
           >
@@ -161,7 +170,7 @@
       <div
         #ModalWithdraw
         id="modalWithdrawID"
-        class="flex absolute right-1/3 items-center z-[9999999999] justify-center w-1/3 h-[calc(100vh-104px)]"
+        class="flex absolute right-1/3 items-center z-[9999999999] justify-center w-1/3 h-fit"
       >
         <div class="flex flex-col w-full h-full bg-white rounded-md">
           <!-- header -->
@@ -189,13 +198,21 @@
             <!-- Ngân hàng của người dùng -->
             <div class="flex flex-col space-y-2">
               <label for="bank" class="text-sm font-medium">Ngân hàng</label>
-              <select id="bank" class="p-2 border rounded-md">
+              <select
+                id="bank"
+                class="p-2 border rounded-md"
+                [(ngModel)]="selectedBankId"
+                disabled="true"
+              >
+                <option class="grid grid-cols-2 gap-4" value="">
+                  -- Chọn ngân hàng --
+                </option>
                 <option
                   class="grid grid-cols-2 gap-4"
-                  *ngFor="let item of banks"
-                  value="{{ item.brandName }}"
+                  *ngFor="let item of bankdata"
+                  value="{{ item.id }}"
                 >
-                  {{ item.brandName }} - {{ item.fullName }}
+                  {{ item.nameBank }}
                 </option>
                 <!-- Thêm các ngân hàng khác tại đây -->
               </select>
@@ -211,6 +228,8 @@
                 id="accountNumber"
                 class="p-2 border rounded-md"
                 placeholder="Nhập số tài khoản"
+                [(ngModel)]="accountNumber"
+                disabled="true"
               />
             </div>
 
@@ -224,6 +243,8 @@
                 id="accountName"
                 class="p-2 border rounded-md"
                 placeholder="Nhập tên chủ tài khoản"
+                [(ngModel)]="recipientName"
+                disabled="true"
               />
             </div>
 
@@ -237,6 +258,8 @@
                 id="phoneNumber"
                 class="p-2 border rounded-md"
                 placeholder="Nhập số điện thoại"
+                [(ngModel)]="phoneNumber"
+                disabled="true"
               />
             </div>
 
@@ -248,11 +271,13 @@
                 id="email"
                 class="p-2 border rounded-md"
                 placeholder="Nhập email"
+                [(ngModel)]="email"
+                disabled="true"
               />
             </div>
 
             <!-- Mã xác nhận -->
-            <div class="flex flex-col space-y-2">
+            <div hidden class="flex-col space-y-2">
               <div class="flex items-center justify-start gap-2">
                 <label for="confirmationCode" class="text-sm font-medium"
                   >Mã xác nhận</label
@@ -274,15 +299,175 @@
 
             <!-- Nút gửi yêu cầu -->
             <button
+              (click)="requestWithdraw()"
               class="p-2 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600"
             >
               Gửi yêu cầu
             </button>
+            
           </div>
         </div>
       </div>
     </div>
 
+    <!-- modal enrollment buy course-->
+    <div
+      class="fixed items-center justify-end w-screen h-screen z-[99999999]"
+      *ngIf="isShowModalEnrollmentBuyCourse"
+    >
+      <!-- background -->
+      <div
+        id="BackgroungModalWithdrawHistoryID"
+        class="absolute flex w-screen z-[10] h-screen bg-zinc-900 opacity-80"
+      ></div>
+
+      <!-- modal -->
+      <div
+        #ModalWithdrawHistory
+        id="modalWithdrawHistoryID"
+        class="flex absolute top-3 left-32 items-center z-[99999999] justify-center w-10/12 h-[calc(100vh-104px)]"
+      >
+        <div class="flex flex-col w-full h-full bg-white rounded-md">
+          <!-- content -->
+          <div class="container px-4 py-8 mx-auto">
+            <div class="flex items-start justify-between">
+              <h1 class="mb-6 text-3xl font-bold">Học viên đã mua khóa học</h1>
+              <button
+                (click)="toggleisShowModalEnrollmentBuyCourse()"
+                type="button"
+                class="px-2 py-1 hover:bg-slate-300"
+              >
+                <i class="cursor-pointer bi bi-x-lg"></i>
+              </button>
+            </div>
+
+            <div
+              class="overflow-hidden bg-white rounded-lg shadow-md z-[99999999]"
+            >
+              <div class="overflow-x-auto">
+                <div class="max-h-[70vh] overflow-y-auto">
+                  <table class="min-w-full leading-normal">
+                    <thead class="sticky top-0 bg-gray-100">
+                      <tr>
+                        <th
+                          class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                        >
+                          STT
+                        </th>
+                        <th
+                          class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                        >
+                          Số tiền
+                        </th>
+                        <th
+                          class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                        >
+                          Trạng thái
+                        </th>
+                        <th
+                          class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                        >
+                          Ngày
+                        </th>
+                        <th
+                          class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                        >
+                          Phương thức
+                        </th>
+                        <th
+                          class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                        >
+                          Người gửi
+                        </th>
+                        <th
+                          class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                        >
+                         Tên khóa học
+                        </th>
+                        <th
+                          class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                        >
+                          Email
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let transaction of students; let i = index">
+                        <td
+                          class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                        >
+                          <p class="text-gray-900 whitespace-no-wrap">
+                            {{ i + 1 }}
+                          </p>
+                        </td>
+                        <td
+                          class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                        >
+                          <p class="font-semibold text-gray-900 whitespace-no-wrap">
+                            {{
+                              transaction.amount | number : "1.0-0"
+                            }}đ
+                          </p>
+                        </td>
+                        <td
+                          class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                        >
+                          <span
+                            [class]="
+                              'px-2 py-1 font-semibold leading-tight rounded-full ' +
+                              getStatusClass(transaction.status)
+                            "
+                          >
+                            {{ transaction.status }}
+                          </span>
+                        </td>
+                        <td
+                          class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                        >
+                          <p class="text-gray-900 whitespace-no-wrap">
+                            {{ transaction.paymentDate | date : "dd/MM/yyyy" }}
+                          </p>
+                        </td>
+                        <td
+                          class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                        >
+                          <p class="text-gray-900 whitespace-no-wrap">
+                            {{ transaction.paymentMethod }}
+                          </p>
+                        </td>
+                        <td
+                          class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                        >
+                          <p class="text-gray-900 whitespace-no-wrap">
+                            {{ transaction.account_holder_name }}
+                          </p>
+                        </td>
+                        <td
+                          class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                        >
+                          <p class="text-gray-900 whitespace-no-wrap">
+                            {{ transaction.courseTitle }}
+                          </p>
+                        </td>
+                        <td
+                          class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                        >
+                          <p class="text-gray-900 whitespace-no-wrap">
+                            {{ transaction.email }}
+                          </p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- end -->
+        </div>
+      </div>
+    </div>
     <!-- modal withdraw history -->
     <div
       class="fixed items-center justify-end w-screen h-screen z-[99999999]"
@@ -314,7 +499,9 @@
               </button>
             </div>
 
-            <div class="overflow-hidden bg-white rounded-lg shadow-md z-[99999999]">
+            <div
+              class="overflow-hidden bg-white rounded-lg shadow-md z-[99999999]"
+            >
               <div class="overflow-x-auto">
                 <div class="max-h-[70vh] overflow-y-auto">
                   <table class="min-w-full leading-normal">
@@ -323,7 +510,7 @@
                         <th
                           class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
                         >
-                          ID
+                          STT
                         </th>
                         <th
                           class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
@@ -343,7 +530,7 @@
                         <th
                           class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
                         >
-                          Phương thức
+                         Số tài khoản
                         </th>
                         <th
                           class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
@@ -353,7 +540,12 @@
                         <th
                           class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
                         >
-                          Số điện thoại
+                         Ngân hàng
+                        </th>
+                        <th
+                          class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                        >
+                          Số tiền
                         </th>
                         <th
                           class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
@@ -363,12 +555,12 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let transaction of transactions">
+                      <tr *ngFor="let transaction of transactions; let i = index">
                         <td
                           class="px-5 py-5 text-sm bg-white border-b border-gray-200"
                         >
                           <p class="text-gray-900 whitespace-no-wrap">
-                            {{ transaction.id }}
+                          {{ i + 1 }}
                           </p>
                         </td>
                         <td
@@ -377,8 +569,8 @@
                           <p class="text-gray-900 whitespace-no-wrap">
                             {{
                               transaction.amount
-                                | currency : transaction.currency
-                            }}
+                                | number : "1.0-0"
+                            }}đ
                           </p>
                         </td>
                         <td
@@ -397,28 +589,35 @@
                           class="px-5 py-5 text-sm bg-white border-b border-gray-200"
                         >
                           <p class="text-gray-900 whitespace-no-wrap">
-                            {{ transaction.date | date : "dd/MM/yyyy" }}
+                            {{ transaction.request_created_at | date : "dd/MM/yyyy" }}
                           </p>
                         </td>
                         <td
                           class="px-5 py-5 text-sm bg-white border-b border-gray-200"
                         >
                           <p class="text-gray-900 whitespace-no-wrap">
-                            {{ transaction.method }}
+                            {{ transaction.bank_account_number }}
                           </p>
                         </td>
                         <td
                           class="px-5 py-5 text-sm bg-white border-b border-gray-200"
                         >
                           <p class="text-gray-900 whitespace-no-wrap">
-                            {{ transaction.senderName }}
+                            {{ transaction.account_holder_name }}
                           </p>
                         </td>
                         <td
                           class="px-5 py-5 text-sm bg-white border-b border-gray-200"
                         >
                           <p class="text-gray-900 whitespace-no-wrap">
-                            {{ transaction.phoneNumber }}
+                            {{ transaction.bank_name }}
+                          </p>
+                        </td>
+                        <td
+                          class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                        >
+                          <p class="text-gray-900 whitespace-no-wrap">
+                            {{ transaction.amount | number : "1.0-0" }}đ
                           </p>
                         </td>
                         <td
@@ -442,7 +641,7 @@
     </div>
 
     <!-- modal QA -->
-    <div class="fixed w-screen h-screen  z-[9999999999]" *ngIf="isShowModalQA">
+    <div class="fixed w-screen h-screen z-[9999999999]" *ngIf="isShowModalQA">
       <!-- background -->
       <div
         id="BackgroungModalQAID"
@@ -453,12 +652,12 @@
       <div
         #ModalQA
         id="modalQAID"
-        class="flex absolute right-1/3 items-center  justify-center w-1/3 h-[calc(100vh-104px)] z-[9999999999]"
+        class="flex absolute right-1/3 items-center justify-center w-1/3 h-[calc(100vh-104px)] z-[9999999999]"
       >
         <div class="flex flex-col w-full h-full bg-white rounded-md">
           <!-- header -->
           <div
-            class="flex flex-col items-center justify-center h-[10%] px-5 w-full z-[9999999999]" 
+            class="flex flex-col items-center justify-center h-[10%] px-5 w-full z-[9999999999]"
           >
             <div class="flex items-center justify-between w-full">
               <h1 class="text-xl font-bold">Yêu cầu rút tiền</h1>
@@ -473,7 +672,7 @@
           </div>
           <!-- body -->
           <div
-            class="flex flex-col w-full h-[90%] rounded-md p-6 bg-slate-50 space-y-4  z-[99999999]"
+            class="flex flex-col w-full h-[90%] rounded-md p-6 bg-slate-50 space-y-4 z-[99999999]"
           >
             <!-- content -->
           </div>

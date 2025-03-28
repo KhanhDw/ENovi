@@ -75,13 +75,7 @@ export class ReceiveComponent implements OnInit {
     });
   }
 
-  getInstructorId(): number {
-    const userInfo = this.apiService.userServiceService.getUserLogin();
-    if (!userInfo || userInfo.id === -1) {
-      return 0; // Trả về 0 nếu chưa đăng nhập
-    }
-    return userInfo.id;
-  }
+ 
 
   paymentmethod() {
     const userId = this.getInstructorId();
@@ -143,6 +137,14 @@ export class ReceiveComponent implements OnInit {
         );
       },
     });
+  }
+
+  getInstructorId(): number {
+    const userInfo = this.apiService.userServiceService.getUserLogin();
+    if (!userInfo || userInfo.id === -1) {
+      return 0; // Trả về 0 nếu chưa đăng nhập
+    }
+    return userInfo.id;
   }
 
   getPaymentMethodByUserId(): void {

@@ -417,7 +417,7 @@ export class AdminRevenueComponent implements OnInit {
 
   public chartOptions: Partial<ChartOptions> = {};
   // dữ liệU biểu đồ để trên contructor
-
+  
   nameChart = 'Tổng doanh thu của hệ thống qua các tháng';
   dataChart = [10, 41, 35, 51, 405, 62, 69, 91, 148, 168, 248, 348];
   typeChartInput: ChartType = 'line';

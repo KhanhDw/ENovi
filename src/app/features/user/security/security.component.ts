@@ -3,26 +3,29 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@app/services/api.service'; // Import ApiService
 
 @Component({
-    selector: 'app-security',
-    templateUrl: './security.component.html',
-    styleUrl: './security.component.css',
-    standalone: false
+  selector: 'app-security',
+  templateUrl: './security.component.html',
+  styleUrl: './security.component.css',
+  standalone: false,
 })
 export class SecurityComponent {
   accountForm: FormGroup;
   email: string = 'ngothanhphong215@gmail.com'; // Get this from your user data
   successMessage: string | null = null;
 
-  constructor(private fb: FormBuilder, private apiService: ApiService) { // Add ApiService
+  constructor(private fb: FormBuilder, private apiService: ApiService) {
+    // Add ApiService
     this.accountForm = this.fb.group(
       {
-        newPassword: ['', [Validators.required, Validators.minLength(8)]], // Add validation as needed
+        currPassword: ['', Validators.required],
+        newPassword: ['', [Validators.required]],//, Validators.minLength(8)]],
         confirmPassword: ['', Validators.required],
       },
-      { validator: this.passwordMatchValidator }
+      {
+        validators: this.passwordMatchValidator, // Sửa thành `validators`
+      }
     );
   }
-
 
   getInstructorId(): number {
     const userInfo = this.apiService.userServiceService.getUserLogin();
@@ -32,30 +35,39 @@ export class SecurityComponent {
     return userInfo.id;
   }
 
-
   passwordMatchValidator(form: FormGroup) {
-    const currPassword = form.get('currPassword')?.value;
-    const newPassword = form.get('newPassword')?.value;
-    const confirmPassword = form.get('confirmPassword')?.value;
-    return newPassword === confirmPassword ? null : { mismatch: true };
+    const newPassword = form.get('newPassword');
+    const confirmPassword = form.get('confirmPassword');
+
+    if (newPassword?.value !== confirmPassword?.value) {
+      confirmPassword?.setErrors({ mismatch: true });
+    } else {
+    }
+    confirmPassword?.setErrors(null);
   }
 
- 
-
   changePassword() {
-    const userId = this.getInstructorId();
+    console.log('Form Valid:', this.accountForm.valid);
+    console.log('Form Errors:', this.accountForm.errors);
+    console.log('Form Values:', this.accountForm.value);
 
-    if (this.accountForm.valid) {
-      const { newPassword , currPassword} = this.accountForm.value;
-      this.apiService.resetPasswordService.changePassword(userId, currPassword, newPassword).subscribe({
+    if (!this.accountForm.valid) {
+      return; // Nếu form không hợp lệ, không thực hiện tiếp
+    }
+
+    const userId = this.getInstructorId();
+    const { newPassword, currPassword } = this.accountForm.value;
+
+    this.apiService.resetPasswordService
+      .changePassword(userId, currPassword, newPassword)
+      .subscribe({
         next: () => {
           this.successMessage = 'Mật khẩu đã được thay đổi thành công!';
           this.accountForm.reset();
         },
         error: (err) => {
           console.error('Error updating password:', err);
-        }
+        },
       });
-    }
   }
 }

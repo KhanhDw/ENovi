@@ -30,4 +30,19 @@ export class PaymentHistoryService {
     const url = `${this.apiUrl}/payment_history_by_course`;
     return this.http.get<any>(url, { params: { title: courseTitle, userId } });
   }
+
+  getRegisteredStudents(courseId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/registered-students/${courseId}`);
+  }
+
+  createPaymentRequest(userId: number, amount: number): Observable<any> {
+    const url = `${this.apiUrl}/create_payment_request`;
+    const paymentData = { userId, amount };
+    return this.http.post<any>(url, paymentData);
+  }
+
+  getWithdrawalHistoryByInstructor(userId: number): Observable<any> {
+    const url = `${this.apiUrl}/withdrawal_history`;
+    return this.http.get<any>(url, { params: { userId } });
+  }
 }
