@@ -30,31 +30,15 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   ) {}
   ngOnInit(): void {
     this.ShowListCourseInCart();
-    // Check if the user has already visited the page
-    const hasVisited = localStorage.getItem('hasVisitedShoppingCart');
-    if (!hasVisited) {
-      localStorage.setItem('hasVisitedShoppingCart', 'true');
-      console.log('First time visiting the shopping cart page.');
-    } else {
-      console.log('Reloading shopping cart data.');
-      this.ShowListCourseInCart();
-    }
-
-    // Handle component destruction to clear localStorage
-    window.addEventListener('beforeunload', () => {
-      localStorage.removeItem('hasVisitedShoppingCart');
-    });
   }
   ShoppingCartComponent() {}
 
   ngOnDestroy(): void {
     // Clear localStorage and reset component state
-    localStorage.removeItem('hasVisitedShoppingCart');
     this.listCourse = [];
     this.checkedCount = 0;
     this.selectedItems.clear();
     this.isSelectAll = false;
-    console.log('ShoppingCartComponent destroyed.');
   }
 
   // =========================

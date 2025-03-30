@@ -9,13 +9,13 @@
             (ngModelChange)="setNameChart()"
           class="w-[180px] py-2 border rounded-md focus:outline-none shadow-sm shadow-gray-400"
         >
-          <option value="-1" selected>Tất cả khóa học</option>
+          <option [value]="-1" selected>Tất cả khóa học</option>
           <option *ngFor="let item of courses" [value]="item.id">{{item.title}}</option>
         </select>
       </div>
-      <div class="flex gap-10">
+      <div class="hidden gap-10">
         <!-- Đã rút tiền -->
-        <div
+        <div 
           class="flex items-center gap-2 px-3 py-2 border-2 rounded-lg border-slate-500"
         >
           <h1 class="font-semibold text-gray-600">Có thể thanh toán:</h1>
@@ -77,28 +77,28 @@
             <div class="flex flex-col">
               <h1 class="font-semibold text-gray-600">Tổng doanh thu</h1>
               <span class="text-3xl font-bold"
-                >20,000,000 <span class="text-sm text-gray-600">đ</span></span
+                >{{TongDoanhThu | number: '1.0-0' }}<span class="text-sm text-gray-600">đ</span></span
               >
             </div>
             <!-- doanh thu tháng này -->
             <div class="flex flex-col">
               <h1 class="font-semibold text-gray-600">Doanh thu tháng này</h1>
               <span class="text-3xl font-bold"
-                >500,000 <span class="text-sm text-gray-600">đ</span></span
+                >{{TongDoanhThuThangHienTai |  number : '1.0-0'}} <span class="text-sm text-gray-600">đ</span></span
               >
             </div>
             <!-- Tổng số học sinh tham gia khóa học -->
             <div class="flex flex-col">
               <h1 class="font-semibold text-gray-600">Tổng học viên</h1>
               <span class="text-3xl font-bold"
-                >20,213 <span class="text-sm text-gray-600">người</span></span
+                >{{TongHocVien | number: '1.0-0' }} <span class="text-sm text-gray-600">người</span></span
               >
             </div>
             <!--  học sinh tham gia khóa học tháng này -->
             <div class="flex flex-col">
               <h1 class="font-semibold text-gray-600">Học viên tháng này</h1>
               <span class="text-3xl font-bold"
-                >252 <span class="text-sm text-gray-600">người</span></span
+                >{{TongHocVienThangHienTai | number: '1.0-0' }} <span class="text-sm text-gray-600">người</span></span
               >
             </div>
             <!-- Đánh giá giảng viên -->
@@ -111,10 +111,10 @@
               ></span>
             </div>
             <!-- đánh giá khóa học (chỉ hiển thị khi chọn khóa học chỉ định, nếu chọn tất thì sẽ ẩn mục này đi)  -->
-            <div class="flex flex-col">
+            <div class="flex flex-col" *ngIf="selectedCourseId != -1">
               <h1 class="font-semibold text-gray-600">Đánh giá khóa học</h1>
               <span class="text-3xl font-bold"
-                >4.5 (sẽ ẩn khi chọn tất cả khóa học)
+                >4.5 
                 <span class="text-sm text-gray-600"
                   ><i class="bi bi-star-fill"></i></span
               ></span>

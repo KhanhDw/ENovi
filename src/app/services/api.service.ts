@@ -26,6 +26,11 @@ import { LectureService } from './lecture/lecture.service';
 import {PaymentHistoryService} from './payment_history/payment-history.service'
 import { PaymentMethodService } from './payment_method/payment-method.service';
 import { BankService } from './bank/bank.service';
+import { CommentService } from './comment/comment.service';
+import { RatingService } from './rating/rating.service';
+
+
+
 @Injectable({
   providedIn: 'root',
 })
@@ -59,6 +64,8 @@ export class ApiService {
     public paymentMethodService: PaymentMethodService,
     public bankService: BankService,
     public paymentHistoryService: PaymentHistoryService,
+    public commentService: CommentService,
+    public ratingService: RatingService,
   ) {
     this.loginServiceService.setApiUrl(`${this.API_URL}/login`);
     this.authGoogleServiceService.setApiUrl(`${this.API_URL}/auth`);
@@ -92,5 +99,8 @@ export class ApiService {
     this.paymentHistoryService.setApiUrl(`${this.API_URL}/payment-history`);
     this.paymentMethodService.setApiUrl(`${this.API_URL}/payment-method`);
     this.bankService.setApiUrl(`${this.API_URL}/banks`);
+
+    this.ratingService.setApiUrl(`${this.API_URL}/rating`);
+    this.commentService.setApiUrl(`${this.API_URL}/comment`);
   }
 }

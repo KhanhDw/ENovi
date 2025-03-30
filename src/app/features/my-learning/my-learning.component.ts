@@ -90,7 +90,7 @@ export class MyLearningComponent implements OnInit {
         this.lengthListMyCourses = data.length;
       },
       error: (error) => {
-        console.error('Error fetching courses i my learning:');
+        console.warn('Error fetching courses i my learning:');
       },
     });
   }

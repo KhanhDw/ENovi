@@ -126,7 +126,7 @@
           </p>
         </div>
         <div>
-          <!--  -->
+          <!-- cập nhật ảnh bìa khóa học -->
           <div class="relative w-full mt-4 mb-4 overflow-hidden cursor-pointer">
             <button
               (click)="triggerFileInput()"
@@ -166,7 +166,7 @@
     >
       <img
         *ngIf="imageUrl; else defaultImage"
-        class="min-w-[345px] border-2 rounded-lg shadow-sm border-slate-500 shadow-black h-60"
+        class="min-w-[345px] border-2 object-cover rounded-lg shadow-sm border-slate-500 shadow-black h-60"
         [src]="imageUrl"
         alt="Uploaded Image"
       />
@@ -564,7 +564,7 @@
   <!--description and resource -->
   <div class="flex w-full pb-8">
     <!-- description -->
-    <div class="flex items-start w-full px-2 py-2 border-2 border-slate-500">
+    <div class="flex items-start w-1/2 px-2 py-2 border-2 border-slate-500">
       <div class="flex flex-col items-start w-full">
         <div class="flex items-center justify-between w-full py-3">
           <p class="px-2 py-1 text-xl font-bold font-signika">Mô tả khóa học</p>
@@ -581,45 +581,149 @@
         </div>
       </div>
     </div>
-    <!-- resource hidden vì quá mệt không làm nổi nữa rồi-->
+    <!-- video giới thiệu khóa học-->
     <div
-      hidden
-      class="items-start self-start w-1/3 px-2 py-2 border-2 border-slate-500"
+      
+      class="items-start self-start w-1/2 px-2 py-2 border-2 border-slate-500"
     >
       <div class="flex flex-col items-start w-full">
         <div class="flex items-center justify-between w-full py-3">
           <p class="px-2 py-1 text-xl font-bold font-signika">
-            Tài liệu học tập
+            Video giới thiệu khóa học
           </p>
-          <button
+          <div class="flex items-center gap-2" *ngIf="introVideoName !== ''">
+            <h1 class="text-xs">{{introVideoName}}</h1>
+            <button (click)="submitUploadVideoIntro()" type="button" class="px-2 text-black border-2 rounded-md border-slate-600">Xác nhận</button>
+          </div>
+          <button hidden
             type="button"
             class="px-2 py-1 text-sm font-semibold border-2 rounded-md hover:text-white hover:bg-gray-800 bg-zinc-100"
           >
-            Thêm tài liệu học tập
+            Cập nhật video
           </button>
+          <!--  -->
+          <div class="relative mt-4 mb-4 overflow-hidden cursor-pointer w-fit">
+            <button
+              (click)="triggerFileIntroVideo()"
+              class="inline-flex w-fit items-center  px-4 py-2 font-bold text-white bg-[#231D1D] rounded-md hover:bg-[#0e1c5b]"
+            >
+              <svg
+                fill="#FFF"
+                height="18"
+                viewBox="0 0 24 24"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
+                class="cursor-pointer"
+              >
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z" />
+              </svg>
+              <span class="ml-2 cursor-pointer">Cập nhật video</span>
+            </button>
+
+            <input
+              class="absolute block w-full px-4 py-2 opacity-0 cursor-pointer"
+              type="file"
+              #fileInputIntro_video
+              (change)="onFileIntro_videoSelected($event)"
+              accept="video/mp4"
+            />
+          </div>
+          <!--  -->
         </div>
         <div class="flex w-full h-[calc(100vh-345px)] border-2">
-          <div
-            class="flex w-full h-full overflow-x-hidden overflow-y-auto"
-            id="rescrourseContaint"
-          >
-            <div class="flex flex-col w-full h-full gap-0">
-              <div class="flex" *ngFor="let item of contentOfSection">
-                <div
-                  type="button"
-                  class="flex items-center justify-between w-full px-2 py-2 overflow-x-hidden font-semibold border-b-2 border-slate-400 bg-zinc-100 hover:bg-slate-200"
-                >
-                  <span
-                    class="max-w-xs overflow-hidden whitespace-nowrap text-ellipsis"
-                  >
-                    {{ item.name }}
-                  </span>
-                  <button
+          <div class="z-10 w-full text-white">
+            <h1 *ngIf="!checkVideoIntro" class="text-black">video chưa sẳn sàng!</h1>
+            <vg-player *ngIf="checkVideoIntro">
+              <vg-overlay-play class="bg-slate-50"></vg-overlay-play>
+              <vg-buffering></vg-buffering>
+
+              <vg-scrub-bar>
+                <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+                <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+              </vg-scrub-bar>
+
+              <vg-controls>
+                <vg-play-pause></vg-play-pause>
+                <vg-playback-button></vg-playback-button>
+
+                <vg-time-display
+                  vgProperty="current"
+                  vgFormat="mm:ss"
+                ></vg-time-display>
+
+                <vg-scrub-bar style="pointer-events: none"></vg-scrub-bar>
+
+                <vg-time-display
+                  vgProperty="left"
+                  vgFormat="mm:ss"
+                ></vg-time-display>
+                <vg-time-display
+                  vgProperty="total"
+                  vgFormat="mm:ss"
+                ></vg-time-display>
+
+                <vg-track-selector></vg-track-selector>
+                <vg-mute></vg-mute>
+                <vg-volume></vg-volume>
+
+                <vg-fullscreen></vg-fullscreen>
+              </vg-controls>
+
+              <video
+                [vgMedia]="$any(media)"
+                #media
+                id="singleVideo"
+                preload="auto"
+                crossorigin
+                *ngIf="videoUrl$ | async as videoUrl"
+              >
+                <source [src]="videoUrl" type="video/mp4" />
+              </video>
+            </vg-player>
+          </div>
+        </div>
+      </div>
+      <!-- resource hidden vì quá mệt không làm nổi nữa rồi-->
+      <div
+        hidden
+        class="items-start self-start w-1/3 px-2 py-2 border-2 border-slate-500"
+      >
+        <div class="flex flex-col items-start w-full">
+          <div class="flex items-center justify-between w-full py-3">
+            <p class="px-2 py-1 text-xl font-bold font-signika">
+              Tài liệu học tập
+            </p>
+            <button
+              type="button"
+              class="px-2 py-1 text-sm font-semibold border-2 rounded-md hover:text-white hover:bg-gray-800 bg-zinc-100"
+            >
+              Thêm tài liệu học tập
+            </button>
+          </div>
+          <div class="flex w-full h-[calc(100vh-345px)] border-2">
+            <div
+              class="flex w-full h-full overflow-x-hidden overflow-y-auto"
+              id="rescrourseContaint"
+            >
+              <div class="flex flex-col w-full h-full gap-0">
+                <div class="flex" *ngFor="let item of contentOfSection">
+                  <div
                     type="button"
-                    class="px-2 py-1 rounded-md hover:bg-zinc-300"
+                    class="flex items-center justify-between w-full px-2 py-2 overflow-x-hidden font-semibold border-b-2 border-slate-400 bg-zinc-100 hover:bg-slate-200"
                   >
-                    <i class="cursor-pointer bi bi-trash3"></i>
-                  </button>
+                    <span
+                      class="max-w-xs overflow-hidden whitespace-nowrap text-ellipsis"
+                    >
+                      {{ item.name }}
+                    </span>
+                    <button
+                      type="button"
+                      class="px-2 py-1 rounded-md hover:bg-zinc-300"
+                    >
+                      <i class="cursor-pointer bi bi-trash3"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -627,246 +731,247 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Modal category -->
-  <div
-    id="static_modal_category"
-    data-modal-backdrop="static"
-    tabindex="-1"
-    aria-hidden="true"
-    [ngClass]="showSelectCategorie ? 'flex' : 'hidden'"
-    class="overflow-y-auto bg-[#000000d7] overflow-x-hidden select-none fixed top-1/2 right-1/2 left-1/2 z-[99999] justify-center items-center w-screen md:inset-0 h-screen"
-  >
-    <div class="relative w-1/2 h-screen">
-      <!-- Modal content -->
-      <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
-        <!-- Modal header -->
-        <div
-          class="flex items-center justify-between border-b border-gray-200 rounded-t md:p-5 dark:border-gray-600"
-        >
-          <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-            Lĩnh vực khóa học
-          </h3>
-          <button
-            hidden
-            (click)="toggleShowSelectCategorie()"
-            type="button"
-            class="inline-flex items-center justify-center w-8 h-8 text-sm text-gray-400 bg-transparent rounded-lg hover:bg-gray-200 hover:text-gray-900 ms-auto dark:hover:bg-gray-600 dark:hover:text-white"
-            data-modal-hide="static-modal"
+    <!-- -------------- -->
+    <!-- Modal category -->
+    <!-- -------------- -->
+    <div
+      id="static_modal_category"
+      data-modal-backdrop="static"
+      tabindex="-1"
+      aria-hidden="true"
+      [ngClass]="showSelectCategorie ? 'flex' : 'hidden'"
+      class="overflow-y-auto bg-[#000000d7] overflow-x-hidden select-none fixed top-1/2 right-1/2 left-1/2 z-[99999] justify-center items-center w-screen md:inset-0 h-screen"
+    >
+      <div class="relative w-1/2 h-screen">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+          <!-- Modal header -->
+          <div
+            class="flex items-center justify-between border-b border-gray-200 rounded-t md:p-5 dark:border-gray-600"
           >
-            <svg
-              class="w-3 h-3"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 14"
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+              Lĩnh vực khóa học
+            </h3>
+            <button
+              hidden
+              (click)="toggleShowSelectCategorie()"
+              type="button"
+              class="inline-flex items-center justify-center w-8 h-8 text-sm text-gray-400 bg-transparent rounded-lg hover:bg-gray-200 hover:text-gray-900 ms-auto dark:hover:bg-gray-600 dark:hover:text-white"
+              data-modal-hide="static-modal"
             >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-              />
-            </svg>
-            <span class="sr-only">Close modal</span>
-          </button>
-        </div>
-        <!-- Modal body -->
-        <div class="bg-gray-100 rounded-b">
-          <div class="container mx-auto">
-            <div class="flex flex-col h-full gap-2 p-2 bg-white shadow-md">
-              <div class="grid grid-cols-3 gap-2">
-                <div
-                  id="static_modal_category_lv"
-                  class="col-span-1 p-1 overflow-y-auto border-2 rounded-md h-96 border-slate-600"
-                >
-                  <h1 class="flex items-center justify-center mb-2 font-bold">
-                    Lĩnh vực
-                  </h1>
-                  <ul>
-                    <li
-                      *ngFor="let category of categories"
-                      (click)="selectCategory(category)"
-                      class="w-full px-4 py-2 mb-2 text-gray-700 bg-gray-200 rounded hover:bg-slate-700 hover:text-white"
-                    >
-                      {{ category.categoryName }}
-                    </li>
-                  </ul>
-                </div>
-                <div
-                  id="static_modal_category_cn"
-                  class="col-span-1 p-1 overflow-y-auto border-2 rounded-md h-96 border-slate-600"
-                >
-                  <h1 class="flex items-center justify-center mb-2 font-bold">
-                    Chuyên ngành
-                  </h1>
-                  <ul *ngIf="savedCategory">
-                    <li
-                      *ngFor="
-                        let sub of getSubCategories(
-                          selectedCategory?.categoryId
-                        )
-                      "
-                      (click)="toggleSubCategory(sub)"
-                      [class.selected]="isSubCategorySelected(sub)"
-                      class="w-full px-4 py-2 mb-2 text-gray-700 bg-gray-200 rounded hover:bg-slate-700 hover:text-white"
-                    >
-                      {{ sub.categoryName }}
-                    </li>
-                  </ul>
+              <svg
+                class="w-3 h-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 14"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
+              </svg>
+              <span class="sr-only">Close modal</span>
+            </button>
+          </div>
+          <!-- Modal body -->
+          <div class="bg-gray-100 rounded-b">
+            <div class="container mx-auto">
+              <div class="flex flex-col h-full gap-2 p-2 bg-white shadow-md">
+                <div class="grid grid-cols-3 gap-2">
                   <div
-                    *ngIf="!savedCategory"
-                    class="flex items-center justify-center h-full text-gray-500"
+                    id="static_modal_category_lv"
+                    class="col-span-1 p-1 overflow-y-auto border-2 rounded-md h-96 border-slate-600"
                   >
-                    Vui lòng chọn ít nhất một lĩnh vực để xem chuyên ngành.
+                    <h1 class="flex items-center justify-center mb-2 font-bold">
+                      Lĩnh vực
+                    </h1>
+                    <ul>
+                      <li
+                        *ngFor="let category of categories"
+                        (click)="selectCategory(category)"
+                        class="w-full px-4 py-2 mb-2 text-gray-700 bg-gray-200 rounded hover:bg-slate-700 hover:text-white"
+                      >
+                        {{ category.categoryName }}
+                      </li>
+                    </ul>
+                  </div>
+                  <div
+                    id="static_modal_category_cn"
+                    class="col-span-1 p-1 overflow-y-auto border-2 rounded-md h-96 border-slate-600"
+                  >
+                    <h1 class="flex items-center justify-center mb-2 font-bold">
+                      Chuyên ngành
+                    </h1>
+                    <ul *ngIf="savedCategory">
+                      <li
+                        *ngFor="
+                          let sub of getSubCategories(
+                            selectedCategory?.categoryId
+                          )
+                        "
+                        (click)="toggleSubCategory(sub)"
+                        [class.selected]="isSubCategorySelected(sub)"
+                        class="w-full px-4 py-2 mb-2 text-gray-700 bg-gray-200 rounded hover:bg-slate-700 hover:text-white"
+                      >
+                        {{ sub.categoryName }}
+                      </li>
+                    </ul>
+                    <div
+                      *ngIf="!savedCategory"
+                      class="flex items-center justify-center h-full text-gray-500"
+                    >
+                      Vui lòng chọn ít nhất một lĩnh vực để xem chuyên ngành.
+                    </div>
+                  </div>
+                  <div
+                    id="static_modal_category_pm"
+                    class="col-span-1 p-1 overflow-y-auto border-2 rounded-md h-96 border-slate-600"
+                  >
+                    <h1 class="flex items-center justify-center mb-2 font-bold">
+                      Phân mục
+                    </h1>
+                    <ul
+                      *ngIf="selectedSubCategories.length > 0"
+                      class="flex flex-wrap items-start gap-2"
+                    >
+                      <li
+                        *ngFor="let item of getSubItems()"
+                        (click)="toggleItem(item)"
+                        class="w-full px-4 py-2 mb-2 text-gray-700 bg-gray-200 rounded hover:bg-slate-700 hover:text-white"
+                      >
+                        {{ item.categoryName }}
+                      </li>
+                    </ul>
+                    <!-- Thông báo khi không có chuyên ngành nào được chọn -->
+                    <div
+                      *ngIf="selectedSubCategories.length === 0"
+                      class="flex items-center justify-center h-full text-gray-500"
+                    >
+                      Vui lòng chọn ít nhất một chuyên ngành để xem phân mục.
+                    </div>
                   </div>
                 </div>
-                <div
-                  id="static_modal_category_pm"
-                  class="col-span-1 p-1 overflow-y-auto border-2 rounded-md h-96 border-slate-600"
-                >
-                  <h1 class="flex items-center justify-center mb-2 font-bold">
-                    Phân mục
-                  </h1>
-                  <ul
-                    *ngIf="selectedSubCategories.length > 0"
-                    class="flex flex-wrap items-start gap-2"
-                  >
-                    <li
-                      *ngFor="let item of getSubItems()"
-                      (click)="toggleItem(item)"
-                      class="w-full px-4 py-2 mb-2 text-gray-700 bg-gray-200 rounded hover:bg-slate-700 hover:text-white"
-                    >
-                      {{ item.categoryName }}
-                    </li>
-                  </ul>
-                  <!-- Thông báo khi không có chuyên ngành nào được chọn -->
-                  <div
-                    *ngIf="selectedSubCategories.length === 0"
-                    class="flex items-center justify-center h-full text-gray-500"
-                  >
-                    Vui lòng chọn ít nhất một chuyên ngành để xem phân mục.
-                  </div>
-                </div>
-              </div>
-              <!-- ------------------------------------- -->
-              <!-- Hiển thị danh sách đã lưu với nút xóa -->
-              <!-- ------------------------------------- -->
+                <!-- ------------------------------------- -->
+                <!-- Hiển thị danh sách đã lưu với nút xóa -->
+                <!-- ------------------------------------- -->
 
-              <div class="grid grid-cols-3 gap-2">
-                <div
-                  id="static_modal_category_lv_s"
-                  class="col-span-1 p-1 overflow-y-auto border-2 rounded-md h-52 border-slate-600"
-                >
-                  <h1 class="flex items-center justify-center mb-2 font-bold">
-                    Lĩnh vực đã chọn
-                  </h1>
-                  <ul *ngIf="savedCategory" class="flex flex-col gap-2">
-                    <li
-                      class="flex items-center justify-between px-4 py-2 text-gray-700 bg-gray-200 rounded"
-                    >
-                      <span>{{ savedCategory.categoryName }}</span>
-                      <button
-                        (click)="removeCategory()"
-                        class="px-2 py-1 text-white bg-red-500 rounded hover:bg-red-700"
-                      >
-                        Xóa
-                      </button>
-                    </li>
-                  </ul>
+                <div class="grid grid-cols-3 gap-2">
                   <div
-                    *ngIf="!savedCategory"
-                    class="flex items-center justify-center h-full text-gray-500"
+                    id="static_modal_category_lv_s"
+                    class="col-span-1 p-1 overflow-y-auto border-2 rounded-md h-52 border-slate-600"
                   >
-                    Chưa có mục nào được chọn.
+                    <h1 class="flex items-center justify-center mb-2 font-bold">
+                      Lĩnh vực đã chọn
+                    </h1>
+                    <ul *ngIf="savedCategory" class="flex flex-col gap-2">
+                      <li
+                        class="flex items-center justify-between px-4 py-2 text-gray-700 bg-gray-200 rounded"
+                      >
+                        <span>{{ savedCategory.categoryName }}</span>
+                        <button
+                          (click)="removeCategory()"
+                          class="px-2 py-1 text-white bg-red-500 rounded hover:bg-red-700"
+                        >
+                          Xóa
+                        </button>
+                      </li>
+                    </ul>
+                    <div
+                      *ngIf="!savedCategory"
+                      class="flex items-center justify-center h-full text-gray-500"
+                    >
+                      Chưa có mục nào được chọn.
+                    </div>
                   </div>
-                </div>
-                <div
-                  id="static_modal_category_cn_s"
-                  class="col-span-1 p-1 overflow-y-auto border-2 rounded-md h-52 border-slate-600"
-                >
-                  <h1 class="flex items-center justify-center mb-2 font-bold">
-                    Chuyên ngành đã chọn
-                  </h1>
-                  <ul *ngIf="savedCategory" class="flex flex-col gap-2">
-                    <li
-                      *ngFor="let savedItem of savedSubCategories"
-                      class="flex items-center justify-between px-4 py-2 text-gray-700 bg-gray-200 rounded"
-                    >
-                      <span>{{ savedItem.categoryName }} </span>
-                      <button
-                        (click)="removeSubCategory(savedItem)"
-                        class="px-2 py-1 text-white bg-red-500 rounded hover:bg-red-700"
-                      >
-                        Xóa
-                      </button>
-                    </li>
-                  </ul>
                   <div
-                    *ngIf="!savedCategory"
-                    class="flex items-center justify-center h-full text-gray-500"
+                    id="static_modal_category_cn_s"
+                    class="col-span-1 p-1 overflow-y-auto border-2 rounded-md h-52 border-slate-600"
                   >
-                    Chưa có mục nào được chọn.
+                    <h1 class="flex items-center justify-center mb-2 font-bold">
+                      Chuyên ngành đã chọn
+                    </h1>
+                    <ul *ngIf="savedCategory" class="flex flex-col gap-2">
+                      <li
+                        *ngFor="let savedItem of savedSubCategories"
+                        class="flex items-center justify-between px-4 py-2 text-gray-700 bg-gray-200 rounded"
+                      >
+                        <span>{{ savedItem.categoryName }} </span>
+                        <button
+                          (click)="removeSubCategory(savedItem)"
+                          class="px-2 py-1 text-white bg-red-500 rounded hover:bg-red-700"
+                        >
+                          Xóa
+                        </button>
+                      </li>
+                    </ul>
+                    <div
+                      *ngIf="!savedCategory"
+                      class="flex items-center justify-center h-full text-gray-500"
+                    >
+                      Chưa có mục nào được chọn.
+                    </div>
                   </div>
-                </div>
-                <div
-                  id="static_modal_category_pm_s"
-                  class="col-span-1 p-1 overflow-y-auto border-2 rounded-md h-52 border-slate-600"
-                >
-                  <h1 class="flex items-center justify-center mb-2 font-bold">
-                    Phân mục đã chọn
-                  </h1>
-                  <ul
-                    *ngIf="savedSubCategories.length > 0"
-                    class="flex flex-col gap-2"
-                  >
-                    <li
-                      *ngFor="let savedItem of savedItems"
-                      class="flex items-center justify-between px-4 py-2 text-gray-700 bg-gray-200 rounded"
-                    >
-                      <span>{{ savedItem.categoryName }} </span>
-                      <button
-                        (click)="removeItem(savedItem)"
-                        class="px-2 py-1 text-white bg-red-500 rounded hover:bg-red-700"
-                      >
-                        Xóa
-                      </button>
-                    </li>
-                  </ul>
                   <div
-                    *ngIf="savedSubCategories.length === 0"
-                    class="flex items-center justify-center h-full text-gray-500"
+                    id="static_modal_category_pm_s"
+                    class="col-span-1 p-1 overflow-y-auto border-2 rounded-md h-52 border-slate-600"
                   >
-                    Chưa có mục nào được chọn.
+                    <h1 class="flex items-center justify-center mb-2 font-bold">
+                      Phân mục đã chọn
+                    </h1>
+                    <ul
+                      *ngIf="savedSubCategories.length > 0"
+                      class="flex flex-col gap-2"
+                    >
+                      <li
+                        *ngFor="let savedItem of savedItems"
+                        class="flex items-center justify-between px-4 py-2 text-gray-700 bg-gray-200 rounded"
+                      >
+                        <span>{{ savedItem.categoryName }} </span>
+                        <button
+                          (click)="removeItem(savedItem)"
+                          class="px-2 py-1 text-white bg-red-500 rounded hover:bg-red-700"
+                        >
+                          Xóa
+                        </button>
+                      </li>
+                    </ul>
+                    <div
+                      *ngIf="savedSubCategories.length === 0"
+                      class="flex items-center justify-center h-full text-gray-500"
+                    >
+                      Chưa có mục nào được chọn.
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <!-- Modal footer -->
-          <div
-            class="flex items-center justify-between h-full p-4 border-t border-gray-200 rounded-b md:p-5 dark:border-gray-600"
-          >
-            <button
-              (click)="clearAllSelections()"
-              data-modal-hide="static-modal"
-              type="button"
-              class="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            <!-- Modal footer -->
+            <div
+              class="flex items-center justify-between h-full p-4 border-t border-gray-200 rounded-b md:p-5 dark:border-gray-600"
             >
-              Xóa tất cả lựa chọn
-            </button>
-            <p class="font-bold text-red-700">{{ errorMessageCategory }}</p>
+              <button
+                (click)="clearAllSelections()"
+                data-modal-hide="static-modal"
+                type="button"
+                class="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Xóa tất cả lựa chọn
+              </button>
+              <p class="font-bold text-red-700">{{ errorMessageCategory }}</p>
 
-            <button
-              (click)="confirmSelections()"
-              data-modal-hide="static-modal"
-              type="button"
-              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Xác nhận
-            </button>
+              <button
+                (click)="confirmSelections()"
+                data-modal-hide="static-modal"
+                type="button"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Xác nhận
+              </button>
+            </div>
           </div>
         </div>
       </div>

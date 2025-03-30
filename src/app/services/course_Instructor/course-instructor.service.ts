@@ -224,7 +224,18 @@ export class CourseInstructorService {
   //  get course by id to pay
 
   getCoursePaymentById(courseIds: number[]): Observable<any> {
-    console.log('courseIds111111111', courseIds);
-    return this.http.post(`${this.apiUrl}/course/payment`, { courseIds });
+    const params = new HttpParams().set('courseIds', courseIds.join(','));
+    return this.http.get(`${this.apiUrl}/course/payment`, { params });
+  }
+
+
+
+  // intro video
+  updateIntroVideo(courseId: number, introVideoUrl: string): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/${encodeURIComponent(courseId)}/update/intro-video`,
+      { introVideoUrl }
+    );
   }
 }
+  

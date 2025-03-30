@@ -60,8 +60,8 @@
             </select>
           </div>
           <div class="flex bg-white">
-            <div class="w-full max-w-sm min-w-[300px]">
-              <div class="relative">
+            <div class="w-full max-w-sm min-w-[300px] flex items-center ">
+              <div class="relative ">
                 <input
                 [(ngModel)]="searchKey"
                   class="max-w-full py-2 pl-3 w-[500px] text-sm transition duration-300 bg-transparent border rounded-md shadow-sm placeholder:text-slate-400 text-slate-700 border-slate-200 pr-28 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 focus:shadow"
@@ -83,9 +83,9 @@
                       clip-rule="evenodd"
                     />
                   </svg>
-
                   Tìm
                 </button>
+                <button *ngIf="clickSearch" (click)="huySearch()" class="px-2 py-1 text-white rounded-md bg-violet-600">Hủy Tìm</button>
               </div>
             </div>
           </div>

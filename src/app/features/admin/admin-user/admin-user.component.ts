@@ -51,6 +51,7 @@ import { BehaviorSubject } from 'rxjs';
 export class AdminUserComponent implements OnInit {
   selectedFilter: string = '';
   searchKey: string = '';
+  clickSearch: boolean = false; // Biến để theo dõi trạng thái của nút tìm kiếm
 
   countUsers: any[] = []; // Mảng lưu dữ liệu
 
@@ -216,12 +217,24 @@ export class AdminUserComponent implements OnInit {
     });
   }
 
+  huySearch() {
+    this.searchKey = '';
+    this.searchUser(this.searchKey);
+    this.clickSearch = false;
+  }
+
   btnSearch() {
     this.searchUser(this.searchKey);
   }
 
   searchUser(searchKey: string) {
     console.log('searchKey: ' + searchKey);
+    if (!searchKey) {
+      // Nếu searchKey rỗng, trả về danh sách ban đầu
+      this.usersSubject.next(this.user0);
+      this.clickSearch = false; // Đặt lại trạng thái clickSearch
+      return;
+    }
     this.adminUserService
       .getSearchUser(encodeURIComponent(searchKey))
       .subscribe({
@@ -229,6 +242,7 @@ export class AdminUserComponent implements OnInit {
           if (res.success) {
             console.log('thanh cong 11');
             this.usersSubject.next(res.user);
+            this.clickSearch = true; // Đặt biến clickSearch thành true khi tìm kiếm
           }
         },
         error: (err) => {

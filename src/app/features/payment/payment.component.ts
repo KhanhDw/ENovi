@@ -32,7 +32,7 @@ export class PaymentComponent {
   };
 
   urlBackend_img_banner_course: string = '';
-  listCourse: CourseSearch[] = []
+  listCourse: CourseSearch[] = [];
   priceTotal: number = 0;
   pricePromotion: number = 0;
   priceToPay: number = 0;
@@ -50,7 +50,6 @@ export class PaymentComponent {
 
   ngOnInit(): void {
     this.getCoursePayLocalstorage();
-    this.fetchCoursePay();
   }
 
   // ====================
@@ -69,8 +68,10 @@ export class PaymentComponent {
     const userId = this.getInstructorId();
     if (userId === -1) {
       console.warn('Người dùng chưa đăng nhập');
+      alert('Bạn cần đăng nhập để thực hiện mua khóa học này!');
       return;
     }
+    this.getCoursePayLocalstorage();
 
     this.createPayment(
       this.orderData.amount,
@@ -94,13 +95,15 @@ export class PaymentComponent {
   ) {
     // Cấu hình các tham số thanh toán
     const paymentData = {
-      amount: amount,
-      bankCode: 'NCB', // Tạm thời chọn ngân hàng NCB để test
-      language: language,
-      orderType: orderType,
-      orderDescription: orderDescription,
-      orderRef: orderId,
+      amount: amount,//ok
+      bankCode: 'NCB', // Tạm thờ i chọn ngân hàng NCB để test
+      language: language,//ok
+      orderType: orderType, //ok
+      orderDescription: orderDescription,//ok
+      orderRef: orderId,//ok
     };
+
+    console.log('paymentDataHHHHHHH->:', paymentData);
 
     // Gọi service để tạo URL thanh toán
     this.vnpayService
@@ -121,9 +124,7 @@ export class PaymentComponent {
   }
 
   getCoursePayLocalstorage() {
-    const paymentDataString = localStorage.getItem('paymentData');
-    // localStorage.removeItem('paymentData'); // Clear the data after retrieving it
-    console.log('Raw payment data from localStorage:', paymentDataString);
+    let paymentDataString = localStorage.getItem('paymentData');
 
     if (!paymentDataString) {
       console.log('No payment data found in localStorage.');
@@ -131,36 +132,58 @@ export class PaymentComponent {
     }
 
     const paymentData = JSON.parse(paymentDataString);
-    console.log('Parsed payment data from localStorage:', paymentData);
+    console.log('Raw payment data from localStorage:', paymentDataString);
 
-    // Validate and use the fetched data
-    if (paymentData.courses && Array.isArray(paymentData.courses)) {
-      this.listCourseBuy = paymentData.courses.map((course: any) => course.id);
-      console.log('List of course IDs to buy:', this.listCourseBuy);
+
+    if (paymentData.amount) {
+      this.orderData.amount = paymentData.amount || this.orderData.amount;
+      this.orderData.language = paymentData.language || this.orderData.language;
+      this.orderData.orderType =
+        paymentData.orderType || this.orderData.orderType;
+      this.orderData.orderDescription =
+        paymentData.orderDescription || this.orderData.orderDescription;
+      this.orderData.orderId = paymentData.orderId || this.orderData.orderId;
+      this.listCourseBuy  = paymentData.listCourseBuy;
+      this.fetchCoursePay();
+      console.log('List of course IDs to buy111:', this.listCourseBuy);
+      console.log("paymentData:00--<<<<>>>", paymentData);
+      console.log('hahahahahahahhhh111');
     } else {
-      console.warn('Invalid courses data in paymentData.');
-      return;
+      console.log('hahahahahahahhhh2222');
+      // Validate and use the fetched data
+      if (paymentData.courses && Array.isArray(paymentData.courses)) {
+        this.listCourseBuy = paymentData.courses.map(
+          (course: any) => course.id
+        );
+        console.log("paymentData:00--<<<<>>>", paymentData);
+        this.fetchCoursePay();
+        console.log('List of course IDs to buy:', this.listCourseBuy);
+      } else {
+        console.warn('Invalid courses data in paymentData.');
+        return;
+      }
     }
   }
 
   fetchCoursePay() {
-    this.apiService.courseInstructorService.getCoursePaymentById(this.listCourseBuy).subscribe({
-      next: (response: any) => {
-        if (response.success && response.course) {
-          this.listCourse = response.course;
-          console.log('this.listCourse:', this.listCourse);
-          this.calculateTotalPrice();
-          this.calculatePromotionPrice();
-          this.calculatePriceToPay();
-
-        } else {
-          console.warn('Failed to fetch course data:', response.message);
-        }
-      },
-      error: (error) => {
-        console.error('Error fetching course data:', error);
-      },
-    });
+    this.apiService.courseInstructorService
+      .getCoursePaymentById(this.listCourseBuy)
+      .subscribe({
+        next: (response: any) => {
+          if (response.success && response.course) {
+            this.listCourse = response.course;
+            console.log('this.listCourse:', this.listCourse);
+            this.calculateTotalPrice();
+            this.calculatePromotionPrice();
+            this.calculatePriceToPay();
+          } else {
+            console.warn('Failed to fetch course data:', response.message);
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching course data:', error);
+        },
+      });
   }
 
   calculateTotalPrice() {
@@ -171,10 +194,13 @@ export class PaymentComponent {
 
   calculatePromotionPrice() {
     this.pricePromotion = this.listCourse.reduce((total, course) => {
-      const discount = course.price * (course.percent_discount) / 100;
+      const discount = (course.price * course.percent_discount) / 100;
       return total + discount;
     }, 0);
-    console.log('Total discount amount based on percent_discount:', this.pricePromotion);
+    console.log(
+      'Total discount amount based on percent_discount:',
+      this.pricePromotion
+    );
   }
 
   calculatePriceToPay() {
@@ -182,5 +208,4 @@ export class PaymentComponent {
     console.log('Price to pay:', this.priceToPay);
     this.orderData.amount = Math.floor(this.priceToPay);
   }
-
 }

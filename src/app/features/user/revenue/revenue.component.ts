@@ -9,6 +9,7 @@ import {
   HostListener,
   AfterViewInit,
   type OnInit,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { ApiService } from '@app/services/api.service';
 import { CookieStorageService } from '@app/services/cookie_storage/cookie-storage.service';
@@ -45,7 +46,6 @@ export type ChartOptions = {
 
 import { CourseInstructor } from './../../../interface/course';
 
-
 @Component({
   selector: 'app-revenue',
   templateUrl: './revenue.component.html',
@@ -71,6 +71,12 @@ export class RevenueComponent implements AfterViewInit, OnInit {
   courses: CourseInstructor[] = [];
   clickedRequestWithdraw: boolean = false;
   sortBy: string = 'newest';
+  TongDoanhThu: number = 0;
+  TongDoanhThuThangHienTai: number = 0;
+  TongHocVien: number = 0;
+  TongHocVienThangHienTai: number = 0;
+
+  TongDoanhThuDaGiaoDich: number = 0;
   // =========================
   // biến dữ liệu ^^^^^^^^^^^^
   // =========================
@@ -135,7 +141,11 @@ export class RevenueComponent implements AfterViewInit, OnInit {
     this.checkRequestWithdraw();
     this.listEnrollmentBuyCourse();
     this.getFetchRequestWithdrawTable();
-    this.fetchCourses( '', this.sortBy);
+    this.fetchCourses('', this.sortBy);
+
+    // if (this.selectedCourseId === -1) {
+    //   this.revenueChart();
+    // }
   }
 
   getStatusClass(status: string): string {
@@ -204,7 +214,8 @@ export class RevenueComponent implements AfterViewInit, OnInit {
   constructor(
     private elementRef: ElementRef,
     private apiService: ApiService,
-    private cookieStorageService: CookieStorageService
+    private cookieStorageService: CookieStorageService,
+    private cdr: ChangeDetectorRef
   ) {
     this.updateChartOptions(); // Cập nhật lại `chartOptions`
   }
@@ -334,7 +345,20 @@ export class RevenueComponent implements AfterViewInit, OnInit {
           if (response && response.success) {
             this.students = response.data;
             console.log('Danh sách học viên:', response.data);
-            // Xử lý dữ liệu học viên ở đây
+
+            /* cập nhật dữ liệu cho chart */
+            this.revenueChartUpdate();
+            /*  tính tổng doanh thu */
+            this.revenueSum();
+            /* tính tổng doanh thu tháng hiện tại */
+            this.revenueSumPerMonth();
+            /* Tổng học viên  */
+            this.enrollmentSum();
+            /* Tổng học viên tháng hiện tại */
+            this.enrollmentSumPerMonth();
+
+            /* cập nhật lại giao diện */
+            this.cdr.detectChanges();
           }
         },
         error: (error) => {
@@ -343,12 +367,102 @@ export class RevenueComponent implements AfterViewInit, OnInit {
       });
   }
 
+  revenueChartUpdate() {
+    this.dataChart = Array.from({ length: 12 }, (_, month) => {
+      return this.students.reduce((total, student) => {
+        const paymentDate = new Date(student.paymentDate);
+        if (paymentDate.getMonth() === month) {
+          return total + parseInt(String(student.amount || '0'), 10);
+        }
+        return total;
+      }, 0);
+    });
+    this.updateChartOptions1(); // Cập nhật lại chartOptions với dữ liệu mới
+  }
+  revenueSum() {
+    if (Number(this.selectedCourseId) === -1) {
+      this.TongDoanhThu = this.students.reduce(
+        (total, student) => total + parseInt(String(student.amount || '0'), 10),
+        0
+      );
+    } else {
+      this.TongDoanhThu = this.students.reduce((total, student) => {
+        if (Number(student.courseId) === Number(this.selectedCourseId)) {
+          return total + parseInt(String(student.amount || '0'), 10);
+        }
+        return total;
+      }, 0);
+    }
+  }
+
+  revenueSumPerMonth() {
+    const currentMonth = new Date().getMonth() + 1; // Lấy tháng hiện tại (0-based nên cần +1)
+    const currentYear = new Date().getFullYear(); // Lấy năm hiện tại
+    if (Number(this.selectedCourseId) === -1) {
+      this.TongDoanhThuThangHienTai = this.students.reduce((total, student) => {
+        const paymentDate = new Date(student.paymentDate);
+        if (
+          paymentDate.getMonth() + 1 === currentMonth &&
+          paymentDate.getFullYear() === currentYear
+        ) {
+          return total + parseInt(String(student.amount || '0'), 10);
+        }
+        return total;
+      }, 0);
+    } else {
+      this.TongDoanhThuThangHienTai = this.students.reduce((total, student) => {
+        const paymentDate = new Date(student.paymentDate);
+        if (
+          paymentDate.getMonth() + 1 === currentMonth &&
+          paymentDate.getFullYear() === currentYear &&
+          Number(student.courseId) === Number(this.selectedCourseId)
+        ) {
+          return total + parseInt(String(student.amount || '0'), 10);
+        }
+        return total;
+      }, 0);
+    }
+  }
+
+  enrollmentSum() {
+    if (Number(this.selectedCourseId) === -1) {
+      this.TongHocVien = this.students.length;
+    } else {
+      this.TongHocVien = this.students.filter(
+        (student) => Number(student.courseId) === Number(this.selectedCourseId)
+      ).length;
+    }
+  }
+
+  enrollmentSumPerMonth() {
+    const currentMonth = new Date().getMonth() + 1;
+    const currentYear = new Date().getFullYear();
+    if (Number(this.selectedCourseId) === -1) {
+      this.TongHocVienThangHienTai = this.students.filter((student) => {
+        const paymentDate = new Date(student.paymentDate);
+        return (
+          paymentDate.getMonth() + 1 === currentMonth &&
+          paymentDate.getFullYear() === currentYear
+        );
+      }).length;
+    } else {
+      this.TongHocVienThangHienTai = this.students.filter((student) => {
+        const paymentDate = new Date(student.paymentDate);
+        return (
+          paymentDate.getMonth() + 1 === currentMonth &&
+          paymentDate.getFullYear() === currentYear &&
+          Number(student.courseId) === Number(this.selectedCourseId)
+        );
+      }).length;
+    }
+  }
+
   // Hàm cập nhật lại chartOptions
   updateChartOptions() {
     this.chartOptions = {
       series: [
         {
-          name: 'RevenueData',
+          name: 'Doanh thu',
           data: this.dataChart,
         },
       ],
@@ -376,18 +490,18 @@ export class RevenueComponent implements AfterViewInit, OnInit {
       },
       xaxis: {
         categories: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
+          'Tháng 1',
+          'Tháng 2',
+          'Tháng 3',
+          'Tháng 4',
+          'Tháng 5',
+          'Tháng 6',
+          'Tháng 7',
+          'Tháng 8',
+          'Tháng 9',
+          'Tháng 10',
+          'Tháng 11',
+          'Tháng 12',
         ],
       },
       yaxis: {
@@ -403,7 +517,7 @@ export class RevenueComponent implements AfterViewInit, OnInit {
     this.chartOptions = Object.assign({}, this.chartOptions, {
       series: [
         {
-          name: 'RevenueData',
+          name: 'Doanh thu',
           data: this.dataChart, // Cập nhật dữ liệu mới
         },
       ],
@@ -411,8 +525,8 @@ export class RevenueComponent implements AfterViewInit, OnInit {
         text: this.nameChart, // Cập nhật tiêu đề mới
       }),
     });
+    this.cdr.detectChanges();
   }
-  
 
   getFetchRequestWithdrawTable() {
     const userId = this.getInstructorId(); // Lấy userId từ cookie hoặc dịch vụ người dùng
@@ -434,7 +548,6 @@ export class RevenueComponent implements AfterViewInit, OnInit {
       });
   }
 
-
   private fetchCourses(searchText: string, sortBy: string): void {
     let id = this.getInstructorId().toString();
     this.apiService.courseInstructorService
@@ -451,25 +564,27 @@ export class RevenueComponent implements AfterViewInit, OnInit {
       });
   }
 
-
   setNameChart() {
-    if (this.selectedCourseId === -1) {
-      this.nameChart = "Tất cả khóa học";
+    if (Number(this.selectedCourseId) === -1) {
+      this.nameChart = 'Tất cả khóa học';
+      this.revenueChartUpdate();
+      this.updateChartOptions1();
       return;
     }
     if (!this.courses || this.courses.length === 0) {
       console.error('Courses list is empty or not initialized.');
-      this.nameChart = "Tổng doanh thu Unknown Course";
+      this.nameChart = 'Tổng doanh thu Unknown Course';
       return;
     }
 
-
     console.log(this.courses);
-    const selectedCourse = this.courses.find(course => Number(course.id) === Number(this.selectedCourseId));
+    const selectedCourse = this.courses.find(
+      (course) => Number(course.id) === Number(this.selectedCourseId)
+    );
 
     if (!selectedCourse) {
       console.warn(`Course with ID ${this.selectedCourseId} not found.`);
-      this.nameChart = "Tổng doanh thu Unknown Course";
+      this.nameChart = 'Tổng doanh thu Unknown Course';
       return;
     }
     const chuoibandau = 'Tổng doanh thu';
@@ -478,7 +593,36 @@ export class RevenueComponent implements AfterViewInit, OnInit {
     console.log(this.nameChart);
     console.log(this.selectedCourseId);
 
+    this.revenueChartUpdate1();
+     /*  tính tổng doanh thu */
+     this.revenueSum();
+     /* tính tổng doanh thu tháng hiện tại */
+     this.revenueSumPerMonth();
+     /* Tổng học viên  */
+     this.enrollmentSum();
+     /* Tổng học viên tháng hiện tại */
+     this.enrollmentSumPerMonth();
+     
     this.updateChartOptions1(); // Cập nhật lại chartOptions với tên mới
   }
+
+  revenueChartUpdate1() {
+    
+      // Nếu chọn một khóa học cụ thể, tính tổng doanh thu của khóa học đó
+      this.dataChart = Array.from({ length: 12 }, (_, month) => {
+        return this.students.reduce((total, student) => {
+          const paymentDate = new Date(student.paymentDate);
+          if (
+            paymentDate.getMonth() === month &&
+            Number(student.courseId) === Number(this.selectedCourseId)
+          ) {
+            return total + parseInt(String(student.amount || '0'), 10);
+          }
+          return total;
+        }, 0);
+      });
+
+      this.updateChartOptions1(); // Cập nhật lại chartOptions với dữ liệu mới
+    }
   
 }

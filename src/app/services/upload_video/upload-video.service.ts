@@ -26,6 +26,23 @@ export class UploadVideoService {
     return this.http.post(`${this.apiUrl}/lesson`, formData);
   }
 
+
+
+  // Upload intro video
+  uploadIntroVideo(file: File, courseId: string): Observable<any> {
+    const formData = new FormData();
+    formData.append('video', file);
+    formData.append('courseId', courseId);
+
+    return this.http.post(`${this.apiUrl}/intro-video`, formData).pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error uploading intro video:', error);
+        return of({ success: false, error });
+      })
+    );
+  }
+
   // Upload video theo chunk (dành cho video lớn)
   // uploadVideoInChunks(file: File, chunkSize: number = 1024 * 1024): Observable<any> {
   //   const totalChunks = Math.ceil(file.size / chunkSize);

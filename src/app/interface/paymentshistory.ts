@@ -26,7 +26,8 @@ export interface StudentEnrollment {
 
 
 export interface PaymentRequest {
-  id: number;
+  request_id: number;
+  payment_method_id: number;
   userId: number;
   account_holder_name: string;
   bank_account_number: string;

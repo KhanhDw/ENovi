@@ -37,12 +37,14 @@
           </button>
           <div class="flex items-center gap-2">
             <h1 class="font-semibold text-yellow-400 font-signika">
-              {{ +courseDetailAPI.rating | number : "1.1-1" }} 
+              {{ +courseDetailAPI.rating | number : "1.1-1" }}
             </h1>
             <div class="flex items-center gap-1 text-yellow-400">
               <i class="bi bi-star-fill"></i>
             </div>
-            <h1 class="text-blue-400">(1,232 lượt đánh giá)</h1>
+            <h1 class="text-blue-400">
+              ({{ SoLanDaDanhGia | number : "1.0-0" }} lượt đánh giá)
+            </h1>
             <h1 class="font-semibold">{{ totalEnroll }} học viên</h1>
           </div>
         </div>
@@ -83,9 +85,15 @@
                   {{ +courseDetailAPI.rating | number : "1.1-1" }}
                 </h1>
                 <div class="flex items-center gap-1 text-yellow-400">
-                  <i *ngFor="let star of stars" [class]="star" class="text-xl"></i>
+                  <i
+                    *ngFor="let star of stars"
+                    [class]="star"
+                    class="text-xl"
+                  ></i>
                 </div>
-                <h1 class="text-blue-400">(1,232 lượt đánh giá)</h1>
+                <h1 class="text-blue-400">
+                  ({{ SoLanDaDanhGia | number : "1.0-0" }} lượt đánh giá)
+                </h1>
                 <h1 class="font-semibold">{{ totalEnroll }} học viên</h1>
               </div>
             </div>
@@ -200,6 +208,7 @@
             <!-- button add to cart -->
             <div class="flex flex-col items-center gap-4 px-2 mt-3">
               <button
+                *ngIf="courseDetailAPI.price !== 0"
                 (click)="addCourseToCart(courseDetailAPI.id)"
                 type="button"
                 [ngClass]="
@@ -213,15 +222,31 @@
                   courseExitCart ? "Đã thêm vào giỏ hàng" : "Thêm vào giỏ hàng"
                 }}
               </button>
-              <!-- (click)="addCourseToMyLearning(courseDetailAPI.id)" -->
               <button
-              (click)="buyCourse(courseDetailAPI.id)"
+                *ngIf="courseDetailAPI.price !== 0"
+                (click)="buyCourse(courseDetailAPI.id)"
                 type="button"
-                [ngClass]="courseInMyLearning ? 'bg-green-600 hover:bg-green-400' : ''"
+                [ngClass]="
+                  courseInMyLearning ? 'bg-green-600 hover:bg-green-400' : ''
+                "
                 class="w-full py-4 font-bold text-black border-2 rounded-md border-slate-600 bg-slate-100 hover:bg-slate-200"
                 [disabled]="courseInMyLearning"
               >
                 {{ courseInMyLearning ? "Đã mua khóa học" : "Mua ngay" }}
+              </button>
+              <button
+                *ngIf="courseDetailAPI.price === 0"
+                (click)="addCourseToMyLearning(courseDetailAPI.id)"
+                type="button"
+                [ngClass]="
+                  courseInMyLearning
+                    ? 'bg-green-600 hover:bg-green-400'
+                    : 'bg-violet-800 text-white hover:bg-violet-500'
+                "
+                class="w-full py-4 font-bold text-black border-2 rounded-md border-slate-600 bg-slate-100 hover:bg-slate-200"
+                [disabled]="courseInMyLearning"
+              >
+                {{ courseInMyLearning ? "Đã nhận khóa học" : "Nhận ngay" }}
               </button>
               <p class="text-sm font-signika">
                 <!-- Hoàn tiền trong 20 ngày, Nếu không mang đến kết quả -->
@@ -495,7 +520,7 @@
                       </svg>
                       <span>{{ totalCourse }} Khoá học</span>
                     </p>
-                    <p hidden class=" items-center py-0.5 font-medium">
+                    <p hidden class="items-center py-0.5 font-medium">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         height="24px"
@@ -508,7 +533,7 @@
                           d="M160-200v-440 440-15 15Zm0 80q-33 0-56.5-23.5T80-200v-440q0-33 23.5-56.5T160-720h160v-80q0-33 23.5-56.5T400-880h160q33 0 56.5 23.5T640-800v80h160q33 0 56.5 23.5T880-640v171q-18-13-38-22.5T800-508v-132H160v440h283q3 21 9 41t15 39H160Zm240-600h160v-80H400v80ZM720-40q-83 0-141.5-58.5T520-240q0-83 58.5-141.5T720-440q83 0 141.5 58.5T920-240q0 83-58.5 141.5T720-40Zm20-208v-112h-40v128l86 86 28-28-74-74Z"
                         />
                       </svg>
-                      <span >12 năm kinh nghiệm</span>
+                      <span>12 năm kinh nghiệm</span>
                     </p>
                   </div>
                 </div>
@@ -541,93 +566,35 @@
                 </h1>
               </div>
               <h1 class="ml-4 text-2xl font-semibold text-black">
-                (20,342 lượt đánh giá)
+                ({{ SoLanDaDanhGia | number : "1.0-0" }} lượt đánh giá)
               </h1>
             </div>
             <!-- list comment -->
             <div class="grid grid-cols-2 gap-2">
               <!-- comment -->
-              <div class="max-w-lg px-6 py-4 mx-auto border rounded-lg">
+              <div
+                *ngFor="let item of listComment | slice : 0 : 4"
+                class="w-full max-w-lg px-6 py-4 mx-auto border rounded-lg border-slate-500"
+              >
                 <div class="flex items-center mb-6">
                   <img
-                    src="https://randomuser.me/api/portraits/men/97.jpg"
+                    [src]="urlBackend_img_avatar + item.avatar"
                     alt="Avatar"
                     class="w-12 h-12 mr-4 rounded-full"
                   />
                   <div>
                     <div class="text-lg font-medium text-gray-800">
-                      John Doe
+                      {{ item.username }}
                     </div>
-                    <div class="text-gray-500">2 hours ago</div>
+                    <div class="text-gray-500">
+                      {{ item.createdAt | date : "HH:mm • dd/MM/yyyy" }}
+                    </div>
                   </div>
                 </div>
-                <p class="mb-6 text-lg leading-relaxed">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  sit amet lorem nulla. Donec consequat urna a tortor sagittis
-                  lobortis.
-                </p>
-              </div>
-              <!-- comment -->
-              <div class="max-w-lg px-6 py-4 mx-auto border rounded-lg">
-                <div class="flex items-center mb-6">
-                  <img
-                    src="https://randomuser.me/api/portraits/men/97.jpg"
-                    alt="Avatar"
-                    class="w-12 h-12 mr-4 rounded-full"
-                  />
-                  <div>
-                    <div class="text-lg font-medium text-gray-800">
-                      John Doe
-                    </div>
-                    <div class="text-gray-500">2 hours ago</div>
-                  </div>
-                </div>
-                <p class="mb-6 text-lg leading-relaxed">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  sit amet lorem nulla. Donec consequat urna a tortor sagittis
-                  lobortis.
-                </p>
-              </div>
-              <!-- comment -->
-              <div class="max-w-lg px-6 py-4 mx-auto border rounded-lg">
-                <div class="flex items-center mb-6">
-                  <img
-                    src="https://randomuser.me/api/portraits/men/97.jpg"
-                    alt="Avatar"
-                    class="w-12 h-12 mr-4 rounded-full"
-                  />
-                  <div>
-                    <div class="text-lg font-medium text-gray-800">
-                      John Doe
-                    </div>
-                    <div class="text-gray-500">2 hours ago</div>
-                  </div>
-                </div>
-                <p class="mb-6 text-lg leading-relaxed">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  sit amet lorem nulla. Donec consequat urna a tortor sagittis
-                  lobortis.
-                </p>
-              </div>
-              <!-- comment -->
-              <div class="max-w-lg px-6 py-4 mx-auto border rounded-lg">
-                <div class="flex items-center mb-6">
-                  <img
-                    src="https://randomuser.me/api/portraits/men/97.jpg"
-                    alt="Avatar"
-                    class="w-12 h-12 mr-4 rounded-full"
-                  />
-                  <div>
-                    <div class="text-lg font-medium text-gray-800">
-                      John Doe
-                    </div>
-                    <div class="text-gray-500">2 hours ago</div>
-                  </div>
-                </div>
-                <p class="mb-6 text-lg leading-relaxed">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  sit amet lorem nulla. Donec consequat urna a tortor sagittis
-                  lobortis.
+                <p
+                  class="mb-3 text-lg font-semibold leading-relaxed line-clamp-2"
+                >
+                  {{ item.content }}
                 </p>
               </div>
             </div>
@@ -641,7 +608,7 @@
             </button>
           </div>
           <!-- report -->
-          <div hidden class="items-center justify-center w-full my-10 ">
+          <div hidden class="items-center justify-center w-full my-10">
             <button
               type="button"
               class="w-4/5 px-3 py-2 text-xl font-bold duration-300 bg-gray-200 border-2 border-blue-800 rounded-md hover:bg-slate-700 hover:text-red-500"
@@ -700,6 +667,7 @@
                   <!-- video preview  -->
                   <div class="flex w-full h-full mt-5">
                     <iframe
+                      hidden
                       *ngIf="showModal"
                       width="100%"
                       height="315"
@@ -710,6 +678,59 @@
                       referrerpolicy="strict-origin-when-cross-origin"
                       allowfullscreen
                     ></iframe>
+                    <h1 *ngIf="!checkVideoIntro" class="text-white">
+                      video chưa sẳn sàng!
+                    </h1>
+
+                    <vg-player *ngIf="checkVideoIntro">
+                      <vg-overlay-play class="bg-slate-50"></vg-overlay-play>
+                      <vg-buffering></vg-buffering>
+
+                      <vg-scrub-bar>
+                        <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+                        <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+                      </vg-scrub-bar>
+
+                      <vg-controls>
+                        <vg-play-pause></vg-play-pause>
+                        <vg-playback-button></vg-playback-button>
+
+                        <vg-time-display
+                          vgProperty="current"
+                          vgFormat="mm:ss"
+                        ></vg-time-display>
+
+                        <vg-scrub-bar
+                          style="pointer-events: none"
+                        ></vg-scrub-bar>
+
+                        <vg-time-display
+                          vgProperty="left"
+                          vgFormat="mm:ss"
+                        ></vg-time-display>
+                        <vg-time-display
+                          vgProperty="total"
+                          vgFormat="mm:ss"
+                        ></vg-time-display>
+
+                        <vg-track-selector></vg-track-selector>
+                        <vg-mute></vg-mute>
+                        <vg-volume></vg-volume>
+
+                        <vg-fullscreen></vg-fullscreen>
+                      </vg-controls>
+
+                      <video
+                        [vgMedia]="$any(media)"
+                        #media
+                        id="singleVideo"
+                        preload="auto"
+                        crossorigin
+                        *ngIf="videoUrl$ | async as videoUrl"
+                      >
+                        <source [src]="videoUrl" type="video/mp4" />
+                      </video>
+                    </vg-player>
                   </div>
                   <!-- Code thêm chức năng tại đây -->
                 </div>
@@ -760,7 +781,8 @@
                       <i class="text-yellow-400 bi bi-star-fill"></i
                       ><span>{{ courseDetailAPI.rating }}</span
                       ><span class="pl-2 text-sm font-semibold text-orange-400"
-                        >[1,234 <i class="bi bi-people-fill"></i>]</span
+                        >[{{ SoLanDaDanhGia | number : "1.0-0" }}
+                        <i class="bi bi-people-fill"></i>]</span
                       >
                     </p>
                     <h1 class="text-2xl">Đánh giá và mình luận</h1>
@@ -790,12 +812,12 @@
                         >
                           <div
                             class="h-3 rounded-sm bg-slate-700"
-                            style="width: 70%"
+                            [ngStyle]="{ width: sao5 + '%' }"
                           ></div>
                         </div>
                         <span
                           class="text-sm font-medium text-gray-900 dark:text-gray-900"
-                          >70%</span
+                          >{{ sao5 }}%</span
                         >
                       </div>
                       <div class="flex items-center w-full mt-4">
@@ -809,12 +831,12 @@
                         >
                           <div
                             class="h-3 rounded-sm bg-slate-700"
-                            style="width: 17%"
+                            [ngStyle]="{ width: sao4 + '%' }"
                           ></div>
                         </div>
                         <span
                           class="text-sm font-medium text-gray-900 dark:text-gray-900"
-                          >17%</span
+                          >{{ sao4 }}%</span
                         >
                       </div>
                       <div class="flex items-center w-full mt-4">
@@ -828,12 +850,12 @@
                         >
                           <div
                             class="h-3 rounded-sm bg-slate-700"
-                            style="width: 8%"
+                            [ngStyle]="{ width: sao3 + '%' }"
                           ></div>
                         </div>
                         <span
                           class="text-sm font-medium text-gray-900 dark:text-gray-900"
-                          >8%</span
+                          >{{ sao3 }}%</span
                         >
                       </div>
                       <div class="flex items-center w-full mt-4">
@@ -847,12 +869,12 @@
                         >
                           <div
                             class="h-3 rounded-sm bg-slate-700"
-                            style="width: 4%"
+                            [ngStyle]="{ width: sao2 + '%' }"
                           ></div>
                         </div>
                         <span
                           class="text-sm font-medium text-gray-900 dark:text-gray-900"
-                          >4%</span
+                          >{{ sao2 }}%</span
                         >
                       </div>
                       <div class="flex items-center w-full mt-4">
@@ -866,18 +888,19 @@
                         >
                           <div
                             class="h-3 rounded-sm bg-slate-700"
-                            style="width: 1%"
+                            [ngStyle]="{ width: sao1 + '%' }"
                           ></div>
                         </div>
                         <span
                           class="text-sm font-medium text-gray-900 dark:text-gray-900"
-                          >1%</span
+                          >{{ sao1 }}%</span
                         >
                       </div>
                     </div>
                     <!-- search comment -->
                     <div
-                      class="flex rounded-md border-2 w-4/5 border-gray-500 overflow-hidden max-w-md mt-5 font-[sans-serif]"
+                      hidden
+                      class="rounded-md border-2 w-4/5 border-gray-500 overflow-hidden max-w-md mt-5 font-[sans-serif]"
                     >
                       <input
                         disabled
@@ -902,25 +925,100 @@
                       </button>
                     </div>
                   </div>
-                  <!-- comment -->
+                  <!-- comment zone -->
                   <div
                     class="flex flex-col items-center w-2/3 h-auto overflow-y-scroll"
                   >
+                    <!-- ------------ -->
+                    <!-- comment input -->
+                    <!-- ------------ -->
+
+                    <section
+                      class="w-full py-2 antialiased border-2 border-gray-500 rounded-md bg-stone-100"
+                    >
+                      <div class="max-w-2xl px-4 mx-auto">
+                        <div class="flex items-center justify-between mb-6">
+                          <h2 class="text-lg font-bold text-gray-900">
+                            Đăng bình luận
+                          </h2>
+                          <div class="flex items-center justify-end gap-2">
+                            <h1 class="font-semibold">Đánh giá:</h1>
+                            <div class="flex gap-2">
+                              <button
+                                *ngFor="
+                                  let rating of buttonsRating;
+                                  let i = index
+                                "
+                                type="button"
+                                [ngClass]="{
+                                  'bg-yellow-400 text-black':
+                                    rating <= (selectedRating ?? 0) ||
+                                    (hoveredRating &&
+                                      rating <= (hoveredRating ?? 0)),
+                                  'bg-gray-200 text-gray-700':
+                                    rating > (selectedRating ?? 0) &&
+                                    (!hoveredRating || rating > hoveredRating),
+                                  'hover:bg-yellow-300': true
+                                }"
+                                (click)="setRating(rating)"
+                                (mouseover)="setHover(rating)"
+                                (mouseout)="clearHover()"
+                                class="px-2 py-1 transition-all duration-300 rounded"
+                              >
+                                <i class="cursor-pointer bi bi-star-fill"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <form class="mb-3">
+                          <div
+                            class="px-4 py-2 mb-4 bg-white border border-gray-200 rounded-lg rounded-t-lg"
+                          >
+                            <label for="comment" class="sr-only"
+                              >Viết bình luận của bạn</label
+                            >
+                            <textarea
+                              id="comment"
+                              name="comment"
+                              rows="6"
+                              [(ngModel)]="contentComment"
+                              class="w-full px-0 text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none"
+                              placeholder="viết bình luận..."
+                              required
+                            ></textarea>
+                          </div>
+                          <button
+                            (click)="postComment()"
+                            type="submit"
+                            class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-500 rounded-lg focus:ring-4 focus:bg-blue-500 hover:bg-violet-600"
+                          >
+                            Đăng bình luận
+                          </button>
+                        </form>
+                      </div>
+                    </section>
+                    <!-- ---------- -->
                     <!-- comment section -->
+                    <!-- ---------- -->
                     <div
-                      class="w-full flex-col justify-start items-start gap-3.5 flex border-b-2 border-gray-500"
+                      [ngClass]="{
+                        hidden: item.rating === null,
+                        'flex-col': item.rating !== null
+                      }"
+                      *ngFor="let item of listComment"
+                      class="w-full justify-start items-start gap-3.5 border-b-2 border-gray-500"
                     >
                       <div
-                        class="inline-flex items-center justify-between w-full pt-2"
+                        class="flex items-center justify-between w-full pt-2"
                       >
                         <div class="justify-start items-center gap-2.5 flex">
                           <div
                             class="w-10 h-10 bg-stone-300 rounded-full justify-start items-start gap-2.5 flex"
                           >
                             <img
-                              class="object-cover rounded-full"
-                              src="https://pagedone.io/asset/uploads/1710225753.png"
-                              alt="John smith image"
+                              class="object-cover w-full h-full rounded-full"
+                              [src]="urlBackend_img_avatar + item.avatar"
+                              [alt]="item.username"
                             />
                           </div>
                           <div
@@ -929,19 +1027,26 @@
                             <h5
                               class="text-sm font-semibold leading-snug text-gray-900"
                             >
-                              John smith
+                              {{ item.username }}
                             </h5>
                             <h6
                               class="text-xs font-normal leading-5 text-gray-500"
                             >
-                              5 Day ago
+                              {{ item.createdAt | date : "dd/MM/yyyy" }}
                             </h6>
                           </div>
                         </div>
-                        <div class="flex items-center justify-end group">
+                        <div class="flex items-center justify-end">
+                          <span
+                            class="w-32 p-2 mt-2 text-sm text-black transition-opacity rounded text-end"
+                          >
+                            {{ item.rating }}
+                            <i class="text-yellow-500 bi bi-star-fill"></i>
+                          </span>
                           <button
+                            hidden
                             type="button"
-                            class="relative flex items-center justify-center px-1 py-1 transition-all duration-700 ease-in-out cursor-pointer group hover:bg-gray-200"
+                            class="relative items-center justify-center px-1 py-1 transition-all duration-700 ease-in-out cursor-pointer group hover:bg-gray-200"
                           >
                             <i
                               class="text-gray-500 cursor-pointer bi bi-three-dots-vertical"
@@ -957,205 +1062,10 @@
                         </div>
                       </div>
                       <p
+                        *ngIf="item.rating !== null"
                         class="pb-3 text-sm font-normal leading-snug text-gray-800"
                       >
-                        Mauris luctus habitasse turpis elementum vitae in. Ut
-                        habitasse orci sed aliquam bibendum. Sem in nisl
-                        vestibulum rhoncus sed diam amet nulla. Netus feugiat
-                        nunc vulputate eros pellentesque. A at augue elementum
-                        aliquet in aliquet. Vitae amet quisque massa egestas
-                        amet. Vitae id ipsum lacus tellus facilisis sit. Nunc ut
-                        pellentesque lacus massa arcu neque mi ultrices
-                        convallis.
-                      </p>
-                    </div>
-                    <!-- comment section -->
-                    <div
-                      class="w-full flex-col justify-start items-start gap-3.5 flex border-b-2 border-gray-500"
-                    >
-                      <div
-                        class="inline-flex items-center justify-between w-full pt-2"
-                      >
-                        <div class="justify-start items-center gap-2.5 flex">
-                          <div
-                            class="w-10 h-10 bg-stone-300 rounded-full justify-start items-start gap-2.5 flex"
-                          >
-                            <img
-                              class="object-cover rounded-full"
-                              src="https://pagedone.io/asset/uploads/1710225753.png"
-                              alt="John smith image"
-                            />
-                          </div>
-                          <div
-                            class="inline-flex flex-col items-start justify-start gap-1"
-                          >
-                            <h5
-                              class="text-sm font-semibold leading-snug text-gray-900"
-                            >
-                              John smith
-                            </h5>
-                            <h6
-                              class="text-xs font-normal leading-5 text-gray-500"
-                            >
-                              5 Day ago
-                            </h6>
-                          </div>
-                        </div>
-                        <div class="flex items-center justify-end group">
-                          <button
-                            type="button"
-                            class="relative flex items-center justify-center px-1 py-1 transition-all duration-700 ease-in-out cursor-pointer group hover:bg-gray-200"
-                          >
-                            <i
-                              class="text-gray-500 cursor-pointer bi bi-three-dots-vertical"
-                            ></i>
-                            <span
-                              class="absolute w-32 p-2 mt-2 text-sm text-white transition-opacity bg-gray-700 rounded opacity-0 right-5 group-hover:opacity-100"
-                            >
-                              <button type="button" (click)="reportComment()">
-                                Báo cáo bình luận
-                              </button>
-                            </span>
-                          </button>
-                        </div>
-                      </div>
-                      <p
-                        class="pb-3 text-sm font-normal leading-snug text-gray-800"
-                      >
-                        Mauris luctus habitasse turpis elementum vitae in. Ut
-                        habitasse orci sed aliquam bibendum. Sem in nisl
-                        vestibulum rhoncus sed diam amet nulla. Netus feugiat
-                        nunc vulputate eros pellentesque. A at augue elementum
-                        aliquet in aliquet. Vitae amet quisque massa egestas
-                        amet. Vitae id ipsum lacus tellus facilisis sit. Nunc ut
-                        pellentesque lacus massa arcu neque mi ultrices
-                        convallis.
-                      </p>
-                    </div>
-                    <!-- comment section -->
-                    <div
-                      class="w-full flex-col justify-start items-start gap-3.5 flex border-b-2 border-gray-500"
-                    >
-                      <div
-                        class="inline-flex items-center justify-between w-full pt-2"
-                      >
-                        <div class="justify-start items-center gap-2.5 flex">
-                          <div
-                            class="w-10 h-10 bg-stone-300 rounded-full justify-start items-start gap-2.5 flex"
-                          >
-                            <img
-                              class="object-cover rounded-full"
-                              src="https://pagedone.io/asset/uploads/1710225753.png"
-                              alt="John smith image"
-                            />
-                          </div>
-                          <div
-                            class="inline-flex flex-col items-start justify-start gap-1"
-                          >
-                            <h5
-                              class="text-sm font-semibold leading-snug text-gray-900"
-                            >
-                              John smith
-                            </h5>
-                            <h6
-                              class="text-xs font-normal leading-5 text-gray-500"
-                            >
-                              5 Day ago
-                            </h6>
-                          </div>
-                        </div>
-                        <div class="flex items-center justify-end group">
-                          <button
-                            type="button"
-                            class="relative flex items-center justify-center px-1 py-1 transition-all duration-700 ease-in-out cursor-pointer group hover:bg-gray-200"
-                          >
-                            <i
-                              class="text-gray-500 cursor-pointer bi bi-three-dots-vertical"
-                            ></i>
-                            <span
-                              class="absolute w-32 p-2 mt-2 text-sm text-white transition-opacity bg-gray-700 rounded opacity-0 right-5 group-hover:opacity-100"
-                            >
-                              <button type="button" (click)="reportComment()">
-                                Báo cáo bình luận
-                              </button>
-                            </span>
-                          </button>
-                        </div>
-                      </div>
-                      <p
-                        class="pb-3 text-sm font-normal leading-snug text-gray-800"
-                      >
-                        Mauris luctus habitasse turpis elementum vitae in. Ut
-                        habitasse orci sed aliquam bibendum. Sem in nisl
-                        vestibulum rhoncus sed diam amet nulla. Netus feugiat
-                        nunc vulputate eros pellentesque. A at augue elementum
-                        aliquet in aliquet. Vitae amet quisque massa egestas
-                        amet. Vitae id ipsum lacus tellus facilisis sit. Nunc ut
-                        pellentesque lacus massa arcu neque mi ultrices
-                        convallis.
-                      </p>
-                    </div>
-                    <!-- comment section -->
-                    <div
-                      class="w-full flex-col justify-start items-start gap-3.5 flex border-b-2 border-gray-500"
-                    >
-                      <div
-                        class="inline-flex items-center justify-between w-full pt-2"
-                      >
-                        <div class="justify-start items-center gap-2.5 flex">
-                          <div
-                            class="w-10 h-10 bg-stone-300 rounded-full justify-start items-start gap-2.5 flex"
-                          >
-                            <img
-                              class="object-cover rounded-full"
-                              src="https://pagedone.io/asset/uploads/1710225753.png"
-                              alt="John smith image"
-                            />
-                          </div>
-                          <div
-                            class="inline-flex flex-col items-start justify-start gap-1"
-                          >
-                            <h5
-                              class="text-sm font-semibold leading-snug text-gray-900"
-                            >
-                              John smith
-                            </h5>
-                            <h6
-                              class="text-xs font-normal leading-5 text-gray-500"
-                            >
-                              5 Day ago
-                            </h6>
-                          </div>
-                        </div>
-                        <div class="flex items-center justify-end group">
-                          <button
-                            type="button"
-                            class="relative flex items-center justify-center px-1 py-1 transition-all duration-700 ease-in-out cursor-pointer group hover:bg-gray-200"
-                          >
-                            <i
-                              class="text-gray-500 cursor-pointer bi bi-three-dots-vertical"
-                            ></i>
-                            <span
-                              class="absolute w-32 p-2 mt-2 text-sm text-white transition-opacity bg-gray-700 rounded opacity-0 right-5 group-hover:opacity-100"
-                            >
-                              <button type="button" (click)="reportComment()">
-                                Báo cáo bình luận
-                              </button>
-                            </span>
-                          </button>
-                        </div>
-                      </div>
-                      <p
-                        class="pb-3 text-sm font-normal leading-snug text-gray-800"
-                      >
-                        Mauris luctus habitasse turpis elementum vitae in. Ut
-                        habitasse orci sed aliquam bibendum. Sem in nisl
-                        vestibulum rhoncus sed diam amet nulla. Netus feugiat
-                        nunc vulputate eros pellentesque. A at augue elementum
-                        aliquet in aliquet. Vitae amet quisque massa egestas
-                        amet. Vitae id ipsum lacus tellus facilisis sit. Nunc ut
-                        pellentesque lacus massa arcu neque mi ultrices
-                        convallis.
+                        {{ item.content }}
                       </p>
                     </div>
 

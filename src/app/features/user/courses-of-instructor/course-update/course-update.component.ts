@@ -1,5 +1,6 @@
 import { CourseUpdate } from './../../../../interface/course';
 import { QuillModules } from 'ngx-quill';
+import { BehaviorSubject } from 'rxjs';
 
 import { ApiService } from '@app/services/api.service';
 import {
@@ -11,6 +12,9 @@ import {
   ViewChild,
   ElementRef,
   ChangeDetectorRef,
+  Renderer2,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { CookieStorageService } from '@app/services/cookie_storage/cookie-storage.service';
@@ -21,7 +25,8 @@ import { error } from 'node:console';
 import { SectionUpdateCourse } from '@app/interface/section';
 import { LessonUpdate } from '@app/interface/lecture';
 import { UploadVideoService } from '@app/services/upload_video/upload-video.service';
-import e from 'express';
+
+
 
 @Component({
   selector: 'app-course-update',
@@ -58,6 +63,8 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
   formattedPrice: string = ''; // Hiển thị số có dấu chấm
   @ViewChild('fileInputImg') fileInput!: ElementRef<HTMLInputElement>;
   @ViewChild('fileInputVideo') fileVideoInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('fileInputIntro_video')
+  fileIntroVideoInput!: ElementRef<HTMLInputElement>;
   imageUrl: string | ArrayBuffer | null = null;
   imageName: string | null = null;
   errorMessage: string = '';
@@ -142,6 +149,20 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
 
   languageList = [{ language_name: 'Tiếng Việt', language_code: 'Việt' }];
 
+  @ViewChild('player', { static: false }) playerElement!: ElementRef;
+  @ViewChild('media') videoElement!: ElementRef<HTMLVideoElement>;
+  introVideo: string = 'intro11_1.mp4';
+  videoUrl$ = new BehaviorSubject<string | null>(null);
+  videoUrl = `https://localhost:3000/stream/video?namevideo=${this.introVideo}`;
+
+  private isReloadingBySystem = false;
+  checkVideoIntro: boolean = false;
+  errorMessageIntroVideo:string ='';
+  introvideoUrl:string | null = null;
+  introVideoName:string  = '';
+  submitUploadIntroVideo:boolean = false;
+  fileVideoIntroRaw: any;
+
   constructor(
     private cookieStorageService: CookieStorageService,
     private apiService: ApiService,
@@ -164,12 +185,155 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
       this.onLanguageChange(this.languageList[0].language_code);
       this.onLevelChange(this.levelList[0].value);
     }
-
     // Load dữ liệu từ cookie
     this.loadCategoriesFromCookie();
-
     console.log('Dữ liệu đã lưu vào getCategoriesALL:', this.getCategoriesALL);
+
+    // Kiểm tra nếu reload được kích hoạt bởi hệ thống
+    if (sessionStorage.getItem('reloadBySystem') === 'true') {
+      sessionStorage.removeItem('reloadBySystem'); // Xóa cờ để tránh reload nhiều lần
+      this.isReloadingBySystem = true; // Đánh dấu rằng reload này hợp lệ
+    }
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['introVideo'] && changes['introVideo'].currentValue) {
+      console.log('Dữ liệu cập nhật: thay đổi introVideo', this.introVideo);
+      this.videoUrl$.next(
+        `https://localhost:3000/stream/video?namevideo=${this.introVideo}`
+      );
+      this.introVideo = changes['introVideo'].currentValue;
+      localStorage.setItem('introVideo', JSON.stringify(this.introVideo));
+      this.reloadPageFromCode();
+    }
+  }
+
+  onPlayerReady(player: any) {
+    if (player) {
+      this.checkVideoIntro = false;
+      return;
+    } else {
+      // console.log('san sang hahahah1111');
+      this.videoUrl$.next(
+        `https://localhost:3000/stream/video?namevideo=${this.introVideo}`
+      );
+      this.checkVideoIntro = true;
+    }
+  }
+
+  reloadPageFromCode() {
+    sessionStorage.setItem('reloadBySystem', 'true'); // Đánh dấu rằng hệ thống yêu cầu reload
+    window.location.reload();
+  }
+
+  triggerFileIntroVideo() {
+    this.fileIntroVideoInput.nativeElement.click();
+  }
+
+
+  onFileIntro_videoSelected(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    const file = inputElement.files?.[0];
+
+    console.log(file);
+
+
+    // Kiểm tra nếu không có file
+    if (!file) {
+      this.setErrorIntroVideo('Vui lòng chọn một tập tin!');
+      return;
+    }
+
+    // Kiểm tra định dạng file (chỉ chấp nhận PNG, JPG, JPEG)
+    if (!this.isValidFileTypeVideo(file.type)) {
+      this.setErrorIntroVideo('Chỉ chấp nhận video mp4!');
+      return;
+    }
+
+    // Xóa thông báo lỗi nếu file hợp lệ
+    this.clearErrorIntroVideo();
+
+    // Lấy tên file
+    console.log(file?.name);
+    this.fileVideoIntroRaw = file;
+
+    this.introVideoName = file?.name;
+    console.log('this.introVideoName',this.introVideoName);
+    this.cdr.detectChanges();
+  }
+
+   // Hàm xóa lỗi
+   private clearErrorIntroVideo(): void {
+    this.errorMessageIntroVideo = '';
+  }
+ // Hàm thiết lập lỗi
+ private setErrorIntroVideo(message: string): void {
+  this.errorMessageIntroVideo = message;
+  this.introvideoUrl = null;
+}
+
+  submitUploadVideoIntro() {
+    if (confirm('Bạn có chắc chắn muốn tải lên video giới thiệu khóa học? \n 10 ngày sau bạn mới có thê cập nhật được video mới!')) {
+      if (this.fileVideoIntroRaw && this.introVideoName) {
+        const idCourseString = this.sharedDataService.getIdCourse();
+        const idCourse = idCourseString ? idCourseString : '';
+
+        this.apiService.uploadVideoService
+          .uploadIntroVideo(this.fileVideoIntroRaw, idCourse)
+          .subscribe({
+            next: (res) => {
+              if (res.success) {
+                this.introvideoUrl = res.namevideoIntro;
+                this.submitUploadIntroVideo = true;
+                this.cookieStorageService.setCookie(
+                  'introVideoUpload',
+                  'true',
+                  10 // Cookie sẽ tồn tại trong 10 ngày
+                );
+
+                this.updateIntroVideoForCourse();
+
+                alert('Tải lên thành công! Video giới thiệu đã được cập nhật.');
+              }
+            },
+            error: (err) => {
+              console.error('Lỗi khi tải lên video:', err);
+              alert('Tải lên thất bại! Vui lòng thử lại.');
+            },
+          });
+      } else {
+        alert('Vui lòng chọn một video trước khi tải lên.');
+      }
+    }
+  }
+
+  updateIntroVideoForCourse() {
+    const idCourseString = this.sharedDataService.getIdCourse();
+    const idCourse = idCourseString ? parseInt(idCourseString) : -1;
+
+    if (idCourse !== -1 && this.introvideoUrl) {
+      this.apiService.courseInstructorService
+        .updateIntroVideo(idCourse, this.introvideoUrl)
+        .subscribe({
+          next: (res) => {
+            if (res.success) {
+              alert('Cập nhật video giới thiệu thành công!');
+              alert('Để xem video bạn cần lưu cập nhật và rời khỏi trang này và truy cập lại!');
+            }
+          },
+          error: (err) => {
+            console.error('Lỗi khi cập nhật video giới thiệu:', err);
+            alert('Cập nhật video giới thiệu thất bại!');
+          },
+        });
+    } else {
+      alert('Vui lòng chọn video giới thiệu trước khi cập nhật.');
+    }
+  }
+
+// -===========================================
+
+  
 
   // Load dữ liệu từ cookie
   private loadCategoriesFromCookie(): void {
@@ -252,6 +416,10 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
   // Hàm kiểm tra định dạng file
   private isValidFileType(fileType: string): boolean {
     const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+    return allowedTypes.includes(fileType);
+  }
+  private isValidFileTypeVideo(fileType: string): boolean {
+    const allowedTypes = ['video/mp4'];
     return allowedTypes.includes(fileType);
   }
 
@@ -527,9 +695,17 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
                 );
               }
 
+              /* intro video giới thiệu khóa học */
+              this.introVideo = this.courseFetch[0].intro_video;
+              console.warn(this.introVideo);
+              this.videoUrl$.next(
+                `https://localhost:3000/stream/video?namevideo=${this.introVideo}`
+              );
+              this.onPlayerReady(this.playerElement);
+              /* --------------------- */
+
               if (this.courseFetch.length > 0) {
                 this.SaveCategories = [];
-
                 const categoryMap = new Map();
 
                 this.courseFetch.forEach((course) => {
@@ -832,10 +1008,13 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
 
   @HostListener('window:beforeunload', ['$event'])
   onBeforeUnload(event: BeforeUnloadEvent) {
-    const confirmationMessage =
-      'Bạn có chắc chắn muốn tải lại trang không? Bạn sẽ bị chuyển hướng!';
-    event.preventDefault();
-    event.returnValue = confirmationMessage; // Hiển thị cảnh báo mặc định của trình duyệt
+    if (!this.isReloadingBySystem) {
+      event.preventDefault();
+      const confirmationMessage =
+        'Bạn có chắc chắn muốn tải lại trang không? Bạn sẽ bị chuyển hướng!';
+      event.preventDefault();
+      event.returnValue = confirmationMessage; // Hiển thị cảnh báo mặc định của trình duyệt
+    }
 
     // Đánh dấu trạng thái reload trong sessionStorage
     sessionStorage.setItem('redirectAfterReload', 'true');

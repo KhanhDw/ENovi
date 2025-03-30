@@ -119,4 +119,35 @@ export class UserServiceService {
       })
     );
   }
+
+
+  getTotalUsers(): Observable<number> {
+    return this.http.get<{ success: boolean; totalUsers: number }>(`${this.apiUrl}/total-users`).pipe(
+      map(response => {
+        if (response.success) {
+          return response.totalUsers;
+        }
+        throw new Error('Unable to fetch total users');
+      }),
+      catchError(error => {
+        console.error('Error fetching total users:', error);
+        return of(0);
+      })
+    );
+  }
+
+  getTotalInstructors(): Observable<number> {
+    return this.http.get<{ success: boolean; totalInstructors: number }>(`${this.apiUrl}/total-instructors`).pipe(
+      map(response => {
+        if (response.success) {
+          return response.totalInstructors;
+        }
+        throw new Error('Unable to fetch total instructors');
+      }),
+      catchError(error => {
+        console.error('Error fetching total instructors:', error);
+        return of(0);
+      })
+    );
+  }
 }

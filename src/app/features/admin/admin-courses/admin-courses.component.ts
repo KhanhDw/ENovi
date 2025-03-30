@@ -11,6 +11,7 @@ import { CourseAdmin } from './../../../interface/course';
 import { ApiService } from '@app/services/api.service';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-courses',
@@ -19,6 +20,7 @@ import { HttpClient } from '@angular/common/http';
   standalone: false,
 })
 export class AdminCoursesComponent implements OnInit {
+  urlBackend_img_banner_course: string = '';
   //  truyền data đến component con
   listCourseAdmin: CourseAdmin[] | null = null;
 
@@ -43,10 +45,17 @@ export class AdminCoursesComponent implements OnInit {
 
   listCourseAdmin$ = new BehaviorSubject<CourseAdmin[]>([]);
 
-  search:string = '';
-  checksearch:boolean  = false
+  search: string = '';
+  checksearch: boolean = false;
 
-  constructor(private apiService: ApiService, private http: HttpClient) {}
+  constructor(
+    private apiService: ApiService,
+    private http: HttpClient,
+    private router: Router
+  ) {
+    this.urlBackend_img_banner_course =
+      this.apiService.API_URL + '/uploads/img/avartaUser/';
+  }
   ngOnInit() {
     this.getAllCourse();
   }
@@ -88,7 +97,7 @@ export class AdminCoursesComponent implements OnInit {
     const validCourse = course as CourseAdmin; // Ép kiểu về Course
     console.log('Received in Parent:', validCourse);
     console.log(course.instructorId);
-    this.getNameInstructor(course.instructorId)
+    this.getNameInstructor(course.instructorId);
     this.CourseDetailRecive = {};
     this.CourseDetailRecive = course;
     this.showDetailInfo = true;
@@ -118,21 +127,22 @@ export class AdminCoursesComponent implements OnInit {
     });
   }
 
-  getNameInstructor(instructorId:number){
-    this.apiService.adminCourseService.getNameInstructor(instructorId).subscribe({
-      next: (res) => {
-        if (res.success) {
-          console.log(res.user[0].username);
-          this.CourseDetailRecive.instructorName = res.user[0].username;
-          this.CourseDetailRecive.img = res.user[0].img;
-        }
-      },
-      error: (error) => {
-        console.warn('admin course http reponse');
-      },
-    });
+  getNameInstructor(instructorId: number) {
+    this.apiService.adminCourseService
+      .getNameInstructor(instructorId)
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            console.log(res.user[0].username);
+            this.CourseDetailRecive.instructorName = res.user[0].username;
+            this.CourseDetailRecive.img = res.user[0].img;
+          }
+        },
+        error: (error) => {
+          console.warn('admin course http reponse');
+        },
+      });
   }
-
 
   onSearch() {
     this.checksearch = true;
@@ -149,10 +159,19 @@ export class AdminCoursesComponent implements OnInit {
     });
   }
 
-  huySearch(){
-    if (this.search !== '' && this.checksearch === true){
-        this.getAllCourse();
-        this.search = '';
+  huySearch() {
+    if (this.search !== '' && this.checksearch === true) {
+      this.getAllCourse();
+      this.search = '';
     }
+  }
+
+  calculateProfit(revenue: number): number {
+    const profit = revenue * 0.1;
+    return profit;
+  }
+
+  goToCourseDetail(id: number, title: string) {
+    this.router.navigate(['/course', id, encodeURIComponent(title)]);
   }
 }

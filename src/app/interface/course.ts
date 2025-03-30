@@ -8,20 +8,18 @@ export interface Course {
 }
 
 export interface CourseAdmin {
-  id: number;
-  title: string;
-  img:string;
-  price: number;
-  level: string;
-  instructorId: number;
-  status: string;
-  createdAt: Date;
-  lecture: number;
-  enrollments: number;
-  revenue:number;
-  commission:number;
-  instructorName:string;
-  rating: number;
+  course_id: number;           // c.id AS course_id
+  course_title: string;        // c.title AS course_title
+  price: number;              // c.price
+  level: 'beginner' | 'intermediate' | 'advanced' | 'all'; // c.level
+  instructorId: number;        // c.instructorId
+  instructorName: string; // u.username AS instructor_username
+  rating: number;             // c.rating
+  img: string;                // c.img
+  total_enrollments: number;  // COUNT(e.userId) AS total_enrollments
+  createdAt: Date;  
+  revenue: number;   
+  instructorAvatar:string         // SUM(e.price) AS revenue
 }
 
 
@@ -99,6 +97,7 @@ export interface CourseUpdate {
   description:string;
   section_name:string;
   sectionOrder: number;
+  intro_video:string;
 }
 
 

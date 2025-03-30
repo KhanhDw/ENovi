@@ -82,8 +82,42 @@ export class CourseComponent
         second: '2-digit',
       })
       .replace(/[\/\s,:]/g, ''),
+    listCourseBuy: [-1],
   };
   listCourseBuy: number[] = [];
+
+  SoLanDaDanhGia: number = 0;
+  listComment: {
+    id: number;
+    userId: number;
+    courseId: number;
+    rating: number;
+    content: string;
+    createdAt: Date;
+    avatar: string;
+    username: string;
+  }[] = [];
+
+  sao1: number = 0;
+  sao2: number = 0;
+  sao3: number = 0;
+  sao4: number = 0;
+  sao5: number = 0;
+
+  contentComment: string = '';
+
+  buttonsRating: number[] = [1, 2, 3, 4, 5];
+  selectedRating: number | null = null; // Rating được chọn
+  hoveredRating: number | null = null; // Rating đang hover
+
+  checkVideoIntro: boolean = false;
+  introVideo: string = '';
+  videoUrl$ = new BehaviorSubject<string | null>(null);
+  videoUrl = `https://localhost:3000/stream/video?namevideo=${this.introVideo}`;
+  @ViewChild('player', { static: false }) playerElement!: ElementRef;
+  @ViewChild('media') videoElement!: ElementRef<HTMLVideoElement>;
+
+
 
   constructor(
     private elementRef: ElementRef,
@@ -102,11 +136,10 @@ export class CourseComponent
 
   ngOnInit() {
     this.courseDetailFetch();
-    // Subscribe to avatar changes
-    // this.avatarUrl$.subscribe(url => {
-    //   this.instructorAvatar = url;
-    //   this.cdRef.detectChanges();
-    // });
+    this.fetchTotalRatings(this.courseId);
+    this.fetchComments(this.courseId);
+    this.getRatingsBreakdown(this.courseId);
+   
   }
 
   ngOnDestroy() {
@@ -155,12 +188,21 @@ export class CourseComponent
                 this.instructorName = res.course[0].instructorName;
                 this.totalCourse = res.totalCourses;
                 this.instructorBio = res.course[0].instructorBiography;
+
+                this.introVideo = res.course[0].intro_video;
+                console.log('this.introVideo', this.introVideo);
+                this.videoUrl$.next(
+                  `https://localhost:3000/stream/video?namevideo=${this.introVideo}`
+                );
                 // Cập nhật avatar thông qua Subject
                 this.updateAvatar(res.course[0].instructorAvatar);
 
                 this.getSectionFetch(Number(rawId));
                 this.renderStars();
                 this.getLanguages();
+
+                this.onPlayerReady(this.playerElement);
+
                 this.cdRef.detectChanges();
               } else {
                 console.warn('Không có dữ liệu course');
@@ -175,6 +217,19 @@ export class CourseComponent
       if (this.courseId !== -1) {
         this.checkCourseInMyLearning(this.courseId);
       }
+    }
+  }
+
+
+  onPlayerReady(player: any) {
+    if (player) {
+      this.checkVideoIntro = false;
+      return;
+    } else {
+      this.videoUrl$.next(
+        `https://localhost:3000/stream/video?namevideo=${this.introVideo}`
+      );
+      this.checkVideoIntro = true;
     }
   }
 
@@ -361,6 +416,14 @@ export class CourseComponent
     if (changes['rating']) {
       this.renderStars();
       this.cdRef.detectChanges();
+    }
+
+    if (changes['introVideo'] && changes['introVideo'].currentValue) {
+      console.log('Dữ liệu cập nhật: thay đổi introVideo', this.introVideo);
+      this.videoUrl$.next(
+        `https://localhost:3000/stream/video?namevideo=${this.introVideo}`
+      );
+      this.introVideo = changes['introVideo'].currentValue;
     }
   }
 
@@ -620,18 +683,28 @@ export class CourseComponent
     }
     this.listCourseBuy[0] = courseId;
 
-    this.createPayment(
-      this.orderData.amount,
-      this.orderData.language,
-      this.orderData.orderType,
-      this.orderData.orderDescription,
-      this.orderData.orderId,
-      this.listCourseBuy,
-      userId
+    this.orderData.amount = Math.floor(
+      this.courseDetailAPI.price *
+        (1 - this.courseDetailAPI.percent_discount / 100)
     );
 
+    this.orderData.listCourseBuy[0] = courseId;
+
+    localStorage.setItem('paymentData', JSON.stringify(this.orderData));
+    // this.cookieStorageService.setCookie('paymentData', JSON.stringify(this.orderData),1);
+
+    // this.createPayment(
+    //   this.orderData.amount,
+    //   this.orderData.language,
+    //   this.orderData.orderType,
+    //   this.orderData.orderDescription,
+    //   this.orderData.orderId,
+    //   this.listCourseBuy,
+    //   userId
+    // );
 
     // this.addCourseToMyLearning(courseId);
+    window.location.href = '/payment';
   }
 
   createPayment(
@@ -640,7 +713,7 @@ export class CourseComponent
     orderType: any,
     orderDescription: any,
     orderId: any,
-    listCourseBuy:number[],
+    listCourseBuy: number[],
     userId: number
   ) {
     // Cấu hình các tham số thanh toán
@@ -654,18 +727,200 @@ export class CourseComponent
     };
 
     // Gọi service để tạo URL thanh toán
-    this.vnpayService.createPayment(paymentData, listCourseBuy, userId).subscribe({
+    this.vnpayService
+      .createPayment(paymentData, listCourseBuy, userId)
+      .subscribe({
+        next: (response) => {
+          if (response.urlvnpay) {
+            // Chuyển hướng sang trang thanh toán VNPay
+            window.location.href = response.urlvnpay;
+          } else {
+            console.error('Lỗi tạo URL thanh toán: Không nhận được URL');
+          }
+        },
+        error: (error) => {
+          console.error('Lỗi kết nối:', error);
+        },
+      });
+  }
+
+  // ====================
+  //  rating course
+  // ====================
+
+  submitRating(rating: number): void {
+    const userId = this.getInstructorId();
+
+    this.apiService.ratingService
+      .addRating(userId, this.courseId, rating)
+      .subscribe({
+        next: (response) => {
+          if (response.success) {
+            console.log('Rating submitted successfully:', response.message);
+            this.fetchTotalRatings(this.courseId);
+          } else {
+            console.warn('Failed to submit rating:', response.message);
+          }
+        },
+        error: (error) => {
+          console.warn('Error submitting rating:', error.message);
+        },
+      });
+  }
+
+  //  lấy tổng số lần khóa học được đánh giá
+  fetchTotalRatings(courseId: number): void {
+    this.apiService.ratingService.getTotalRatings(courseId).subscribe({
       next: (response) => {
-        if (response.urlvnpay) {
-          // Chuyển hướng sang trang thanh toán VNPay
-          window.location.href = response.urlvnpay;
-        } else {
-          console.error('Lỗi tạo URL thanh toán: Không nhận được URL');
-        }
+        console.log('Total ratings fetched successfully:', response);
+        this.SoLanDaDanhGia = response.totalRatings || 0;
+        this.renderStars();
+        this.cdRef.detectChanges();
       },
       error: (error) => {
-        console.error('Lỗi kết nối:', error);
+        console.warn('Error fetching total ratings:');
       },
     });
   }
+
+  getRatingsBreakdown(courseId: number): void {
+    this.apiService.ratingService.getRatingsBreakdown(courseId).subscribe({
+      next: (response) => {
+        console.log('Ratings breakdown fetched successfully:', response);
+        // Assuming the breakdown data is returned in the response
+        const breakdown = response.breakdown || {};
+        // Update a property or handle the breakdown data as needed
+        this.handleRatingsBreakdown(breakdown);
+      },
+      error: (error) => {
+        console.warn('Error fetching ratings breakdown:', );
+      },
+    });
+  }
+
+  private handleRatingsBreakdown(breakdown: any): void {
+    // Process and update the UI or component state with the breakdown data
+    console.log('Processed ratings breakdown:', breakdown);
+    // Example: Update a property to display in the UI
+    // this.ratingsBreakdown = breakdown;
+
+    let Var_sao1 = breakdown[0] || 0;
+    let Var_sao2 = breakdown[1] || 0;
+    let Var_sao3 = breakdown[2] || 0;
+    let Var_sao4 = breakdown[3] || 0;
+    let Var_sao5 = breakdown[4] || 0;
+
+    const totalRatings = Var_sao1 + Var_sao2 + Var_sao3 + Var_sao4 + Var_sao5;
+
+    this.sao1 =
+      totalRatings > 0 ? Math.ceil((Var_sao1 / totalRatings) * 100) : 0;
+    this.sao2 =
+      totalRatings > 0 ? Math.ceil((Var_sao2 / totalRatings) * 100) : 0;
+    this.sao3 =
+      totalRatings > 0 ? Math.ceil((Var_sao3 / totalRatings) * 100) : 0;
+    this.sao4 =
+      totalRatings > 0 ? Math.ceil((Var_sao4 / totalRatings) * 100) : 0;
+    this.sao5 =
+      totalRatings > 0 ? Math.ceil((Var_sao5 / totalRatings) * 100) : 0;
+
+    console.log('Percentage for each star:', {
+      Var_sao1,
+      Var_sao2,
+      Var_sao3,
+      Var_sao4,
+      Var_sao5,
+    });
+    console.log(
+      'Percentage for each star:111111',
+      this.sao1,
+      this.sao2,
+      this.sao3,
+      this.sao4,
+      this.sao5
+    );
+  }
+
+  // ====================
+  //  comment course
+  // ====================
+
+  addComment(courseId: number, content: string): void {
+    const userId = this.getInstructorId();
+    const commentData = { courseId, content };
+    this.apiService.commentService
+      .addComment(userId, courseId, content)
+      .subscribe({
+        next: (response) => {
+          console.log('Comment added successfully:', response);
+          this.fetchComments(courseId); // Refresh comments after adding
+        },
+        error: (error) => {
+          console.error('Error adding comment:', error);
+        },
+      });
+  }
+
+  deleteComment(commentId: number, courseId: number): void {
+    const userId = this.getInstructorId();
+    this.apiService.commentService.deleteComment(commentId).subscribe({
+      next: (response) => {
+        console.log('Comment deleted successfully:', response);
+        this.fetchComments(courseId); // Refresh comments after deletion
+      },
+      error: (error) => {
+        console.error('Error deleting comment:', error);
+      },
+    });
+  }
+
+  fetchComments(courseId: number): void {
+    const userId = this.getInstructorId();
+    this.apiService.commentService
+      .getCommentsByCourseId(courseId, userId)
+      .subscribe({
+        next: (response) => {
+          console.log('Comments fetched successfully:', response);
+          this.listComment = response.comments || [];
+          this.cdRef.detectChanges();
+        },
+        error: (error) => {
+          console.error('Error fetching comments:', );
+        },
+      });
+  }
+
+  postComment() {
+    if (
+      this.contentComment.trim() === '' ||
+      this.selectedRating === null ||
+      this.selectedRating === 0
+    ) {
+      alert('Nội dung bình luận và đánh giá không được để trống');
+      return;
+    }
+    // console.log('this.selectedRating: ', this.selectedRating);
+    // console.log('this.contentComment: ', this.contentComment);
+    this.submitRating(this.selectedRating || 0);
+    this.addComment(this.courseId, this.contentComment);
+    this.contentComment = ''; // Reset the comment input
+  }
+
+  setRating(rating: number) {
+    this.selectedRating = rating;
+  }
+
+  setHover(rating: number) {
+    this.hoveredRating = rating; // Cập nhật rating khi hover
+  }
+
+  clearHover() {
+    this.hoveredRating = null; // Xóa hover khi chuột rời khỏi
+  }
+
+  // ====================
+  //  video intro 
+  // ====================
+ 
+
+ 
 }

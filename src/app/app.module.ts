@@ -1,9 +1,9 @@
 import { CategoriesComponent } from './features/admin/categories/categories.component';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
-import {VgApiService, VgCoreModule} from '@videogular/ngx-videogular/core';
-import {VgControlsModule} from '@videogular/ngx-videogular/controls';
-import {VgOverlayPlayModule} from '@videogular/ngx-videogular/overlay-play';
-import {VgBufferingModule} from '@videogular/ngx-videogular/buffering';
+import { VgApiService, VgCoreModule } from '@videogular/ngx-videogular/core';
+import { VgControlsModule } from '@videogular/ngx-videogular/controls';
+import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play';
+import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
 import { FormsModule } from '@angular/forms';
 import { provideHttpClient, withFetch } from '@angular/common/http'; // Import module này
 import { QuillModule } from 'ngx-quill';
@@ -14,6 +14,7 @@ import {
   BrowserModule,
   provideClientHydration,
 } from '@angular/platform-browser';
+import { NgOptimizedImage } from '@angular/common';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -69,6 +70,11 @@ import { RegisterInstructorComponent } from './features/user/register-instructor
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { CommentCourseComponent } from './components/comment-course/comment-course.component';
 import { PaymentStatusComponent } from './features/payment/payment-status/payment-status.component';
+
+import {
+  IMAGE_CONFIG,
+  ImageConfig,
+} from '@app/services/img_config/image-config.token';
 
 @NgModule({
   declarations: [
@@ -148,9 +154,20 @@ import { PaymentStatusComponent } from './features/payment/payment-status/paymen
     VgControlsModule,
     VgBufferingModule,
     VgOverlayPlayModule,
+    NgOptimizedImage,
   ],
 
-  providers: [provideClientHydration(), provideHttpClient(withFetch())],
+  providers: [
+    provideClientHydration(),
+    provideHttpClient(withFetch()),
+    {
+      provide: IMAGE_CONFIG,
+      useValue: <ImageConfig>{
+        disableImageSizeWarning: true,
+        disableImageLazyLoadWarning: true,
+      },
+    },
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

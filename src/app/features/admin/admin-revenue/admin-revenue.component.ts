@@ -1,9 +1,11 @@
+import { ApiService } from './../../../services/api.service';
 import {
   Component,
   ElementRef,
   ViewChild,
   HostListener,
   AfterViewInit,
+  ChangeDetectorRef,
   type OnInit,
 } from '@angular/core';
 
@@ -65,84 +67,36 @@ interface RevenueData {
   standalone: false,
 })
 export class AdminRevenueComponent implements OnInit {
-  // =========================
-  // modal bank
-  // =========================
-
-  banks = [
-    { brandName: '', fullName: 'Vui lòng chọn ngân hàng' },
-    { brandName: 'VPBank', fullName: 'Ngân hàng TMCP Việt Nam Thịnh Vượng' },
-    {
-      brandName: 'BIDV',
-      fullName: 'Ngân hàng TMCP Đầu tư và Phát triển Việt Nam',
-    },
-    {
-      brandName: 'Vietcombank',
-      fullName: 'Ngân hàng TMCP Ngoại Thương Việt Nam',
-    },
-    {
-      brandName: 'VietinBank',
-      fullName: 'Ngân hàng TMCP Công thương Việt Nam',
-    },
-    { brandName: 'MBBANK', fullName: 'Ngân hàng TMCP Quân Đội' },
-    { brandName: 'ACB', fullName: 'Ngân hàng TMCP Á Châu' },
-    { brandName: 'SHB', fullName: 'Ngân hàng TMCP Sài Gòn – Hà Nội' },
-    { brandName: 'Techcombank', fullName: 'Ngân hàng TMCP Kỹ Thương' },
-    { brandName: 'Agribank', fullName: 'Ngân hàng NN&PT Nông thôn Việt Nam' },
-    {
-      brandName: 'HDBank',
-      fullName: 'Ngân hàng TMCP Phát triển Thành phố Hồ Chí Minh',
-    },
-    {
-      brandName: 'LienVietPostBank',
-      fullName: 'Ngân hàng TMCP Bưu điện Liên Việt',
-    },
-    { brandName: 'VIB', fullName: 'Ngân hàng TMCP Quốc Tế' },
-    { brandName: 'SeABank', fullName: 'Ngân hàng TMCP Đông Nam Á' },
-    { brandName: 'VBSP', fullName: 'Ngân hàng Chính sách xã hội Việt Nam' },
-    { brandName: 'TPBank', fullName: 'Ngân hàng TMCP Tiên Phong' },
-    { brandName: 'OCB', fullName: 'Ngân hàng TMCP Phương Đông' },
-    { brandName: 'MSB', fullName: 'Ngân hàng TMCP Hàng Hải' },
-    { brandName: 'Sacombank', fullName: 'Ngân hàng TMCP Sài Gòn Thương Tín' },
-    { brandName: 'Eximbank', fullName: 'Ngân hàng TMCP Xuất Nhập Khẩu' },
-    { brandName: 'SCB', fullName: 'Ngân hàng TMCP Sài Gòn' },
-    { brandName: 'VDB', fullName: 'Ngân hàng Phát triển Việt Nam' },
-    { brandName: 'Nam A Bank', fullName: 'Ngân hàng TMCP Nam Á' },
-    { brandName: 'ABBANK', fullName: 'Ngân hàng TMCP An Bình' },
-    { brandName: 'PVcomBank', fullName: 'Ngân hàng TMCP Đại Chúng Việt Nam' },
-    { brandName: 'Bac A Bank', fullName: 'Ngân hàng TMCP Bắc Á' },
-    { brandName: 'UOB', fullName: 'Ngân hàng TNHH MTV UOB Việt Nam' },
-    { brandName: 'Woori', fullName: 'Ngân hàng TNHH MTV Woori Việt Nam' },
-    { brandName: 'HSBC', fullName: 'Ngân hàng TNHH MTV HSBC Việt Nam' },
-    {
-      brandName: 'SCBVL',
-      fullName: 'Ngân hàng TNHH MTV Standard Chartered Việt Nam',
-    },
-    { brandName: 'PBVN', fullName: 'Ngân hàng TNHH MTV Public Bank Việt Nam' },
-    { brandName: 'SHBVN', fullName: 'Ngân hàng TNHH MTV Shinhan Việt Nam' },
-    { brandName: 'NCB', fullName: 'Ngân hàng TMCP Quốc dân' },
-    { brandName: 'VietABank', fullName: 'Ngân hàng TMCP Việt Á' },
-    { brandName: 'Viet Capital Bank', fullName: 'Ngân hàng TMCP Bản Việt' },
-    { brandName: 'DongA Bank', fullName: 'Ngân hàng TMCP Đông Á' },
-    { brandName: 'Vietbank', fullName: 'Ngân hàng TMCP Việt Nam Thương Tín' },
-    { brandName: 'ANZVL', fullName: 'Ngân hàng TNHH MTV ANZ Việt Nam' },
-    { brandName: 'OceanBank', fullName: 'Ngân hàng TNHH MTV Đại Dương' },
-    { brandName: 'CIMB', fullName: 'Ngân hàng TNHH MTV CIMB Việt Nam' },
-    { brandName: 'Kienlongbank', fullName: 'Ngân hàng TMCP Kiên Long' },
-    { brandName: 'IVB', fullName: 'Ngân hàng TNHH Indovina' },
-    { brandName: 'BAOVIET Bank', fullName: 'Ngân hàng TMCP Bảo Việt' },
-    { brandName: 'SAIGONBANK', fullName: 'Ngân hàng TMCP Sài Gòn Công Thương' },
-    { brandName: 'Co-opBank', fullName: 'Ngân hàng Hợp tác xã Việt Nam' },
-    { brandName: 'GPBank', fullName: 'Ngân hàng TNHH MTV Dầu khí toàn cầu' },
-    { brandName: 'VRB', fullName: 'Ngân hàng Liên doanh Việt Nga' },
-    { brandName: 'CB', fullName: 'Ngân hàng TNHH MTV Xây dựng' },
-    { brandName: 'HLBVN', fullName: 'Ngân hàng TNHH MTV Hong Leong Việt Nam' },
-    { brandName: 'PG Bank', fullName: 'Ngân hàng TMCP Xăng dầu Petrolimex' },
-  ];
-
+  totalRevenue: number = 0;
+  totalUser: number = 0;
+  totalInstructor: number = 0;
+  totalCourse: number = 0;
   isShowModalWithdraw = false;
   isShowModalWithdrawHistory = false;
   isShowModalQA = false;
+
+  @ViewChild('ModalWithdraw') modalWithdrawElementRef!: ElementRef;
+  @ViewChild('ModalWithdrawHistory')
+  ModalWithdrawHistoryElementRef!: ElementRef;
+  @ViewChild('ModalQA') modalQAElementRef!: ElementRef;
+
+  ngOnInit(): void {
+    this.DoanhThuToanHeThong(); // Gọi hàm khi component được khởi tạo
+    this.updateChartOptions(); // Cập nhật lại `chartOptions` khi khởi tạo component
+    this.fetchTotalUsers(); // Gọi hàm khi component được khởi tạo
+    this.fetchTotalInstructors(); // Gọi hàm khi component được khởi tạo
+    this.fetchMonthlyRevenue();
+  }
+
+  ngAfterViewInit(): void {}
+  constructor(
+    private elementRef: ElementRef,
+    private apiService: ApiService,
+
+    private cdRef: ChangeDetectorRef
+  ) {
+    this.updateChartOptions(); // Cập nhật lại `chartOptions`
+  }
 
   toggleShowModalWithdraw() {
     this.isShowModalWithdraw = !this.isShowModalWithdraw;
@@ -153,13 +107,6 @@ export class AdminRevenueComponent implements OnInit {
   toggleShowModalQA() {
     this.isShowModalQA = !this.isShowModalQA;
   }
-
-  @ViewChild('ModalWithdraw') modalWithdrawElementRef!: ElementRef;
-  @ViewChild('ModalWithdrawHistory')
-  ModalWithdrawHistoryElementRef!: ElementRef;
-  @ViewChild('ModalQA') modalQAElementRef!: ElementRef;
-
-  ngAfterViewInit(): void {}
 
   @HostListener('document:click', ['$event'])
   onClick(event: MouseEvent): void {
@@ -198,171 +145,6 @@ export class AdminRevenueComponent implements OnInit {
       senderName: 'Nguyễn Văn A',
       phoneNumber: '0901234567',
       email: 'nguyenvana@example.com',
-    },
-    {
-      id: 2,
-      amount: 1000,
-      currency: 'EUR',
-      status: 'Pending',
-      date: new Date('2023-05-03'),
-      method: 'PayPal',
-      senderName: 'Trần Thị B',
-      phoneNumber: '0912345678',
-      email: 'tranthib@example.com',
-    },
-    {
-      id: 3,
-      amount: 250,
-      currency: 'GBP',
-      status: 'Failed',
-      date: new Date('2023-05-05'),
-      method: 'Crypto',
-      senderName: 'Lê Văn C',
-      phoneNumber: '0923456789',
-      email: 'levanc@example.com',
-    },
-    {
-      id: 4,
-      amount: 750,
-      currency: 'USD',
-      status: 'Completed',
-      date: new Date('2023-05-07'),
-      method: 'Bank Transfer',
-      senderName: 'Phạm Thị D',
-      phoneNumber: '0934567890',
-      email: 'phamthid@example.com',
-    },
-    {
-      id: 5,
-      amount: 300,
-      currency: 'EUR',
-      status: 'Completed',
-      date: new Date('2023-05-09'),
-      method: 'PayPal',
-      senderName: 'Hoàng Văn E',
-      phoneNumber: '0945678901',
-      email: 'hoangvane@example.com',
-    },
-    {
-      id: 5,
-      amount: 300,
-      currency: 'EUR',
-      status: 'Completed',
-      date: new Date('2023-05-09'),
-      method: 'PayPal',
-      senderName: 'Hoàng Văn E',
-      phoneNumber: '0945678901',
-      email: 'hoangvane@example.com',
-    },
-    {
-      id: 5,
-      amount: 300,
-      currency: 'EUR',
-      status: 'Completed',
-      date: new Date('2023-05-09'),
-      method: 'PayPal',
-      senderName: 'Hoàng Văn E',
-      phoneNumber: '0945678901',
-      email: 'hoangvane@example.com',
-    },
-    {
-      id: 5,
-      amount: 300,
-      currency: 'EUR',
-      status: 'Completed',
-      date: new Date('2023-05-09'),
-      method: 'PayPal',
-      senderName: 'Hoàng Văn E',
-      phoneNumber: '0945678901',
-      email: 'hoangvane@example.com',
-    },
-    {
-      id: 5,
-      amount: 300,
-      currency: 'EUR',
-      status: 'Completed',
-      date: new Date('2023-05-09'),
-      method: 'PayPal',
-      senderName: 'Hoàng Văn E',
-      phoneNumber: '0945678901',
-      email: 'hoangvane@example.com',
-    },
-    {
-      id: 5,
-      amount: 300,
-      currency: 'EUR',
-      status: 'Completed',
-      date: new Date('2023-05-09'),
-      method: 'PayPal',
-      senderName: 'Hoàng Văn E',
-      phoneNumber: '0945678901',
-      email: 'hoangvane@example.com',
-    },
-    {
-      id: 5,
-      amount: 300,
-      currency: 'EUR',
-      status: 'Completed',
-      date: new Date('2023-05-09'),
-      method: 'PayPal',
-      senderName: 'Hoàng Văn E',
-      phoneNumber: '0945678901',
-      email: 'hoangvane@example.com',
-    },
-    {
-      id: 5,
-      amount: 300,
-      currency: 'EUR',
-      status: 'Completed',
-      date: new Date('2023-05-09'),
-      method: 'PayPal',
-      senderName: 'Hoàng Văn E',
-      phoneNumber: '0945678901',
-      email: 'hoangvane@example.com',
-    },
-    {
-      id: 5,
-      amount: 300,
-      currency: 'EUR',
-      status: 'Completed',
-      date: new Date('2023-05-09'),
-      method: 'PayPal',
-      senderName: 'Hoàng Văn E',
-      phoneNumber: '0945678901',
-      email: 'hoangvane@example.com',
-    },
-    {
-      id: 5,
-      amount: 300,
-      currency: 'EUR',
-      status: 'Completed',
-      date: new Date('2023-05-09'),
-      method: 'PayPal',
-      senderName: 'Hoàng Văn E',
-      phoneNumber: '0945678901',
-      email: 'hoangvane@example.com',
-    },
-    {
-      id: 5,
-      amount: 300,
-      currency: 'EUR',
-      status: 'Completed',
-      date: new Date('2023-05-09'),
-      method: 'PayPal',
-      senderName: 'Hoàng Văn E',
-      phoneNumber: '0945678901',
-      email: 'hoangvane@example.com',
-    },
-    {
-      id: 5,
-      amount: 300,
-      currency: 'EUR',
-      status: 'Completed',
-      date: new Date('2023-05-09'),
-      method: 'PayPal',
-      senderName: 'Hoàng Văn E',
-      phoneNumber: '0945678901',
-      email: 'hoangvane@example.com',
     },
   ];
 
@@ -417,19 +199,15 @@ export class AdminRevenueComponent implements OnInit {
 
   public chartOptions: Partial<ChartOptions> = {};
   // dữ liệU biểu đồ để trên contructor
-  
+
   nameChart = 'Tổng doanh thu của hệ thống qua các tháng';
   dataChart = [10, 41, 35, 51, 405, 62, 69, 91, 148, 168, 248, 348];
-  typeChartInput: ChartType = 'line';
+  typeChartInput: ChartType = 'area';
   typeChartList = [
-    { name: 'line', title: 'Biểu đồ đường' },
     { name: 'area', title: 'Biểu đồ vùng' },
+    { name: 'line', title: 'Biểu đồ đường' },
     { name: 'bar', title: 'Biểu đồ cột' },
   ];
-
-  constructor(private elementRef: ElementRef) {
-    this.updateChartOptions(); // Cập nhật lại `chartOptions`
-  }
 
   onChangeTypeChart(event: Event) {
     const target = event.target as HTMLSelectElement;
@@ -497,6 +275,20 @@ export class AdminRevenueComponent implements OnInit {
       },
     };
   }
+  updateChartOptions1() {
+    this.chartOptions = Object.assign({}, this.chartOptions, {
+      series: [
+        {
+          name: 'Doanh thu',
+          data: this.dataChart, // Cập nhật dữ liệu mới
+        },
+      ],
+      title: Object.assign({}, this.chartOptions.title, {
+        text: this.nameChart, // Cập nhật tiêu đề mới
+      }),
+    });
+    this.cdRef.detectChanges();
+  }
 
   // ================================
   // table data revenue detail
@@ -518,474 +310,7 @@ export class AdminRevenueComponent implements OnInit {
       websiteCommission: 100000,
       instructorPayment: 900000,
     },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    {
-      date: '01/01/2024',
-      revenue: 1000000,
-      courseSold: 2,
-      registeredStudents: 2,
-      websiteCommission: 100000,
-      instructorPayment: 900000,
-    },
-    // Add more sample data here
   ];
-
-  ngOnInit(): void {}
 
   formatCurrency(amount: number): string {
     return amount.toLocaleString('vi-VN', {
@@ -994,16 +319,59 @@ export class AdminRevenueComponent implements OnInit {
     });
   }
 
-  // ================================
-  // table data revenue by instructor
-  // ================================
-  // ================================
-  // table data revenue by course
-  // ================================
-  // ================================
-  // table data pay for instructor
-  // ================================
-  // ================================
-  // table data transaction paid
-  // ================================
+  DoanhThuToanHeThong() {
+    this.apiService.paymentHistoryService.getTotalRevenue().subscribe({
+      next: (response) => {
+        console.log('Tổng doanh thu:', response.data.totalRevenue);
+        this.totalRevenue = response.data.totalRevenue;
+        this.cdRef.detectChanges(); // Cập nhật lại view
+      },
+      error: (error) => {
+        console.error('Lỗi khi lấy tổng doanh thu:', error);
+      },
+    });
+  }
+
+  fetchTotalUsers() {
+    this.apiService.userServiceService.getTotalUsers().subscribe({
+      next: (totalUsers) => {
+        console.log('Tổng số người dùng:', totalUsers);
+        this.totalUser = totalUsers;
+        this.cdRef.detectChanges(); // Cập nhật lại view
+      },
+      error: (error) => {
+        console.error('Lỗi khi lấy tổng số người dùng:', error);
+      },
+    });
+  }
+
+  fetchTotalInstructors() {
+    this.apiService.userServiceService.getTotalInstructors().subscribe({
+      next: (totalInstructors) => {
+        console.log('Tổng số giảng viên:', totalInstructors);
+        this.totalInstructor = totalInstructors;
+        this.cdRef.detectChanges(); // Cập nhật lại view
+        // You can add logic here to update the UI or store the value
+      },
+      error: (error) => {
+        console.error('Lỗi khi lấy tổng số giảng viên:', error);
+      },
+    });
+  }
+
+  fetchMonthlyRevenue() {
+    this.apiService.paymentHistoryService.getMonthlyRevenue().subscribe({
+      next: (response) => {
+        console.log('Doanh thu hàng tháng:', response.data);
+        this.dataChart = response.data; // Cập nhật dữ liệu biểu đồ với doanh thu hàng tháng
+        console.log(response.data);
+        this.cdRef.detectChanges(); // Cập nhật lại view
+        this.updateChartOptions1(); // Cập nhật lại `chartOptions` với dữ liệu mới
+      },
+      error: (error) => {
+        console.error('Lỗi khi lấy doanh thu hàng tháng:', error);
+      },
+    });
+  }
+  // ========================
 }

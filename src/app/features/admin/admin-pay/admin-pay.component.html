@@ -6,6 +6,12 @@
         <h1 class="w-full text-4xl font-bold uppercase font-signika">
           Quản lý thanh toán
         </h1>
+        <button (click)="exportToExcel()"
+          type="button"
+          class="w-40 px-3 py-2 text-white bg-green-600 border-green-800 rounded-lg shadow-md shadow-green-400"
+        >
+          Xuất file Excel toàn bộ dữ liệu
+        </button>
       </div>
     </div>
     <!-- body -->
@@ -14,114 +20,333 @@
         <!-- table data transaction wait to pay -->
         <div class="container mx-auto mt-5 h-[500px] mb-10">
           <div class="flex items-center justify-between w-full py-5 my-3">
-            <h1 class="text-2xl font-bold">Các giao dịch đang chờ</h1>
+            <h1 class="text-2xl font-bold">Các giao dịch đang chờ xác nhận</h1>
             <!-- component -->
             <!-- search bar -->
-            <div
-              class="w-full max-w-lg mx-auto bg-white rounded-lg shadow-sm shadow-black"
-            >
-              <div
-                class="flex items-center px-3.5 py-2 text-gray-400 group hover:ring-1 hover:ring-gray-300 focus-within:!ring-2 ring-inset focus-within:!ring-teal-500 rounded-md"
-              >
-                <svg
-                  class="w-5 h-5 mr-2 stroke-slate-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  ></path>
-                </svg>
-                <input
-                  class="block w-full text-base text-gray-700 bg-transparent appearance-none placeholder:text-gray-400 focus:outline-none sm:text-sm sm:leading-6"
-                  placeholder="Nhập nội dung tìm kiếm..."
-                  aria-label="Search components"
-                  id="headlessui-combobox-input-:r5n:"
-                  role="combobox"
-                  type="text"
-                  aria-expanded="false"
-                  aria-autocomplete="list"
-                  value=""
-                  style="caret-color: rgb(107, 114, 128)"
-                />
-              </div>
-            </div>
+
             <!-- end search bar -->
-            <button
-              type="button"
-              class="px-3 py-2 text-white bg-green-600 border-green-800 rounded-lg shadow-md shadow-green-400"
-            >
-              Xuất file Excel
-            </button>
           </div>
           <div
-            class="h-full overflow-x-auto overflow-y-auto bg-white rounded-lg shadow-sm shadow-black"
+            class="overflow-x-auto overflow-y-auto flex flex-col h-[calc(100vh-300px)] bg-white rounded-lg shadow-sm shadow-black"
           >
-            <table
-              class="h-full min-w-full overflow-y-auto divide-y divide-gray-200"
-            >
+            <table class="overflow-y-auto divide-y divide-gray-200 table-fixed">
               <thead class="sticky top-0 z-10 bg-gray-50">
                 <tr>
                   <th
-                    scope="col"
-                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
                   >
                     STT
                   </th>
                   <th
-                    scope="col"
-                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Trạng thái
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
                   >
                     Ngày
                   </th>
                   <th
-                    scope="col"
-                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
                   >
-                    Loại giao dịch
+                    Số tài khoản
                   </th>
                   <th
-                    scope="col"
-                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
                   >
-                    Số tiền
+                    Người yêu cầu
                   </th>
                   <th
-                    scope="col"
-                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
                   >
-                    Người thực hiện
+                    Ngân hàng
                   </th>
                   <th
-                    scope="col"
-                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
                   >
-                    Trạng thái
+                    Số tiền (90%)
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Hệ thống (10%)
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Email
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Hành động
                   </th>
                 </tr>
               </thead>
-              <tbody class="h-full bg-white divide-y divide-gray-200">
-                <tr *ngFor="let item of revenueData; let i = index">
-                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                    {{ i + 1 }}
+              <tbody class="bg-white divide-y divide-gray-200">
+                <tr
+                  *ngFor="
+                    let transaction of transactions_pending;
+                    let i = index
+                  "
+                >
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ i + 1 }}
+                    </p>
                   </td>
-                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                    {{ item.date }}
+
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <span
+                      [class]="
+                        'px-2 py-1 font-semibold leading-tight rounded-full ' +
+                        getStatusClass(transaction.status)
+                      "
+                    >
+                      {{ transaction.status }}
+                    </span>
                   </td>
-                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                    {{ formatCurrency(item.revenue) }}
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.request_created_at | date : "dd/MM/yyyy" }}
+                    </p>
                   </td>
-                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                    {{ item.courseSold }}
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.bank_account_number }}
+                    </p>
                   </td>
-                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                    {{ formatCurrency(item.websiteCommission) }}
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.account_holder_name }}
+                    </p>
                   </td>
-                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                    {{ formatCurrency(item.instructorPayment) }}
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.bank_name }}
+                    </p>
+                  </td>
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.amount | number : "1.0-0" }}đ
+                    </p>
+                  </td>
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ (transaction.amount * 0.1) | number : "1.0-0" }}đ
+                    </p>
+                  </td>
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.email }}
+                    </p>
+                  </td>
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <div class="flex items-center justify-center gap-2">
+                      <button
+                        (click)="XacNhanDongY(transaction.request_id)"
+                        type="button"
+                        class="py-2 text-xs font-semibold border-2 rounded-md w-14 hover:bg-green-500 hover:text-white border-slate-700"
+                      >
+                        Đồng ý
+                      </button>
+                      <button
+                        (click)="TuChoiThanhToan(transaction.request_id)"
+                        type="button"
+                        class="py-2 text-xs font-semibold border-2 rounded-md w-14 hover:bg-red-500 hover:text-white border-slate-700"
+                      >
+                        Từ chối
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- table data transaction paid -->
+        <div class="container mx-auto mt-5 min-h-[500px] h-[500px] mb-[100px]">
+          <div class="flex items-center justify-between w-full py-5 my-3">
+            <h1 class="text-2xl font-bold">Các giao dịch đã chuyển khoản</h1>
+            <!-- search bar -->
+
+            <!-- end search bar -->
+          </div>
+          <div
+            class="overflow-x-auto overflow-y-auto flex flex-col h-[calc(100vh-300px)] bg-white rounded-lg shadow-sm shadow-black"
+          >
+            <table class="overflow-y-auto divide-y divide-gray-200 table-fixed">
+              <thead class="sticky top-0 z-10 bg-gray-50">
+                <tr>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    STT
+                  </th>
+
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Trạng thái
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Ngày
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Số tài khoản
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Người yêu cầu
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Ngân hàng
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Số tiền (90%)
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Hệ thống (10%)
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Email
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Hành động
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <tr
+                  *ngFor="
+                    let transaction of transactions_approved;
+                    let i = index
+                  "
+                >
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ i + 1 }}
+                    </p>
+                  </td>
+
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <span
+                      [class]="
+                        'px-2 py-1 font-semibold leading-tight rounded-full ' +
+                        getStatusClass(transaction.status)
+                      "
+                    >
+                      {{ transaction.status }}
+                    </span>
+                  </td>
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.request_created_at | date : "dd/MM/yyyy" }}
+                    </p>
+                  </td>
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.bank_account_number }}
+                    </p>
+                  </td>
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.account_holder_name }}
+                    </p>
+                  </td>
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.bank_name }}
+                    </p>
+                  </td>
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.amount | number : "1.0-0" }}đ
+                    </p>
+                  </td>
+                  <td
+                  class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                >
+                  <p class="text-gray-900 whitespace-no-wrap">
+                    {{ (transaction.amount * 0.1) | number : "1.0-0" }}đ
+                  </p>
+                </td>
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.email }}
+                    </p>
+                  </td>
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <div class="flex items-center justify-center gap-2">
+                      <button
+                        (click)="XacNhanThanhToan(transaction.request_id)"
+                        type="button"
+                        class="py-2 text-xs font-semibold border-2 rounded-md w-14 hover:bg-green-500 hover:text-white border-slate-700"
+                      >
+                        Hoàn tất
+                      </button>
+                      <button
+                        (click)="TuChoiThanhToan(transaction.request_id)"
+                        type="button"
+                        class="py-2 text-xs font-semibold border-2 rounded-md w-14 hover:bg-red-500 hover:text-white border-slate-700"
+                      >
+                        Thất bại
+                      </button>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -133,111 +358,281 @@
           <div class="flex items-center justify-between w-full py-5 my-3">
             <h1 class="text-2xl font-bold">Các giao dịch đã thanh toán</h1>
             <!-- search bar -->
-            <div
-              class="w-full max-w-lg mx-auto bg-white rounded-lg shadow-sm shadow-black"
-            >
-              <div
-                class="flex items-center px-3.5 py-2 text-gray-400 group hover:ring-1 hover:ring-gray-300 focus-within:!ring-2 ring-inset focus-within:!ring-teal-500 rounded-md"
-              >
-                <svg
-                  class="w-5 h-5 mr-2 stroke-slate-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  ></path>
-                </svg>
-                <input
-                  class="block w-full text-base text-gray-700 bg-transparent appearance-none placeholder:text-gray-400 focus:outline-none sm:text-sm sm:leading-6"
-                  placeholder="Nhập nội dung tìm kiếm..."
-                  aria-label="Search components"
-                  id="headlessui-combobox-input-:r5n:"
-                  role="combobox"
-                  type="text"
-                  aria-expanded="false"
-                  aria-autocomplete="list"
-                  value=""
-                  style="caret-color: rgb(107, 114, 128)"
-                />
-              </div>
-            </div>
+
             <!-- end search bar -->
-            <button
-              type="button"
-              class="px-3 py-2 text-white bg-green-600 border-green-800 rounded-lg shadow-md shadow-green-400"
-            >
-              Xuất file Excel
-            </button>
           </div>
           <div
-            class="h-full overflow-x-auto overflow-y-auto bg-white rounded-lg shadow-sm shadow-black"
+            class="overflow-x-auto overflow-y-auto flex flex-col h-[calc(100vh-300px)] bg-white rounded-lg shadow-sm shadow-black"
           >
-            <table
-              class="h-full min-w-full overflow-y-auto divide-y divide-gray-200"
-            >
+            <table class="overflow-y-auto divide-y divide-gray-200 table-fixed">
               <thead class="sticky top-0 z-10 bg-gray-50">
                 <tr>
                   <th
-                    scope="col"
-                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
                   >
                     STT
                   </th>
+
                   <th
-                    scope="col"
-                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Trạng thái
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
                   >
                     Ngày
                   </th>
                   <th
-                    scope="col"
-                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
                   >
-                    Loại giao dịch
+                    Số tài khoản
                   </th>
                   <th
-                    scope="col"
-                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
                   >
-                    Số tiền
+                    Người yêu cầu
                   </th>
                   <th
-                    scope="col"
-                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
                   >
-                    Người thực hiện
+                    Ngân hàng
                   </th>
                   <th
-                    scope="col"
-                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
                   >
-                    Trạng thái
+                    Số tiền (90%)
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Hệ thống (10%)
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Email
                   </th>
                 </tr>
               </thead>
-              <tbody class="h-full bg-white divide-y divide-gray-200">
-                <tr *ngFor="let item of revenueData; let i = index">
-                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                    {{ i + 1 }}
+              <tbody class="bg-white divide-y divide-gray-200">
+                <tr
+                  *ngFor="
+                    let transaction of transactions_confirmed;
+                    let i = index
+                  "
+                >
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ i + 1 }}
+                    </p>
                   </td>
-                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                    {{ item.date }}
+
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <span
+                      [class]="
+                        'px-2 py-1 font-semibold leading-tight rounded-full ' +
+                        getStatusClass(transaction.status)
+                      "
+                    >
+                      {{ transaction.status }}
+                    </span>
                   </td>
-                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                    {{ formatCurrency(item.revenue) }}
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.request_created_at | date : "dd/MM/yyyy" }}
+                    </p>
                   </td>
-                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                    {{ item.courseSold }}
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.bank_account_number }}
+                    </p>
                   </td>
-                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                    {{ formatCurrency(item.websiteCommission) }}
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.account_holder_name }}
+                    </p>
                   </td>
-                  <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                    {{ formatCurrency(item.instructorPayment) }}
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.bank_name }}
+                    </p>
+                  </td>
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.amount | number : "1.0-0" }}đ
+                    </p>
+                  </td>
+                  <td
+                  class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                >
+                  <p class="text-gray-900 whitespace-no-wrap">
+                    {{ (transaction.amount * 0.1) | number : "1.0-0" }}đ
+                  </p>
+                </td>
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.email }}
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- table data transaction reject  -->
+        <div class="container mx-auto mt-5 min-h-[500px] h-[500px] mb-[100px]">
+          <div class="flex items-center justify-between w-full py-5 my-3">
+            <h1 class="text-2xl font-bold">Các giao dịch đã từ chối</h1>
+            <!-- search bar -->
+
+            <!-- end search bar -->
+          </div>
+          <div
+            class="overflow-x-auto overflow-y-auto flex flex-col h-[calc(100vh-300px)] bg-white rounded-lg shadow-sm shadow-black"
+          >
+            <table class="overflow-y-auto divide-y divide-gray-200 table-fixed">
+              <thead class="sticky top-0 z-10 bg-gray-50">
+                <tr>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    STT
+                  </th>
+
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Trạng thái
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Ngày
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Số tài khoản
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Người yêu cầu
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Ngân hàng
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Số tiền (90%)
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Hệ thống (10%)
+                  </th>
+                  <th
+                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase border-b-2 border-gray-200"
+                  >
+                    Email
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <tr
+                  *ngFor="
+                    let transaction of transactions_rejected;
+                    let i = index
+                  "
+                >
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ i + 1 }}
+                    </p>
+                  </td>
+
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <span
+                      [class]="
+                        'px-2 py-1 font-semibold leading-tight rounded-full ' +
+                        getStatusClass(transaction.status)
+                      "
+                    >
+                      {{ transaction.status }}
+                    </span>
+                  </td>
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.request_created_at | date : "dd/MM/yyyy" }}
+                    </p>
+                  </td>
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.bank_account_number }}
+                    </p>
+                  </td>
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.account_holder_name }}
+                    </p>
+                  </td>
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.bank_name }}
+                    </p>
+                  </td>
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.amount | number : "1.0-0" }}đ
+                    </p>
+                  </td>
+                  <td
+                  class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                >
+                  <p class="text-gray-900 whitespace-no-wrap">
+                    {{ (transaction.amount * 0.1) | number : "1.0-0" }}đ
+                  </p>
+                </td>
+                  <td
+                    class="px-5 py-5 text-sm bg-white border-b border-gray-200"
+                  >
+                    <p class="text-gray-900 whitespace-no-wrap">
+                      {{ transaction.email }}
+                    </p>
                   </td>
                 </tr>
               </tbody>

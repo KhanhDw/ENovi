@@ -119,13 +119,13 @@
       <div class="flex items-start justify-between">
         <h1 class="text-xl">Tên khóa học</h1>
         <a
-          href="#"
+        (click)="goToCourseDetail(CourseDetailRecive.course_id || 0, CourseDetailRecive.course_title || '')"
           class="px-2 border rounded-lg cursor-pointer hover:text-red-400"
           >Đến khóa học</a
         >
       </div>
       <p class="text-xl font-semibold text-yellow-100">
-        {{ CourseDetailRecive.title }}
+        {{ CourseDetailRecive.course_title }}
       </p>
     </div>
     <!-- price -->
@@ -137,30 +137,37 @@
     </div>
     <!-- the number of course -->
     <div class="flex w-full gap-2 mt-1">
-      <h1 class="text-xl">Tổng bài giảng:</h1>
+      <h1 class="text-xl">Đánh giá:</h1>
       <p class="text-xl font-semibold text-yellow-100">
-        {{ CourseDetailRecive.lecture }} bài
+        {{ CourseDetailRecive.rating }} <i class="text-yellow-500 bi bi-star-fill"></i>
       </p>
     </div>
     <!-- the number of student -->
     <div class="flex w-full gap-2 mt-1">
       <h1 class="text-xl">Tổng học viên:</h1>
       <p class="text-xl font-semibold text-yellow-100">
-        {{ CourseDetailRecive.enrollments }} người
+        {{ CourseDetailRecive.total_enrollments ? CourseDetailRecive.total_enrollments : 0  }} người
+      </p>
+    </div>
+    <!-- revenue -->
+    <div class="flex w-full gap-2 mt-3">
+      <h1 class="text-xl font-semibold">Trình độ:</h1>
+      <p class="text-xl font-bold text-green-500">
+        {{ CourseDetailRecive.level === 'beginner' ? 'Nhập môn' : CourseDetailRecive.level === 'intermediate' ? 'Trung cấp' : CourseDetailRecive.level === 'advanced' ? 'Nâng cao' : 'Tất cả' }}
       </p>
     </div>
     <!-- revenue -->
     <div class="flex w-full gap-2 mt-3">
       <h1 class="text-xl font-semibold">Doanh thu:</h1>
       <p class="text-xl font-bold text-green-500">
-        {{ CourseDetailRecive.revenue }}đ
+        {{ CourseDetailRecive.revenue | number:'1.0-0' }} đ
       </p>
     </div>
     <!-- commission which website recived -->
     <div class="flex w-full gap-2 mt-3">
       <h1 class="text-xl font-semibold">Hoa hồng:</h1>
       <p class="text-xl font-bold text-pink-300">
-        {{ CourseDetailRecive.commission }} đ
+        {{ calculateProfit(CourseDetailRecive.revenue || 0) | number:'1.0-0' }} đ
       </p>
     </div>
     <!-- íntructor -->
@@ -168,8 +175,8 @@
       <h1 class="text-xl font-semibold">Giảng viên</h1>
       <div class="flex items-center justify-start gap-2">
         <img
-          class="object-contain border-2 rounded-full w-14 h-14"
-          src="https://d3hi6wehcrq5by.cloudfront.net/itnavi-blog/2020/07/Angular-l%C3%A0-g%C3%AC-6.jpg"
+          class="object-cover border-2 rounded-full w-14 h-14"
+          [src]="urlBackend_img_banner_course + CourseDetailRecive.instructorAvatar"
           alt="avatar"
         />
         <div class="flex flex-col w-full">
@@ -181,8 +188,7 @@
     </div>
 
     <div class="flex flex-col w-full mt-10">
-      <a
-        [routerLink]="gotoDetail"
+      <a hidden
         class="w-full py-2 text-2xl text-center hover:bg-[#2b2424] border-y-2 border-slate-600"
         >Quản lý chi tiết</a
       >
@@ -300,7 +306,7 @@
         >
           <i class="cursor-pointer bi bi-card-list"></i>
         </button>
-        <button
+        <button hidden
           [ngClass]="listORCard ? 'bg-yellow-200' : 'bg-gray-200'"
           (click)="toggleToCart()"
           type="button"
