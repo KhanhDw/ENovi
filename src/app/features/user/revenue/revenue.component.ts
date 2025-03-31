@@ -301,7 +301,7 @@ export class RevenueComponent implements AfterViewInit, OnInit {
     }
 
     this.apiService.paymentHistoryService
-      .createPaymentRequest(userId, 1000000)
+      .createPaymentRequest(userId, Math.floor(this.TongDoanhThuThangHienTai))
       .subscribe({
         next: (response) => {
           if (response && response.success) {

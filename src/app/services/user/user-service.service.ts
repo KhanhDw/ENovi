@@ -35,7 +35,7 @@ export class UserServiceService {
   getUserLogin(): {
     id: number;
     roleUser: string;
-    name: string;
+    userName: string;
     picture?: string;
     email?: string;
     website?: string;
@@ -44,21 +44,21 @@ export class UserServiceService {
     const user = this.cookieStorageService.getCookie('user');
     if (!user) {
       console.warn('User is null in UserService');
-      return { id: -1, roleUser: '', name: '' };
+      return { id: -1, roleUser: '', userName: '' };
     }
     try {
       const parsedData = JSON.parse(user);
       const id = parsedData.id ?? -1;
       const roleUser = parsedData.role ?? '';
-      const name = parsedData.name ?? '';
+      const userName = parsedData.userName ?? '';
       const picture = parsedData.picture;
       const email = parsedData.email;
       const website = parsedData.website;
       const biography = parsedData.biography;
-      return { id, roleUser, name, picture, email, website, biography };
+      return { id, roleUser, userName, picture, email, website, biography };
     } catch (error) {
       console.error('Error parsing user data:', error);
-      return { id: -1, roleUser: '', name: '' };
+      return { id: -1, roleUser: '', userName: '' };
     }
   }
 
@@ -149,5 +149,35 @@ export class UserServiceService {
         return of(0);
       })
     );
+  }
+
+  updateUserProfile(profileData: { id: number; username: string; website: string; biography: string }): Observable<boolean> {
+    if (!profileData.id || !profileData.username || !profileData.website || !profileData.biography) {
+      console.warn('Missing required fields to update user profile');
+      return of(false);
+    }
+
+    return this.http
+      .put<{ success: boolean; message: string }>(
+        `${this.apiUrl}/update-profile`,
+        profileData
+      )
+      .pipe(
+        map((response) => {
+          if (response.success) {
+            // Update the user data in the cookie
+            const currentUser = JSON.parse(this.cookieStorageService.getCookie('user') || '{}');
+            const updatedUser = { ...currentUser, ...profileData };
+            this.cookieStorageService.setCookie('user', JSON.stringify(updatedUser));
+            return true;
+          }
+          console.error('Error updating profile:', response.message);
+          return false;
+        }),
+        catchError((error) => {
+          console.error('Error calling update profile API:', error);
+          return of(false);
+        })
+      );
   }
 }

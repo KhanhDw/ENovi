@@ -17,6 +17,7 @@ export class RegisterComponent {
   showNotification: boolean = false;
   countdown: number = 6;
   private countdownInterval: any;
+  messageErroRegister: string = ''
 
   formRegister = {
     email: '',
@@ -68,15 +69,20 @@ export class RegisterComponent {
       .subscribe({
         next: (res) => {
           this.response = { message: res.message };
-          this.showNotification = true;
+
           if (res.success) {
             this.startCountdown();
+          }else{
+            this.messageErroRegister = res.message;
+            this.showNotification = true;
           }
+            
         },
         error: (err) => {
           this.response = {
             message: err.error?.message || 'Có lỗi xảy ra, vui lòng thử lại!',
           };
+          
           this.showNotification = true;
         },
       });
@@ -90,10 +96,11 @@ export class RegisterComponent {
   }
 
   startCountdown() {
-    this.countdown = 6; // Bắt đầu từ 6 giây
+    this.countdown = 3; // Bắt đầu từ 3 giây
+    this.showNotification = true; // Hiển thị thông báo đếm ngược
     this.countdownInterval = setInterval(() => {
       this.ngZone.run(() => {
-        this.countdown--;
+        this.countdown--; // Biến `countdown` được sử dụng để hiển thị số đang đếm ngược
         if (this.countdown <= 0) {
           clearInterval(this.countdownInterval);
           this.router.navigate(['/login']);

@@ -52,8 +52,11 @@ export class InstructorProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUserAvatar();
-    this.instructor.name = this.userServiceService.getUserLogin().name || 'NULL';
     this.getTotalStudents();
+
+console.log('this.userServiceService.getUserLogin()', this.userServiceService.getUserLogin());
+
+    this.instructor.name = this.userServiceService.getUserLogin().userName || 'NULL';
     this.instructor.socialLinks[0].name = this.userServiceService.getUserLogin().website || 'NULL';
     this.instructor.socialLinks[0].url = this.userServiceService.getUserLogin().website || 'NULL';
     this.instructor.bio = this.userServiceService.getUserLogin().biography || 'NULL';
@@ -87,9 +90,27 @@ export class InstructorProfileComponent implements OnInit {
   }
 
   
-  getUserId(): { id: number; roleUser: string; name: string; picture?: string; email?: string, website?: string, biography?: string } {
+  getUserId(): { id: number; roleUser: string; userName: string; picture?: string; email?: string, website?: string, biography?: string } {
     return this.userServiceService.getUserLogin();
   }
 
+  
+  decodeHTML(str: string): string {
+    const doc = new DOMParser().parseFromString(str, "text/html");
+    return doc.body.textContent || "";
+  }
+
+
+  
+  getInstructorId(): { id: number; roleUser: string } {
+    const userInfo = this.apiService.userServiceService.getUserLogin();
+    if (!userInfo || userInfo.id === -1) {
+      return { id: -1, roleUser: '' }; // Trả về 0 nếu chưa đăng nhập
+    }
+    return { id: userInfo.id, roleUser: userInfo.roleUser || '' };
+  }
 
 }
+
+
+

@@ -474,7 +474,7 @@
                 (error)="handleImageError($event)"
               />
               <div class="flex flex-col">
-                <h1 class="flex ml-5 text-2xl font-bold text-blue-700">
+                <h1  class="flex ml-5 text-2xl font-bold text-blue-700">
                   {{ instructorName }}
                   <p
                     class="hidden items-center px-0.5 font-medium border-2 text-sm ml-2 border-slate-600 rounded-md"
@@ -543,8 +543,8 @@
               <p
                 [ngClass]="showMoreInstructor ? 'h-auto' : 'h-32 gradient-bg'"
                 class="text-justify text-slate-800 font-signika"
+                [innerText]="decodeHTML(instructorBio)"
               >
-                {{ instructorBio }}
               </p>
               <button
                 (click)="toggleShowMoreInstructor()"

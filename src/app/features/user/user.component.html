@@ -56,6 +56,7 @@
           'hover:font-bold hover:border-l-8 hover:bg-slate-700':
             item.name !== '',
           'opacity-50 pointer-events-none': item.url === '/notfound',
+            'hidden': varcheckLevelUser === 'student' && item.level === 'instructor',
           'border-l-8 bg-slate-700': activeButtonIndex === i
         }"
         [routerLink]="item.url"

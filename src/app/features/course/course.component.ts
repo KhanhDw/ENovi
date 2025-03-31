@@ -23,6 +23,8 @@ import { MyLearningService } from '@app/services/my-learning/my-learning.service
 import { BehaviorSubject, Subject } from 'rxjs';
 import { UserServiceService } from '@app/services/user/user-service.service';
 import { VnpayService } from '@app/services/vnpay/vnpay.service';
+import { VgApiService } from '@videogular/ngx-videogular/core';
+
 
 @Component({
   selector: 'app-course',
@@ -370,6 +372,7 @@ export class CourseComponent
 
   toggleShowModal() {
     this.showModal = !this.showModal;
+    this.videoElement.nativeElement.pause();
   }
 
   reportComment() {
@@ -922,5 +925,8 @@ export class CourseComponent
   // ====================
  
 
- 
+  decodeHTML(str: string): string {
+    const doc = new DOMParser().parseFromString(str, "text/html");
+    return doc.body.textContent || "";
+  }
 }

@@ -73,7 +73,7 @@
             class="flex flex-col w-full"
           >
             <a
-              href="#"
+              (click)="submitSeachCategories(subitem)"
               class="px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 hover:text-gray-900"
             >
               {{ subitem }}
@@ -247,6 +247,7 @@
               <a
                 class="block px-4 py-2 hover:bg-gray-100"
                 *ngFor="let item of avartFeature" 
+                [ngClass]="{'hidden': isLogin === 1 && item.role === 2}"
                 href="{{ item.url }}"
                 >{{ item.name }}</a
               >

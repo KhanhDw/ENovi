@@ -192,6 +192,10 @@
               Vui lòng kiểm tra kỹ thông tin nhận tiền, nếu sai bạn có thể sẽ
               mất tiền.
             </p>
+            <p class="flex gap-2 text-xs text-gray-500">
+              <i class="bi bi-info-circle"></i>
+              Chúng tôi sẽ thanh toán mỗi tháng 1 lần, dù cho bạn có bao nhiêu doanh thu
+            </p>
           </div>
           <!-- body -->
           <div class="flex flex-col w-full h-[90%] rounded-md p-6 space-y-4">
@@ -272,6 +276,17 @@
                 class="p-2 border rounded-md"
                 placeholder="Nhập email"
                 [(ngModel)]="email"
+                disabled="true"
+              />
+            </div>
+            <!-- số tiền -->
+            <div class="flex flex-col space-y-2">
+              <label for="email" class="text-sm font-medium">Thanh toán</label>
+              <input
+                type="text"
+                id="TongDoanhThuThangHienTai"
+                class="p-2 border rounded-md"
+                [(ngModel)]="TongDoanhThuThangHienTai"
                 disabled="true"
               />
             </div>

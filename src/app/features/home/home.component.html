@@ -126,7 +126,8 @@
         Khoá học thịnh hành
       </h1>
       <div class="flex items-center justify-center gap-4">
-        <a hidden
+        <a
+          hidden
           href="#"
           class="px-2 py-1 mr-10 transition-all bg-blue-200 rounded-md hover:bg-blue-800 font-signika hover:text-white"
           >Xem thêm</a
@@ -159,9 +160,9 @@
           class="relative flex flex-col flex-shrink-0 w-64 my-6 transition-all duration-500 bg-white border rounded-lg shadow-md border-slate-300 hover:shadow-blue-500"
         >
           <!-- image of course  -->
-          <div class="h-62 m-2.5 overflow-hidden text-white rounded-md">
+          <div class="h-60 m-2.5 overflow-hidden text-white rounded-md">
             <img
-              class="object-fill w-full h-5/6"
+              class="object-cover w-full h-5/6"
               [src]="urlBackend_img_banner_course + item.img"
               alt="card-image"
             />
@@ -197,7 +198,8 @@
           <!-- name of course -->
           <div class="px-4 py-2">
             <div class="flex items-center mb-2">
-              <a  (click)="goToCourseDetail(item.id,item.title)"
+              <a
+                (click)="goToCourseDetail(item.id, item.title)"
                 class="overflow-y-hidden text-xl font-semibold leading-none font-signika text-slate-800 line-clamp-3 hover:text-blue-500"
               >
                 {{ item.title }}
@@ -221,7 +223,8 @@
         Khoá học miễn phí chất lượng cao
       </h1>
       <div class="flex items-center justify-center gap-4">
-        <a hidden
+        <a
+          hidden
           href="#"
           class="px-2 py-1 mr-10 transition-all bg-blue-200 rounded-md hover:bg-blue-800 font-signika hover:text-white"
           >Xem thêm</a
@@ -243,51 +246,63 @@
       </div>
     </div>
     <!-- list card - carousel -->
-    <!-- card courses -->
-    <div
-      *ngFor="let item of CourseFree"
-      class="relative flex flex-col flex-shrink-0 w-64 my-6 transition-all duration-500 bg-white border rounded-lg shadow-md border-slate-300 hover:shadow-blue-500"
-    >
-      <!-- image of course  -->
-      <div class="h-62 m-2.5 overflow-hidden text-white rounded-md">
-        <img
-          class="object-fill w-full h-5/6"
-          [src]="urlBackend_img_banner_course + item.img"
-          alt="card-image"
-        />
+    <div class="flex w-full mx-auto mt-1 overflow-hidden">
+      <div
+        class="flex gap-4 transition-transform duration-500"
+        [style.transform]="'translateX(-' + currentIndexCourseFree * 6 + '%)'"
+      >
+        <!-- card courses -->
         <div
-          class="flex items-center justify-between w-full px-2 border-gray-200 rounded-b-lg h-1/6 bg-slate-800"
+          *ngFor="let item of CourseFree"
+          class="relative flex flex-col flex-shrink-0 w-64 my-6 transition-all duration-500 bg-white border rounded-lg shadow-md border-slate-300 hover:shadow-blue-500"
         >
-          <!--5 start -->
-          <div class="flex items-center justify-center">
-            <span class="text-xl font-bold text-green-300 font-signika"> {{ item.price === 0 ? 'FREE' : item.price  }}</span>
-          </div>
-          <!-- the number of rate of the user -->
-          <div class="flex items-center justify-center">
-            <span class="ml-1.5 text-white">{{ item.rating }}</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              class="w-5 h-5 text-yellow-300"
+          <!-- image of course  -->
+          <div class="h-60 m-2.5 overflow-hidden text-white rounded-md">
+            <img
+              class="object-cover w-full h-5/6"
+              [src]="urlBackend_img_banner_course + item.img"
+              alt="card-image"
+            />
+            <div
+              class="flex items-center justify-between w-full px-2 border-gray-200 rounded-b-lg h-1/6 bg-slate-800"
             >
-              <path
-                fill-rule="evenodd"
-                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
+              <!--5 start -->
+              <div class="flex items-center justify-center">
+                <span class="text-xl font-bold text-green-300 font-signika">
+                  {{ item.price === 0 ? "FREE" : item.price }}</span
+                >
+              </div>
+              <!-- the number of rate of the user -->
+              <div class="flex items-center justify-center">
+                <span class="ml-1.5 text-white">{{
+                  item.rating | number : "1.0-0"
+                }}</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="w-5 h-5 text-yellow-300"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <!-- name of course -->
-      <div class="px-4 py-2">
-        <div class="flex items-center mb-2">
-          <a (click)="goToCourseDetail(item.id,item.title)"
-            class="overflow-y-hidden text-xl font-semibold leading-none font-signika text-slate-800 line-clamp-3 hover:text-blue-500"
-          >
-          {{ item.title }}
-          </a>
+          <!-- name of course -->
+          <div class="px-4 py-2">
+            <div class="flex items-center mb-2">
+              <a
+                (click)="goToCourseDetail(item.id, item.title)"
+                class="overflow-y-hidden text-xl font-semibold leading-none font-signika text-slate-800 line-clamp-3 hover:text-blue-500"
+              >
+                {{ item.title }}
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -391,12 +406,14 @@
       </h1>
     </div>
     <div class="flex w-4/5 mx-auto">
-      <div class="flex flex-col items-center justify-center w-1/4 gap-4 pt-5 border-r-2 border-slate-300">
+      <div
+        class="flex flex-col items-center justify-center w-1/4 gap-4 pt-5 border-r-2 border-slate-300"
+      >
         <h1 class="flex text-3xl font-bold font-signika">
-         Những lĩnh vực hot nhất hiện nay
+          Những lĩnh vực hot nhất hiện nay
         </h1>
-        
-        <div hidden class="flex-col gap-6 ">
+
+        <div hidden class="flex-col gap-6">
           <a
             href="#"
             class="flex items-center text-xl font-bold text-blue-600 font-signika"

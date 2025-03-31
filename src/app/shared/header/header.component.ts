@@ -54,6 +54,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   private isLoggedOut = false; // Biến kiểm tra đã logout hay chưa
   private checkSessionInterval: any;
 
+  urlBackend_img_avartaUser:string ='';
+
   nameUser: string = '';
   emailUser: string = '';
   picture: string = '';
@@ -82,9 +84,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   loaddata: boolean = true;
 
   avartFeature = [
-    { name: 'Khoá học của tôi', url: '/my-learning' },
-    { name: 'Hoạt động giảng dạy', url: '/user/instructor/courses-instructor' },
-    { name: 'Điều chỉnh hồ sơ', url: '/user/edit-information' },
+    { name: 'Khoá học của tôi', url: '/my-learning' , role: 1},
+    { name: 'Hoạt động giảng dạy', url: '/user/instructor/courses-instructor' , role: 2},
+    { name: 'Điều chỉnh hồ sơ', url: '/user/edit-information' , role: 1},
   ];
 
   constructor(
@@ -98,7 +100,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private shareHeaderSearchService: ShareHeaderSearchService,
     private reloadSystemService: ReloadSystemService,
     private sharedDataService: SharedDataService
-  ) {}
+  ) {
+    this.urlBackend_img_avartaUser =
+      this.apiService.API_URL + '/uploads/img/avartaUser/';
+  }
 
   get isLoggedIn(): boolean {
     return !!this.cookieService.getCookie('token') || false;
@@ -290,6 +295,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   isShowCol3: boolean = false;
 
   ngOnInit() {
+
     this.sharedDataService.setHeaderComponent(this);
 
     const categoriesCookie = this.cookieService.getCookie('categories');
@@ -331,6 +337,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     this.getQueryParam();
+
+
+    const userInfo = this.apiService.userServiceService.getUserLogin();
+    console.log('userInfo:', userInfo.userName);
   }
 
   getQueryParam() {
@@ -388,18 +398,28 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
           if (this.isLoggedInWithEnovi) {
             this.nameUser = user.username || '';
-            this.picture = user.avatar || '/img/avatar.png';
+            if (user.avatar) {
+              this.picture = this.urlBackend_img_avartaUser + user.avatar;
+            } else {
+              this.picture = '/img/avatar.png';
+            }
           }
 
           if (this.isLoggedIn) {
-            this.nameUser = user.name || '';
-            this.picture = user.picture || '';
+            this.nameUser = user.userName || '';
+            this.picture = user.picture && user.picture.includes('https://lh3.googleusercontent.com') 
+              ? user.picture 
+              : this.urlBackend_img_avartaUser + user.picture || '';
           }
 
           // khi đăng ký instructor và load lại data thì dùng cái này
           if (user.username) {
             this.nameUser = user.username || '';
-            this.picture = user.avatar || '/img/avatar.png';
+            if (user.avatar) {
+              this.picture = this.urlBackend_img_avartaUser + user.avatar;
+            } else {
+              this.picture = '/img/avatar.png';
+            }
           }
 
           // console.log('22222', user.username);
@@ -506,6 +526,27 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       this.fetchResults(searchcontext, 0, -1, 0, '', 0, 1, 'Mới nhất');
     }
   }
+  submitSeachCategories(name:any) {
+    console.log(name);
+    const searchcontext = name;
+    if (searchcontext != '') {
+      if (searchcontext.trim()) {
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: {
+            title: searchcontext,
+            page: this.shareHeaderSearchService.currentSearchTermPage,
+          },
+          queryParamsHandling: 'merge', // Giữ nguyên các query params khác nếu có
+        });
+      }
+      // Điều hướng với query params mới
+      this.router.navigate(['/search'], {
+        queryParams: { title: searchcontext },
+      });
+      this.fetchResults(searchcontext, 0, -1, 0, '', 0, 1, 'Mới nhất');
+    }
+  }
 
   fetchResults(
     titleSearch: string,
@@ -560,4 +601,17 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         });
     }
   }
+
+  getInstructorId(): { id: number; roleUser: string } {
+    const userInfo = this.apiService.userServiceService.getUserLogin();
+    console.log('userInfo:', userInfo.userName);
+    if (!userInfo || userInfo.id === -1) {
+      return { id: -1, roleUser: '' }; // Trả về 0 nếu chưa đăng nhập
+    }
+
+
+    return { id: userInfo.id, roleUser: userInfo.roleUser || '' };
+  }
+
+ 
 }

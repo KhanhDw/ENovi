@@ -1,13 +1,20 @@
 import { Component } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-
+import { ApiService } from '@app/services/api.service';
+import { OnInit } from '@angular/core';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrl: './user.component.css',
   standalone: false,
 })
-export class userComponent {
+  export class userComponent implements OnInit {
+    constructor(private apiService: ApiService) {}
+
+    ngOnInit(): void {
+      this.checkLevelUser();
+    }
+
   // ====================
   // item in sidebar
   // ====================
@@ -21,11 +28,14 @@ export class userComponent {
       name: 'Khoá học',
       icon: 'M560-564v-68q33-14 67.5-21t72.5-7q26 0 51 4t49 10v64q-24-9-48.5-13.5T700-600q-38 0-73 9.5T560-564Zm0 220v-68q33-14 67.5-21t72.5-7q26 0 51 4t49 10v64q-24-9-48.5-13.5T700-380q-38 0-73 9t-67 27Zm0-110v-68q33-14 67.5-21t72.5-7q26 0 51 4t49 10v64q-24-9-48.5-13.5T700-490q-38 0-73 9.5T560-454ZM260-320q47 0 91.5 10.5T440-278v-394q-41-24-87-36t-93-12q-36 0-71.5 7T120-692v396q35-12 69.5-18t70.5-6Zm260 42q44-21 88.5-31.5T700-320q36 0 70.5 6t69.5 18v-396q-33-14-68.5-21t-71.5-7q-47 0-93 12t-87 36v394Zm-40 118q-48-38-104-59t-116-21q-42 0-82.5 11T100-198q-21 11-40.5-1T40-234v-482q0-11 5.5-21T62-752q46-24 96-36t102-12q58 0 113.5 15T480-740q51-30 106.5-45T700-800q52 0 102 12t96 36q11 5 16.5 15t5.5 21v482q0 23-19.5 35t-40.5 1q-37-20-77.5-31T700-240q-60 0-116 21t-104 59ZM280-494Z',
       url: '/user/instructor/courses-instructor',
+      level: 'instructor'
     },
     {
       name: 'Doanh thu',
       icon: 'M120-120v-80l80-80v160h-80Zm160 0v-240l80-80v320h-80Zm160 0v-320l80 81v239h-80Zm160 0v-239l80-80v319h-80Zm160 0v-400l80-80v480h-80ZM120-327v-113l280-280 160 160 280-280v113L560-447 400-607 120-327Z',
       url: '/user/instructor/revenue',
+      level: 'instructor'
+
     },
     // {
     //   name: 'Tin nhắn',
@@ -36,6 +46,8 @@ export class userComponent {
       name: 'Hồ sơ giảng viên',
       icon: 'M720-240q25 0 42.5-17.5T780-300q0-25-17.5-42.5T720-360q-25 0-42.5 17.5T660-300q0 25 17.5 42.5T720-240Zm0 120q32 0 57-14t42-39q-20-16-45.5-23.5T720-204q-28 0-53.5 7.5T621-173q17 25 42 39t57 14Zm-520 0q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v268q-19-9-39-15.5t-41-9.5v-243H200v560h242q3 22 9.5 42t15.5 38H200Zm0-120v40-560 243-3 280Zm80-40h163q3-21 9.5-41t14.5-39H280v80Zm0-160h244q32-30 71.5-50t84.5-27v-3H280v80Zm0-160h400v-80H280v80ZM720-40q-83 0-141.5-58.5T520-240q0-83 58.5-141.5T720-440q83 0 141.5 58.5T920-240q0 83-58.5 141.5T720-40Z',
       url: '/user/instructor/profile',
+      level: 'instructor'
+
     },
     // {
     //   name: 'Đánh giá',
@@ -56,6 +68,8 @@ export class userComponent {
       name: 'Phương thức thanh toán',
       icon: 'M560-440q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35ZM280-320q-33 0-56.5-23.5T200-400v-320q0-33 23.5-56.5T280-800h560q33 0 56.5 23.5T920-720v320q0 33-23.5 56.5T840-320H280Zm80-80h400q0-33 23.5-56.5T840-480v-160q-33 0-56.5-23.5T760-720H360q0 33-23.5 56.5T280-640v160q33 0 56.5 23.5T360-400Zm440 240H120q-33 0-56.5-23.5T40-240v-440h80v440h680v80ZM280-400v-320 320Z',
       url: '/user/instructor/payments',
+      level: 'instructor'
+
     },
     // { name: '' } /* dãy phân cách giữa instructor và student */,
     // {
@@ -67,16 +81,22 @@ export class userComponent {
       name: 'Điều chỉnh hồ sơ',
       icon: 'M480-240Zm-320 80v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q37 0 73 4.5t72 14.5l-67 68q-20-3-39-5t-39-2q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32h240v80H160Zm400 40v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-340L683-120H560Zm300-263-37-37 37 37ZM620-180h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19ZM480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm0-80q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Z',
       url: '/user/edit-information', //  --> /basic-information or /photo
+      level: 'student'
+
     },
     {
       name: 'Lịch sử mua hàng',
       icon: 'M480-120q-138 0-240.5-91.5T122-440h82q14 104 92.5 172T480-200q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h110v80H120v-240h80v94q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z',
       url: '/user/purchase-history',
+      level: 'student'
+
     },
     {
       name: 'Bảo mật',
       icon: 'M480-80q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q97-30 162-118.5T718-480H480v-315l-240 90v207q0 7 2 18h238v316Z',
       url: '/user/security',
+      level: 'student'
+
     },
     // {
     //   name: 'Đóng tài khoản',
@@ -102,5 +122,21 @@ export class userComponent {
 
   toggleShowSidebar() {
     this.isShowSidebar = !this.isShowSidebar;
+  }
+
+  getInstructorId(): { id: number; roleUser: string } {
+    const userInfo = this.apiService.userServiceService.getUserLogin();
+    if (!userInfo || userInfo.id === -1) {
+      return { id: -1, roleUser: '' }; // Trả về 0 nếu chưa đăng nhập
+    }
+    return { id: userInfo.id, roleUser: userInfo.roleUser || '' };
+  }
+
+  varcheckLevelUser: any;
+
+  checkLevelUser() {
+    const { id, roleUser } = this.getInstructorId();
+    this.varcheckLevelUser = roleUser;
+    console.log(roleUser);
   }
 }

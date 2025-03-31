@@ -7,7 +7,8 @@
         <input
           type="text"
           class="w-full p-2 border border-gray-300 rounded"
-          [value]="getUserId().name"
+          name="username"
+          [(ngModel)]="username"
         />
       </div>
 
@@ -27,7 +28,8 @@
           type="text"
           class="w-full p-2 border border-gray-300 rounded"
           placeholder="Url"
-          [value]="getUserId().website"
+          name="website"
+          [(ngModel)]="website"
         />
       </div>
       <div *ngIf="showTieuSuGiangVien !== 'student'">
@@ -145,6 +147,7 @@
   </div>
   <div class="flex items-center justify-end w-full">
     <button
+    (click)="saveUserProfile()"
       type="submit"
       class="flex items-end px-12 py-2 font-bold text-white bg-purple-500 rounded w-fit"
     >

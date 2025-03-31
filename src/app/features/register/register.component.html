@@ -362,17 +362,18 @@
         <!-- Notification -->
         <div
           *ngIf="showNotification"
-          class="p-2 text-sm rounded"
+          class="p-2 text-sm font-semibold rounded"
           [ngClass]="{
-            'text-red-500 bg-red-100':
-              response.message.includes('không') ||
-              response.message.includes('Lỗi'),
-            'text-green-500 bg-green-100':
-              response.message.includes('thành công'),
-            'text-gray-500 bg-gray-100': response.message.includes('Đang xử lý')
+            'text-red-500 bg-red-100':response.message.includes('không') || response.message.includes('Lỗi'),
+            'text-green-500 bg-green-100':  response.message.includes('thành công'),
+            'text-gray-500 bg-gray-100': response.message.includes('Đang xử lý'),
+            'text-orange-600 bg-gray-100': response.message.includes('tồn tại'),
           }"
         >
           {{ response.message }}
+          <span *ngIf="response.message.includes('thành công')" class="text-end">
+           Đến đăng nhập sau: {{ countdown }}
+          </span>
         </div>
         <div>
           <button
