@@ -1,6 +1,6 @@
 import { ApiService } from '@app/services/api.service';
 import { CourseInstructor } from './../../../interface/course';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { CookieStorageService } from '@app/services/cookie_storage/cookie-storage.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -37,7 +37,9 @@ export class CoursesOfInstructorComponent implements OnInit, AfterViewInit {
     private apiService: ApiService,
     private router: Router,
     private route: ActivatedRoute,
-    private sharedDataService: SharedDataService
+    private sharedDataService: SharedDataService,
+    private cdr: ChangeDetectorRef,
+
   ) {
     this.urlBackend_img_banner_course = this.apiService.API_URL+'/uploads/img/bannerCourses/';
     
@@ -120,20 +122,29 @@ export class CoursesOfInstructorComponent implements OnInit, AfterViewInit {
   }
 
   postDeleteCourseInstructorId(id: number) {
-    console.log(id);
-    this.apiService.courseInstructorService
-      .DeleteCourseInstructor(id.toString())
-      .subscribe({
-        next: (res) => {
-          if (res.success) {
-            console.log('thanh cong xpa');
-            window.location.reload();
-          }
-        },
-        error: (err) => {
-          console.log('Thất bại: ' + err);
-        },
-      });
+    if (confirm('Bạn có chắc chắn muốn xóa khóa học này không?')) {
+      console.log(id);
+      this.apiService.courseInstructorService
+        .DeleteCourseInstructor(id.toString())
+        .subscribe({
+          next: (res) => {
+            if (res.success) {
+              alert('Xóa khóa học thành công');
+              // window.location.reload();
+              this.fetchCourses(this.searchText, this.sortBy);
+              this.cdr.detectChanges();
+            }else{
+              alert('Xóa khóa học thất bại');
+            }
+          },
+          error: (err) => {
+            alert('Lỗi xay ra khi xóa khóa học');
+            console.log('Thất bại: ' + err);
+          },
+        });
+    } else {
+      console.log('Hủy xóa khóa học');
+    }
   }
 
   goUpdateCourse(idCourse: number, title: string) {

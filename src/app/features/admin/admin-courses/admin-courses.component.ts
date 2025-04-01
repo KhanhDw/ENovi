@@ -174,4 +174,30 @@ export class AdminCoursesComponent implements OnInit {
   goToCourseDetail(id: number, title: string) {
     this.router.navigate(['/course', id, encodeURIComponent(title)]);
   }
+
+
+  deleteCourse(courseId: number) {
+    if (!courseId || courseId <= 0) {
+      console.warn('Invalid course ID provided for deletion');
+      return;
+    }
+
+    this.apiService.adminCourseService.deleteCourseById(courseId).subscribe({
+      next: (res) => {
+        if (res.success) {
+          console.log('Course deleted successfully');
+          this.getAllCourse(); // Refresh the course list after deletion
+          this.toggleShowModalsubmitDeleteCourse();
+          alert('Xóa khóa học thành công!');
+        } else {
+          console.warn('Failed to delete course:', res.message);
+          alert('Xóa khóa học thất bại!');
+        }
+      },
+      error: (error) => {
+        console.error('Error deleting course:', error);
+        alert('Đã có lỗi xảy ra khi xóa khóa học!');
+      },
+    });
+  }
 }

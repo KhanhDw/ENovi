@@ -38,4 +38,8 @@ export class AdminCourseService {
     return this.http.get<any>(`${this.apiUrl}/get-course-title`, { params });
   }
   
+
+  deleteCourseById(courseId: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${courseId}/delete`);
+  }
 }
