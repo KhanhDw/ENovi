@@ -44,6 +44,7 @@ import { AuthCallbackComponent } from './components/System/auth-callback/auth-ca
 import { ResetPasswordComponent } from './features/reset-password/reset-password.component';
 import { PaymentStatusComponent } from './features/payment/payment-status/payment-status.component';
 //service prevent reload page
+import { authGuard } from './services/Auth_Guard/auth.guard';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -188,6 +189,7 @@ const routes: Routes = [
       { path: 'pay', component: AdminPayComponent },
       { path: 'categories', component: CategoriesComponent },
     ],
+    canActivate: [authGuard] 
   },
 
   { path: 'notfound', component: NotfoundComponent },

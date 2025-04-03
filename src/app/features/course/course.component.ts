@@ -14,7 +14,7 @@ import {
   ChangeDetectionStrategy,
   OnDestroy,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '@app/services/api.service';
 import { CourseDetail } from '@app/interface/course';
 import { take, takeUntil } from 'rxjs/operators';
@@ -24,7 +24,6 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { UserServiceService } from '@app/services/user/user-service.service';
 import { VnpayService } from '@app/services/vnpay/vnpay.service';
 import { VgApiService } from '@videogular/ngx-videogular/core';
-
 
 @Component({
   selector: 'app-course',
@@ -119,13 +118,12 @@ export class CourseComponent
   @ViewChild('player', { static: false }) playerElement!: ElementRef;
   @ViewChild('media') videoElement!: ElementRef<HTMLVideoElement>;
 
-
-
   constructor(
     private elementRef: ElementRef,
     private route: ActivatedRoute,
     private apiService: ApiService,
     private ngZone: NgZone,
+    private router: Router,
     private cookieStorageService: CookieStorageService,
     private cdRef: ChangeDetectorRef,
     private myLearningService: MyLearningService,
@@ -141,7 +139,6 @@ export class CourseComponent
     this.fetchTotalRatings(this.courseId);
     this.fetchComments(this.courseId);
     this.getRatingsBreakdown(this.courseId);
-   
   }
 
   ngOnDestroy() {
@@ -222,7 +219,6 @@ export class CourseComponent
     }
   }
 
-
   onPlayerReady(player: any) {
     if (player) {
       this.checkVideoIntro = false;
@@ -251,6 +247,8 @@ export class CourseComponent
 
   getInstructorId(): number {
     const userInfo = this.userServiceService.getUserLogin();
+    console.log('userInfo:', userInfo);
+    console.log('userInfo1:', userInfo.id);
     if (!userInfo || userInfo.id === -1) {
       return 0; // Trả về 0 nếu chưa đăng nhập
     }
@@ -511,46 +509,55 @@ export class CourseComponent
   }
 
   addCourseToCart(courseId: number): void {
-    if (this.courseExitCart) return;
-
     const userId = this.getInstructorId();
-    this.apiService.cartService.addCourseToCart(userId, courseId).subscribe({
-      next: (res) => {
-        if (res?.success) {
-          console.log('Course added to cart successfully');
-          this.courseExitCart = true;
-          this.cdRef.detectChanges();
-        } else {
-          console.warn('Failed to add course to cart');
-        }
-      },
-      error: (err) => {
-        console.error('Error adding course to cart:');
-      },
-    });
+    if (userId === -1 || userId === 0) {
+      this.router.navigate(['/login']);
+    } else {
+      if (this.courseExitCart) return;
+
+      this.apiService.cartService.addCourseToCart(userId, courseId).subscribe({
+        next: (res) => {
+          if (res?.success) {
+            console.log('Course added to cart successfully');
+            this.courseExitCart = true;
+            this.cdRef.detectChanges();
+          } else {
+            console.warn('Failed to add course to cart');
+          }
+        },
+        error: (err) => {
+          console.error('Error adding course to cart:');
+        },
+      });
+    }
   }
 
   //===
 
   isCourseInCart(courseId: number): void {
     const userId = this.getInstructorId();
-    this.apiService.cartService.isCourseInCart(userId, courseId).subscribe({
-      next: (res) => {
-        if (res) {
-          console.log(
-            (res as any).isInCart
-              ? (this.courseExitCart = true)
-              : (this.courseExitCart = false)
-          );
-          this.cdRef.detectChanges();
-        } else {
-          console.warn('Failed to check if course is in the cart');
-        }
-      },
-      error: (err) => {
-        console.error('Error checking course in cart:');
-      },
-    });
+
+    if (userId === -1 || userId === 0) {
+      // this.router.navigate(['/login']);
+    } else {
+      this.apiService.cartService.isCourseInCart(userId, courseId).subscribe({
+        next: (res) => {
+          if (res) {
+            console.log(
+              (res as any).isInCart
+                ? (this.courseExitCart = true)
+                : (this.courseExitCart = false)
+            );
+            this.cdRef.detectChanges();
+          } else {
+            console.warn('Failed to check if course is in the cart');
+          }
+        },
+        error: (err) => {
+          console.error('Error checking course in cart:');
+        },
+      });
+    }
   }
 
   getCourseCategories(courseId: number): void {
@@ -584,130 +591,131 @@ export class CourseComponent
 
   addCourseToMyLearning(courseId: number): void {
     const userId = this.getInstructorId();
-    if (userId === -1) {
-      console.warn('Người dùng chưa đăng nhập');
-      return;
+    if (userId === -1 || userId === 0) {
+      this.router.navigate(['/login']);
+    } else {
+      this.myLearningService.addToMyLearning({ userId, courseId }).subscribe({
+        next: (res) => {
+          if (res?.success) {
+            console.log('Đã thêm khóa học vào My Learning thành công');
+            this.courseInMyLearning = true;
+            this.addEnrollCourse(courseId);
+            this.cdRef.detectChanges();
+          } else {
+            console.warn('Không thể thêm khóa học vào My Learning');
+          }
+        },
+        error: (err) => {
+          console.error('Lỗi khi thêm khóa học vào My Learning:');
+        },
+      });
     }
-
-    this.myLearningService.addToMyLearning({ userId, courseId }).subscribe({
-      next: (res) => {
-        if (res?.success) {
-          console.log('Đã thêm khóa học vào My Learning thành công');
-          this.courseInMyLearning = true;
-          this.addEnrollCourse(courseId);
-          this.cdRef.detectChanges();
-        } else {
-          console.warn('Không thể thêm khóa học vào My Learning');
-        }
-      },
-      error: (err) => {
-        console.error('Lỗi khi thêm khóa học vào My Learning:');
-      },
-    });
   }
 
   checkCourseInMyLearning(courseId: number): void {
     const userId = this.getInstructorId();
-    if (userId === -1) {
-      this.courseInMyLearning = false;
-      this.cdRef.detectChanges();
-      return;
+    if (userId === -1 || userId === 0) {
+      // this.router.navigate(['/login']);
+    } else {
+      this.myLearningService
+        .checkCourseInMyLearning(userId, courseId)
+        .subscribe({
+          next: (res) => {
+            if (res?.success) {
+              this.courseInMyLearning = res.exists;
+              this.cdRef.detectChanges();
+              console.log(
+                'Trạng thái khóa học trong My Learning:',
+                this.courseInMyLearning
+              );
+            } else {
+              console.log(
+                'Trạng thái khóa học trong My Learning lỗi:',
+                this.courseInMyLearning
+              );
+              this.courseInMyLearning = false;
+              this.cdRef.detectChanges();
+            }
+          },
+          error: (err) => {
+            this.courseInMyLearning = false;
+            this.cdRef.detectChanges();
+
+            if (err.status === 500) {
+              console.error(
+                'Lỗi server khi kiểm tra khóa học trong My Learning:',
+                err.error.error
+              );
+            } else {
+              console.error('Lỗi khi kiểm tra khóa học trong My Learning:');
+            }
+          },
+        });
     }
-
-    this.myLearningService.checkCourseInMyLearning(userId, courseId).subscribe({
-      next: (res) => {
-        if (res?.success) {
-          this.courseInMyLearning = res.exists;
-          this.cdRef.detectChanges();
-          console.log(
-            'Trạng thái khóa học trong My Learning:',
-            this.courseInMyLearning
-          );
-        } else {
-          console.log(
-            'Trạng thái khóa học trong My Learning lỗi:',
-            this.courseInMyLearning
-          );
-          this.courseInMyLearning = false;
-          this.cdRef.detectChanges();
-        }
-      },
-      error: (err) => {
-        this.courseInMyLearning = false;
-        this.cdRef.detectChanges();
-
-        if (err.status === 500) {
-          console.error(
-            'Lỗi server khi kiểm tra khóa học trong My Learning:',
-            err.error.error
-          );
-        } else {
-          console.error('Lỗi khi kiểm tra khóa học trong My Learning:');
-        }
-      },
-    });
   }
 
   addEnrollCourse(courseId: number): void {
     const userId = this.getInstructorId();
-    if (userId === -1) {
-      console.log('Người dùng chưa đăng nhập');
-      return;
+    if (userId === -1 || userId === 0) {
+      this.router.navigate(['/login']);
+    } else {
+      this.apiService.enrollmentService
+        .addEnrollment(userId, courseId)
+        .subscribe({
+          next: (res) => {
+            if (res?.success) {
+              console.log('Đăng ký khóa học thành công');
+              this.courseInMyLearning = true;
+              this.cdRef.detectChanges();
+            } else {
+              console.log('Đăng ký khóa học thất bại');
+            }
+          },
+          error: (err) => {
+            if (err.status === 500) {
+              console.error(
+                'Lỗi server khi đăng ký khóa học:',
+                err.error.error
+              );
+            } else {
+              console.error('Lỗi khi đăng ký khóa học:');
+            }
+          },
+        });
     }
-
-    this.apiService.enrollmentService
-      .addEnrollment(userId, courseId)
-      .subscribe({
-        next: (res) => {
-          if (res?.success) {
-            console.log('Đăng ký khóa học thành công');
-            this.courseInMyLearning = true;
-            this.cdRef.detectChanges();
-          } else {
-            console.log('Đăng ký khóa học thất bại');
-          }
-        },
-        error: (err) => {
-          if (err.status === 500) {
-            console.error('Lỗi server khi đăng ký khóa học:', err.error.error);
-          } else {
-            console.error('Lỗi khi đăng ký khóa học:');
-          }
-        },
-      });
   }
 
   // buy course
   buyCourse(courseId: number): void {
     const userId = this.getInstructorId();
-    if (userId === -1) {
-      console.warn('Người dùng chưa đăng nhập');
-      return;
+    if (userId === -1 || userId === 0) {
+      this.router.navigate(['/login']);
+    } else {
+      this.listCourseBuy[0] = courseId;
+
+      this.orderData.amount = Math.floor(
+        this.courseDetailAPI.price *
+          (1 - this.courseDetailAPI.percent_discount / 100)
+      );
+
+      this.orderData.listCourseBuy[0] = courseId;
+
+      localStorage.setItem('paymentData', JSON.stringify(this.orderData));
+      // this.cookieStorageService.setCookie('paymentData', JSON.stringify(this.orderData),1);
+
+      // this.createPayment(
+      //   this.orderData.amount,
+      //   this.orderData.language,
+      //   this.orderData.orderType,
+      //   this.orderData.orderDescription,
+      //   this.orderData.orderId,
+      //   this.listCourseBuy,
+      //   userId
+      // );
+
+      // this.addCourseToMyLearning(courseId);
+      window.location.href = '/payment';
     }
-    this.listCourseBuy[0] = courseId;
-
-    this.orderData.amount = Math.floor(
-      this.courseDetailAPI.price *
-        (1 - this.courseDetailAPI.percent_discount / 100)
-    );
-
-    this.orderData.listCourseBuy[0] = courseId;
-
-    localStorage.setItem('paymentData', JSON.stringify(this.orderData));
-    // this.cookieStorageService.setCookie('paymentData', JSON.stringify(this.orderData),1);
-
-    // this.createPayment(
-    //   this.orderData.amount,
-    //   this.orderData.language,
-    //   this.orderData.orderType,
-    //   this.orderData.orderDescription,
-    //   this.orderData.orderId,
-    //   this.listCourseBuy,
-    //   userId
-    // );
-
-    // this.addCourseToMyLearning(courseId);
-    window.location.href = '/payment';
   }
 
   createPayment(
@@ -753,22 +761,25 @@ export class CourseComponent
 
   submitRating(rating: number): void {
     const userId = this.getInstructorId();
-
-    this.apiService.ratingService
-      .addRating(userId, this.courseId, rating)
-      .subscribe({
-        next: (response) => {
-          if (response.success) {
-            console.log('Rating submitted successfully:', response.message);
-            this.fetchTotalRatings(this.courseId);
-          } else {
-            console.warn('Failed to submit rating:', response.message);
-          }
-        },
-        error: (error) => {
-          console.warn('Error submitting rating:', error.message);
-        },
-      });
+    if (userId === -1 || userId === 0) {
+      this.router.navigate(['/login']);
+    } else {
+      this.apiService.ratingService
+        .addRating(userId, this.courseId, rating)
+        .subscribe({
+          next: (response) => {
+            if (response.success) {
+              console.log('Rating submitted successfully:', response.message);
+              this.fetchTotalRatings(this.courseId);
+            } else {
+              console.warn('Failed to submit rating:', response.message);
+            }
+          },
+          error: (error) => {
+            console.warn('Error submitting rating:', error.message);
+          },
+        });
+    }
   }
 
   //  lấy tổng số lần khóa học được đánh giá
@@ -796,7 +807,7 @@ export class CourseComponent
         this.handleRatingsBreakdown(breakdown);
       },
       error: (error) => {
-        console.warn('Error fetching ratings breakdown:', );
+        console.warn('Error fetching ratings breakdown:');
       },
     });
   }
@@ -849,18 +860,23 @@ export class CourseComponent
 
   addComment(courseId: number, content: string): void {
     const userId = this.getInstructorId();
-    const commentData = { courseId, content };
-    this.apiService.commentService
-      .addComment(userId, courseId, content)
-      .subscribe({
-        next: (response) => {
-          console.log('Comment added successfully:', response);
-          this.fetchComments(courseId); // Refresh comments after adding
-        },
-        error: (error) => {
-          console.error('Error adding comment:', error);
-        },
-      });
+
+    if (userId === -1 || userId === 0) {
+      this.router.navigate(['/login']);
+    } else {
+      const commentData = { courseId, content };
+      this.apiService.commentService
+        .addComment(userId, courseId, content)
+        .subscribe({
+          next: (response) => {
+            console.log('Comment added successfully:', response);
+            this.fetchComments(courseId); // Refresh comments after adding
+          },
+          error: (error) => {
+            console.error('Error adding comment:', error);
+          },
+        });
+    }
   }
 
   deleteComment(commentId: number, courseId: number): void {
@@ -878,18 +894,18 @@ export class CourseComponent
 
   fetchComments(courseId: number): void {
     const userId = this.getInstructorId();
-    this.apiService.commentService
-      .getCommentsByCourseId(courseId, userId)
-      .subscribe({
-        next: (response) => {
-          console.log('Comments fetched successfully:', response);
-          this.listComment = response.comments || [];
-          this.cdRef.detectChanges();
-        },
-        error: (error) => {
-          console.error('Error fetching comments:', );
-        },
-      });
+      this.apiService.commentService
+        .getCommentsByCourseId(courseId, userId)
+        .subscribe({
+          next: (response) => {
+            console.log('Comments fetched successfully:', response);
+            this.listComment = response.comments || [];
+            this.cdRef.detectChanges();
+          },
+          error: (error) => {
+            console.error('Error fetching comments:');
+          },
+        });
   }
 
   postComment() {
@@ -921,12 +937,11 @@ export class CourseComponent
   }
 
   // ====================
-  //  video intro 
+  //  video intro
   // ====================
- 
 
   decodeHTML(str: string): string {
-    const doc = new DOMParser().parseFromString(str, "text/html");
-    return doc.body.textContent || "";
+    const doc = new DOMParser().parseFromString(str, 'text/html');
+    return doc.body.textContent || '';
   }
 }
