@@ -118,6 +118,10 @@ export class CourseComponent
   @ViewChild('player', { static: false }) playerElement!: ElementRef;
   @ViewChild('media') videoElement!: ElementRef<HTMLVideoElement>;
 
+  videoNotFound = false; // Flag for "video not found" error
+  serverError = false; // Flag for other server errors
+  videoLoading = true; // Flag to show loading spinner
+
   constructor(
     private elementRef: ElementRef,
     private route: ActivatedRoute,
@@ -190,9 +194,14 @@ export class CourseComponent
 
                 this.introVideo = res.course[0].intro_video;
                 console.log('this.introVideo', this.introVideo);
-                this.videoUrl$.next(
-                  `https://localhost:3000/stream/video?namevideo=${this.introVideo}`
-                );
+
+                if (this.introVideo !== null) {
+                  this.videoUrl$.next(
+                    `https://localhost:3000/stream/video?namevideo=${this.introVideo}`
+                  );
+                }else{
+                  this.checkVideoIntro = false;
+                }
                 // Cập nhật avatar thông qua Subject
                 this.updateAvatar(res.course[0].instructorAvatar);
 
@@ -209,6 +218,8 @@ export class CourseComponent
             },
             error: (e) => {
               console.warn('HttpErrorResponse course.components.ts');
+              this.videoLoading = false; // Hide loading
+              this.serverError = true; // Show server error
             },
           });
       });
@@ -220,15 +231,21 @@ export class CourseComponent
   }
 
   onPlayerReady(player: any) {
+    this.videoLoading = false;
     if (player) {
       this.checkVideoIntro = false;
+      this.videoNotFound = false;
+      this.serverError = false;
       return;
     } else {
       this.videoUrl$.next(
-        `https://localhost:3000/stream/video?namevideo=${this.introVideo}`
+        `https://localhost:3000/stream/video?namevideo=${
+          this.introVideo
+        }&retry=${Date.now()}`
       );
       this.checkVideoIntro = true;
     }
+    this.cdRef.detectChanges();
   }
 
   // ====================
@@ -414,17 +431,21 @@ export class CourseComponent
   // star rating
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['rating']) {
-      this.renderStars();
-      this.cdRef.detectChanges();
-    }
+    try {
+      if (changes['rating']) {
+        this.renderStars();
+        this.cdRef.detectChanges();
+      }
 
-    if (changes['introVideo'] && changes['introVideo'].currentValue) {
-      console.log('Dữ liệu cập nhật: thay đổi introVideo', this.introVideo);
-      this.videoUrl$.next(
-        `https://localhost:3000/stream/video?namevideo=${this.introVideo}`
-      );
-      this.introVideo = changes['introVideo'].currentValue;
+      if (changes['introVideo'] && changes['introVideo'].currentValue) {
+        console.log('Dữ liệu cập nhật: thay đổi introVideo', this.introVideo);
+        this.videoUrl$.next(
+          `https://localhost:3000/stream/video?namevideo=${this.introVideo}`
+        );
+        this.introVideo = changes['introVideo'].currentValue;
+      }
+    } catch (error) {
+      console.error('Error in ngOnChanges course stream:', error);
     }
   }
 
@@ -688,6 +709,7 @@ export class CourseComponent
   // buy course
   buyCourse(courseId: number): void {
     const userId = this.getInstructorId();
+    console.log('userId course heheh11:', userId);
     if (userId === -1 || userId === 0) {
       this.router.navigate(['/login']);
     } else {
@@ -894,18 +916,18 @@ export class CourseComponent
 
   fetchComments(courseId: number): void {
     const userId = this.getInstructorId();
-      this.apiService.commentService
-        .getCommentsByCourseId(courseId, userId)
-        .subscribe({
-          next: (response) => {
-            console.log('Comments fetched successfully:', response);
-            this.listComment = response.comments || [];
-            this.cdRef.detectChanges();
-          },
-          error: (error) => {
-            console.error('Error fetching comments:');
-          },
-        });
+    this.apiService.commentService
+      .getCommentsByCourseId(courseId, userId)
+      .subscribe({
+        next: (response) => {
+          console.log('Comments fetched successfully:', response);
+          this.listComment = response.comments || [];
+          this.cdRef.detectChanges();
+        },
+        error: (error) => {
+          console.error('Error fetching comments:');
+        },
+      });
   }
 
   postComment() {

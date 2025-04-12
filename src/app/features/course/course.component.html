@@ -474,7 +474,7 @@
                 (error)="handleImageError($event)"
               />
               <div class="flex flex-col">
-                <h1  class="flex ml-5 text-2xl font-bold text-blue-700">
+                <h1 class="flex ml-5 text-2xl font-bold text-blue-700">
                   {{ instructorName }}
                   <p
                     class="hidden items-center px-0.5 font-medium border-2 text-sm ml-2 border-slate-600 rounded-md"
@@ -544,8 +544,7 @@
                 [ngClass]="showMoreInstructor ? 'h-auto' : 'h-32 gradient-bg'"
                 class="text-justify text-slate-800 font-signika"
                 [innerText]="decodeHTML(instructorBio)"
-              >
-              </p>
+              ></p>
               <button
                 (click)="toggleShowMoreInstructor()"
                 type="button"
@@ -679,8 +678,11 @@
                       allowfullscreen
                     ></iframe>
                     <h1 *ngIf="!checkVideoIntro" class="text-white">
-                      video chưa sẳn sàng!
+                      Giảng viên chưa cập nhật video giới thiệu khóa học!
                     </h1>
+                    <!-- <div *ngIf="videoLoading">Loading...</div>
+                    <div *ngIf="videoNotFound">Video not found.</div>
+                    <div *ngIf="serverError">A server error occurred.</div> -->
 
                     <vg-player *ngIf="checkVideoIntro">
                       <vg-overlay-play class="bg-slate-50"></vg-overlay-play>
