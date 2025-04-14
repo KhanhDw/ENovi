@@ -26,8 +26,6 @@ import { SectionUpdateCourse } from '@app/interface/section';
 import { LessonUpdate } from '@app/interface/lecture';
 import { UploadVideoService } from '@app/services/upload_video/upload-video.service';
 
-
-
 @Component({
   selector: 'app-course-update',
   templateUrl: './course-update.component.html',
@@ -157,10 +155,10 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
 
   private isReloadingBySystem = false;
   checkVideoIntro: boolean = false;
-  errorMessageIntroVideo:string ='';
-  introvideoUrl:string | null = null;
-  introVideoName:string  = '';
-  submitUploadIntroVideo:boolean = false;
+  errorMessageIntroVideo: string = '';
+  introvideoUrl: string | null = null;
+  introVideoName: string = '';
+  submitUploadIntroVideo: boolean = false;
   fileVideoIntroRaw: any;
 
   constructor(
@@ -180,20 +178,15 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {}
 
   ngOnInit(): void {
+    this.updateCourse.section = [];
+    
     if (this.SaveCategories.length === 0) {
       this.fetchCourse();
       this.onLanguageChange(this.languageList[0].language_code);
       this.onLevelChange(this.levelList[0].value);
     }
-    // Load dữ liệu từ cookie
+    
     this.loadCategoriesFromCookie();
-    console.log('Dữ liệu đã lưu vào getCategoriesALL:', this.getCategoriesALL);
-
-    // Kiểm tra nếu reload được kích hoạt bởi hệ thống
-    if (sessionStorage.getItem('reloadBySystem') === 'true') {
-      sessionStorage.removeItem('reloadBySystem'); // Xóa cờ để tránh reload nhiều lần
-      this.isReloadingBySystem = true; // Đánh dấu rằng reload này hợp lệ
-    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -230,13 +223,11 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
     this.fileIntroVideoInput.nativeElement.click();
   }
 
-
   onFileIntro_videoSelected(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     const file = inputElement.files?.[0];
 
     console.log(file);
-
 
     // Kiểm tra nếu không có file
     if (!file) {
@@ -258,22 +249,26 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
     this.fileVideoIntroRaw = file;
 
     this.introVideoName = file?.name;
-    console.log('this.introVideoName',this.introVideoName);
+    console.log('this.introVideoName', this.introVideoName);
     this.cdr.detectChanges();
   }
 
-   // Hàm xóa lỗi
-   private clearErrorIntroVideo(): void {
+  // Hàm xóa lỗi
+  private clearErrorIntroVideo(): void {
     this.errorMessageIntroVideo = '';
   }
- // Hàm thiết lập lỗi
- private setErrorIntroVideo(message: string): void {
-  this.errorMessageIntroVideo = message;
-  this.introvideoUrl = null;
-}
+  // Hàm thiết lập lỗi
+  private setErrorIntroVideo(message: string): void {
+    this.errorMessageIntroVideo = message;
+    this.introvideoUrl = null;
+  }
 
   submitUploadVideoIntro() {
-    if (confirm('Bạn có chắc chắn muốn tải lên video giới thiệu khóa học? \n 10 ngày sau bạn mới có thê cập nhật được video mới!')) {
+    if (
+      confirm(
+        'Bạn có chắc chắn muốn tải lên video giới thiệu khóa học? \n 10 ngày sau bạn mới có thê cập nhật được video mới!'
+      )
+    ) {
       if (this.fileVideoIntroRaw && this.introVideoName) {
         const idCourseString = this.sharedDataService.getIdCourse();
         const idCourse = idCourseString ? idCourseString : '';
@@ -318,7 +313,9 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
           next: (res) => {
             if (res.success) {
               alert('Cập nhật video giới thiệu thành công!');
-              alert('Để xem video bạn cần lưu cập nhật và rời khỏi trang này và truy cập lại!');
+              alert(
+                'Để xem video bạn cần lưu cập nhật và rời khỏi trang này và truy cập lại!'
+              );
             }
           },
           error: (err) => {
@@ -331,9 +328,7 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
     }
   }
 
-// -===========================================
-
-  
+  // -===========================================
 
   // Load dữ liệu từ cookie
   private loadCategoriesFromCookie(): void {
@@ -766,15 +761,22 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
                     this.updateCourse.section.push(sectionData);
                   }
                 });
-                // Sắp xếp theo sectionOrder từ lớn đến bé
-                this.updateCourse.section.sort(
-                  (a, b) => a.sectionOrder - b.sectionOrder
-                );
-                this.nameSection = this.updateCourse.section[0].section_name;
-                this.nameSectionDefault =
+
+                if (this.updateCourse.section.length > 0) {
+                  // Sắp xếp theo sectionOrder từ lớn đến bé
+                  this.updateCourse.section.sort(
+                    (a, b) => a.sectionOrder - b.sectionOrder
+                  );
+                  this.nameSection = this.updateCourse.section[0].section_name;
+                  this.nameSectionDefault =
                   this.updateCourse.section[0].section_name;
                 this.orderSectionDefault =
                   this.updateCourse.section[0].sectionOrder;
+                } else {
+                  this.nameSection = '';
+                  this.nameSectionDefault =''; this.orderSectionDefault = -1;
+                }
+               
               } else {
                 console.error(
                   'Lỗi: this.courseFetch không phải là một mảng!',
@@ -1180,45 +1182,57 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit {
   createSection() {
     if (this.isCreatingSection) return;
 
-    this.isCreatingSection = true; // Chặn click
-    setTimeout(() => (this.isCreatingSection = false), 500); // Mở sau 2 giây
+    this.isCreatingSection = true;
+    setTimeout(() => (this.isCreatingSection = false), 500);
 
     const idCourseString = this.sharedDataService.getIdCourse();
     const idCourse = idCourseString ? parseInt(idCourseString) : -1;
-    let sectionOrderMax =
-      this.updateCourse.section.slice(-1)[0].sectionOrder + 1;
+    
+    // Tính toán sectionOrder mới
+    let sectionOrderMax = this.updateCourse.section.length > 0
+      ? Math.max(...this.updateCourse.section.map(s => s.sectionOrder)) + 1
+      : 1;
 
     this.apiService.courseInstructorService
       .createSection('yêu cầu thay đổi', idCourse, sectionOrderMax)
       .subscribe({
         next: (res) => {
           if (res.success) {
-            console.log('update successful name section');
-
-            // Thêm ngay phần tử mới vào UI trước khi gọi API
-            const newSection = {
-              section_id: -1,
-              section_name: 'yêu cầu thay đổi',
-              sectionOrder: sectionOrderMax,
-            };
-            this.updateCourse.section = [
-              ...this.updateCourse.section,
-              newSection,
-            ];
-            sectionOrderMax =
-              this.updateCourse.section.slice(-1)[0].sectionOrder;
-            console.log('sectionOrderMax: ' + sectionOrderMax);
-
-            this.getSectionId(sectionOrderMax);
-
-            (async () => {
-              this.cdr.detectChanges(); // Ép UI cập nhật lại
-            })();
+            // Sau khi tạo section thành công, lấy section ID
+            this.apiService.courseInstructorService
+              .getSectionId(idCourse, sectionOrderMax)
+              .subscribe({
+                next: (sectionRes) => {
+                  if (sectionRes.success && sectionRes.sectionFetch_id.length > 0) {
+                    // Thêm section mới vào mảng với ID chính xác
+                    const newSection = {
+                      section_id: sectionRes.sectionFetch_id[0].id,
+                      section_name: 'yêu cầu thay đổi',
+                      sectionOrder: sectionOrderMax
+                    };
+                    
+                    this.updateCourse.section = [...this.updateCourse.section, newSection];
+                    
+                    // Cập nhật UI và chọn section mới
+                    this.getSectionClicked(
+                      newSection.section_name,
+                      newSection.sectionOrder,
+                      newSection.section_id
+                    );
+                    
+                    this.cdr.detectChanges();
+                  }
+                },
+                error: (err) => {
+                  console.error('Lỗi khi lấy section ID:', err);
+                }
+              });
           }
         },
         error: (err) => {
-          console.log(err);
-        },
+          console.error('Lỗi khi tạo section:', err);
+          this.isCreatingSection = false;
+        }
       });
   }
 

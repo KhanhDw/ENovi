@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 @Injectable({
@@ -22,7 +22,17 @@ export class RegisterServiceService {
     this.apiUrl = apiUrl;
   }
 
-  registerUserAPI(username:string ,email: string, password: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/`, {username, email, password });
+  registerUserAPI(username: string, email: string, password: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}/`, 
+      { username, email, password },
+      {
+        withCredentials: true,
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json'
+        })
+      }
+    );
   }
+  
 }
